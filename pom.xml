@@ -22,6 +22,18 @@
 	<groupId>loddwhbench</groupId>
 	<dependencies>
 		<dependency>
+			<groupId>com.hp.hpl.jena</groupId>
+			<artifactId>jena</artifactId>
+			<version>2.6.4</version>
+		</dependency>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>2.7.2</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
 			<groupId>info.freelibrary</groupId>
 			<artifactId>freelib-marc4j</artifactId>
 			<version>2.6.7</version>
