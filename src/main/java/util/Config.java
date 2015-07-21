@@ -12,9 +12,9 @@ public class Config {
 		hebis_26887668_29873805_rdf_gz(WHERE_THE_FILES_AT, "hebis-26887668-29873805.rdf.gz"),
 		hebis_21257740_26887667_rdf_gz(WHERE_THE_FILES_AT, "hebis-21257740-26887667.rdf.gz"),
 		hebis_13050073_21257739_rdf_gz(WHERE_THE_FILES_AT, "hebis-13050073-21257739.rdf.gz"),
-		hebis_tiny_rdf("hebis_1000_marc.gz"),
-		hebis_tiny_marc("hebis_1000_rdf.gz"),
-		hebis_small_rdf("hebis_10000_marc.gz"),
+		hebis_tiny_rdf("hebis_1000_rdf.gz"),
+		hebis_tiny_marc("hebis_1000_marc.gz"),
+		hebis_small_rdf("hebis_10000_rdf.gz"),
 		hebis_small_marc("hebis_10000_marc.gz"),
 		hebis_medium_rdf("hebis_100000_rdf.gz"),
 		hebis_medium_marc("hebis_100000_marc.gz");

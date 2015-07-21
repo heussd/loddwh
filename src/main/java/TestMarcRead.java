@@ -1,64 +1,75 @@
-
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.util.zip.GZIPInputStream;
 
 import org.marc4j.MarcReader;
 import org.marc4j.MarcStreamReader;
-import org.marc4j.MarcStreamWriter;
-import org.marc4j.MarcWriter;
 import org.marc4j.marc.Record;
 
+import util.Config.Dumps;
 import util.DataObject;
 
 public class TestMarcRead {
 
-	private static final String HEBIS_ORG_MARC_CODE = "(DE-599)HEB";
-	private static final String DCTERMS_IDENTIFIER = "035"; // Wrong??!
-	private static final String DCTERMS_TITLE = "245";
-
 	public static void main(String[] args) throws Exception {
-		 InputStream in = (new FileInputStream("untitled"));
-//		InputStream in = new GZIPInputStream(new FileInputStream("/Users/th/Ph.D./HeBIS Zulieferungen Juni 2015/HeBIS_Hauptbestand_in_MARC.gz"));
-		MarcWriter writer = new MarcStreamWriter(new FileOutputStream(new File("myoutfile")));
+		InputStream in = new GZIPInputStream(new FileInputStream(Dumps.hebis_tiny_marc.file));
 		MarcReader reader = new MarcStreamReader(in);
 
+//		PrintWriter printWriter = new PrintWriter(new File("lala.txt"));
 		long i = 0;
 
 		outerloop: while (reader.hasNext()) {
 
-//			String findMe = "Die diskutierte Region";
+			// String findMe = "Die diskutierte Region";
 
 			// System.out.println(record.toString());
 			// String id = "";
-			try {
+//			try {
 				Record record = reader.next();
+				
+				
 
 				// System.out.println(record);
 
-				 DataObject dataObject = new DataObject();
+				DataObject dataObject = new DataObject();
+
+//				System.out.println(record);
+
+				dataObject.fromMarcRecord(record);
 				
-				 dataObject.fromMarcRecord(record);
+				String id = dataObject.getId();
+				
+				if (id.equals("268877475") || id.equals("268877483")) {
+					System.out.println(record);
+					System.out.println(dataObject);
+				}
 				//
-				 System.out.println(dataObject);
-				 System.out.println(record);
+//				System.out.println(dataObject);
+				
+				
+//				printWriter.print("\n\n" + dataObject);
+				
+			
+				
 				// id = "--";
 				// DataField field = (DataField)
 				// record.getVariableField(DCTERMS_IDENTIFIER);
 
-
-//				for (VariableField field : record.getVariableFields(Codes.DCTERMS_TITLE.MARC)) {
-//					Subfield subfield = ((DataField) field).getSubfield(Codes.DCTERMS_TITLE.subfield);
-//					String str = subfield.getData();
-//					// System.out.println(str);
-//					if (str.equals(findMe)) {
-//						System.out.println("FOUND IT!");
-//						System.out.println(record);
-//						writer.write(record);
-//						break outerloop;
-//					}
-//				}
+				// for (VariableField field :
+				// record.getVariableFields(Codes.DCTERMS_TITLE.MARC)) {
+				// Subfield subfield = ((DataField)
+				// field).getSubfield(Codes.DCTERMS_TITLE.subfield);
+				// String str = subfield.getData();
+				// // System.out.println(str);
+				// if (str.equals(findMe)) {
+				// System.out.println("FOUND IT!");
+				// System.out.println(record);
+				// writer.write(record);
+				// break outerloop;
+				// }
+				// }
 
 				// System.out.println(field.getTag());
 				// Subfield subfield = field.getSubfield('a');
@@ -72,9 +83,9 @@ public class TestMarcRead {
 
 				// break;
 
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
 
 			// System.out.println(id);
 
@@ -90,7 +101,5 @@ public class TestMarcRead {
 				System.out.println(i + " record so far...");
 			}
 		}
-
-		writer.close();
 	}
 }
