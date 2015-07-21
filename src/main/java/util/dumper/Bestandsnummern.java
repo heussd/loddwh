@@ -4,27 +4,24 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.zip.GZIPInputStream;
 
 import org.marc4j.MarcReader;
 import org.marc4j.MarcStreamReader;
-import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
-import org.marc4j.marc.Subfield;
 
-import util.Dumps;
+import util.DataObject;
+import util.Config.Dumps;
 
 public class Bestandsnummern extends Helpers {
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-		InputStream inputStream = new GZIPInputStream(new FileInputStream(Dumps.HeBIS_Hauptbestand_in_MARC_gz.file));
+		InputStream inputStream = new GZIPInputStream(new FileInputStream(Dumps.hebis_small_marc.file));
 		MarcReader reader = new MarcStreamReader(inputStream);
 
 		// MarcWriter writer = new MarcStreamWriter(new GZIPOutputStream(new
 		// FileOutputStream(file)));
 
 		int counter = 0;
-		ArrayList<String> f003 = new ArrayList<>();
 
 		while (reader.hasNext()) {
 
@@ -34,30 +31,16 @@ public class Bestandsnummern extends Helpers {
 
 			try {
 				Record record = reader.next();
-				for (Subfield f : ((DataField) record.getVariableField("035")).getSubfields("a")) {
-					// f = f.substring(0, 10);
-					
-					String field = f.getData();
-					field = field.substring(1, field.indexOf(")"));
-					if (!f003.contains(field)) {
-						System.out.println(field);
-						f003.add(field);
-					}
+				DataObject dao = new DataObject();
+				dao.fromMarcRecord(record);
 
+				System.out.println(dao);
+
+				if (counter > 40) {
+					break;
 				}
-
-				// String recordId =
-				// record.getControlNumberField().getData().trim();
-				//
-				// try {
-				// if (new Integer(recordId) < new Integer(minimumId))
-				// continue;
-				// } catch (Exception e) {
-				//
-				// }
-				//
-				// writer.write(record);
 			} catch (Exception e) {
+				System.out.println(e);
 			}
 		}
 

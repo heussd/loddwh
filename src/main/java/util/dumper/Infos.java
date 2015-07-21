@@ -1,16 +1,15 @@
 package util.dumper;
 
-import java.io.File;
 import java.util.ArrayList;
 
-import util.Dumps;
+import util.Config.Dumps;
 
 public class Infos extends Helpers {
 
 	public static void main(String[] args) throws Exception {
 
-		ArrayList<String> rdfIds = idsFromRdfDump(new File("testme_rdf.gz"));
-		ArrayList<String> marcIds = idsFromMarcDump(new File("testme_marc.gz"));
+		ArrayList<String> rdfIds = idsFromRdfDump(Dumps.hebis_medium_rdf.file);
+		ArrayList<String> marcIds = idsFromMarcDump(Dumps.hebis_medium_marc.file);
 		
 		
 //		System.out.println(minId(rdfIds));

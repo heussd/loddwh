@@ -1,6 +1,6 @@
 package util.dumper;
 
-import util.Dumps;
+import util.Config.Dumps;
 
 public class RDFDumpProducer extends Helpers {
 	public static void main(String[] args) throws Exception {

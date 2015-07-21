@@ -20,9 +20,8 @@ import org.marc4j.MarcWriter;
 import org.marc4j.marc.Record;
 
 import redis.clients.jedis.Jedis;
-import util.Dumps;
-
-import com.hp.hpl.jena.rdf.model.Model;
+import util.Config;
+import util.Config.Dumps;
 
 public abstract class Helpers {
 
@@ -100,7 +99,7 @@ public abstract class Helpers {
 		return ids;
 	}
 
-	public static void writeRdfExtract(ArrayList<String> wantedIds, Dumps source, String target) throws Exception {
+	public static void writeRdfExtract(ArrayList<String> wantedIds, Config.Dumps source, String target) throws Exception {
 		System.out.println("Scanning " + source + " for entites...");
 		BufferedReader inputReader = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(source.file))));
 		PrintWriter printWriter = new PrintWriter(new File(target));
@@ -175,7 +174,7 @@ public abstract class Helpers {
 			}
 
 		}
-		
+
 		System.out.println("\nWrote " + counter + " records, " + errors + " errors.");
 	}
 
@@ -292,36 +291,53 @@ public abstract class Helpers {
 		writer.close();
 
 	}
-	
+
 	protected static void validate(File file) {
-//		Model m = new Mo
-//		new Model.read(new GZIPInputStream(new FileInputStream(file)), "www.example.com", "RDF/XML");
+		// Model m = new Mo
+		// new Model.read(new GZIPInputStream(new FileInputStream(file)),
+		// "www.example.com", "RDF/XML");
 	}
 
-	protected static void produceIdenticalMarcAndRdfDump(Jedis jedis, String target) throws Exception {
-		InputStream inputStream = new GZIPInputStream(new FileInputStream(Dumps.hebis_small_marc.file));
+	protected static void produceIdenticalMarcAndRdfDump(Jedis jedis, String target, int quanity) throws Exception {
+		InputStream inputStream = new GZIPInputStream(new FileInputStream(Dumps.HeBIS_Hauptbestand_in_MARC_gz.file));
 		MarcReader reader = new MarcStreamReader(inputStream);
 
 		MarcWriter writer = new MarcStreamWriter(new GZIPOutputStream(new FileOutputStream(target + "_marc.gz")));
 		PrintStream printStream = new PrintStream(new GZIPOutputStream(new FileOutputStream(target + "_rdf.gz")), false, "UTF-8");
-		
 
 		// OutputFileStream outputStream = new GZIPOutputStream(new
 		// FileOutputStream(new File(target)));
 
 		printStream.print(jedis.get("RDFHEAD") + "\n");
-		int counter = 0;
+		int counter = 0, written = 0;
 		while (reader.hasNext()) {
-
 			if (++counter % 100000 == 0) {
-				System.out.println(counter + " records so far...");
+				System.out.println("Passed " + counter + " records so far...");
+			}
+			if (counter < 10000000) {
+				try {
+					reader.next();
+				} catch (Exception e) {
+				}
+				continue;
+			}
+
+			if (written >= quanity) {
+				System.out.println("Wrote " + quanity + " records.");
+				break;
 			}
 
 			try {
 				Record record = reader.next();
+
+				if (Math.random() * 10 < 7)
+					continue;
+
 				String recordId = record.getControlNumberField().getData().trim();
+//				System.out.println(recordId);
 				String rdfRecord = jedis.get(recordId);
 				if (rdfRecord != null) {
+					written++;
 					writer.write(record);
 					printStream.print(rdfRecord + "\n");
 				}

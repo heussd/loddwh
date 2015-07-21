@@ -2,7 +2,7 @@ package util.dumper;
 
 import java.util.ArrayList;
 
-import util.Dumps;
+import util.Config.Dumps;
 
 public class TestsetProducer extends Helpers {
 
@@ -15,7 +15,7 @@ public class TestsetProducer extends Helpers {
 
 //		System.out.println(ids);
 
-		writeMarcExtract(ids, Dumps.hebis_29873806_36057474_rdf_gz_marc_gz.file, file.toString() + ".marc.gz");
+//		writeMarcExtract(ids, Dumps.hebis_29873806_36057474_rdf_gz_marc_gz.file, file.toString() + ".marc.gz");
 	}
 
 }

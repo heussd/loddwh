@@ -2,7 +2,7 @@ package util.dumper;
 
 import java.io.File;
 
-import util.Dumps;
+import util.Config.Dumps;
 
 public class MarcSubdumpProducer extends Helpers {
 	public static void main(String[] args) throws Exception {
