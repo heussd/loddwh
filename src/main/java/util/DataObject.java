@@ -2,7 +2,10 @@ package util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
@@ -15,8 +18,8 @@ public class DataObject {
 		// Extract subfield a
 		for (Codes code : Codes.values()) {
 			try {
-				if (code.MARC != null && code.subfield != '0') {
-					data.put(code, ((DataField) record.getVariableField(code.MARC)).getSubfield(code.subfield).getData());
+				if (code.MARC_CODE != null && code.SUBFIELD != '0') {
+					data.put(code, ((DataField) record.getVariableField(code.MARC_CODE)).getSubfield(code.SUBFIELD).getData());
 				}
 			} catch (Exception e) {
 			}
@@ -28,7 +31,7 @@ public class DataObject {
 		for (ControlField controlField : record.getControlFields()) {
 			switch (controlField.getTag()) {
 			case "006":
-				data.put(Codes.TEST_006, controlField.getData());
+				// data.put(Cocdes.TEST_006, controlField.getData());
 				String formOfMaterial = controlField.getData().substring(0, 1);
 
 				switch (formOfMaterial) {
@@ -75,7 +78,6 @@ public class DataObject {
 					throw new RuntimeException("Dont know this: " + unknownProperty + " @ " + record.getControlNumber());
 				}
 
-				data.put(Codes.TEST_007, controlField.getData());
 				break;
 			}
 		}
@@ -87,8 +89,8 @@ public class DataObject {
 			// This relation is confirmed
 			putMultiple(Codes.RDF_TYPE, "http://purl.org/dc/terms/BibliographicResource");
 
-			data.put(Codes.DCTERMS_MEDIUM, Codes.DCTERMS_MEDIUM.FIXEDVALUE);
-			data.put(Codes.DCTERMS_FORMAT, Codes.DCTERMS_FORMAT.FIXEDVALUE);
+			data.put(Codes.DCTERMS_MEDIUM, Codes.DCTERMS_MEDIUM.CONSTANT);
+			data.put(Codes.DCTERMS_FORMAT, Codes.DCTERMS_FORMAT.CONSTANT);
 		}
 		putMultiple(Codes.RDF_TYPE, "http://purl.org/vocab/frbr/core#Manifestation");
 
@@ -97,13 +99,13 @@ public class DataObject {
 		data.remove(Codes.DCTERMS_IDENTIFIER);
 		String id = record.getControlNumberField().getData();
 		data.put(Codes.DCTERMS_IDENTIFIER, id);
-		data.put(Codes.RDF_ABOUT, Codes.RDF_ABOUT.FIXEDVALUE + id.substring(0, id.length() - 1));
-		data.put(Codes.WDRS_DESCRIBEDBY, Codes.WDRS_DESCRIBEDBY.FIXEDVALUE + id.substring(0, id.length() - 1));
+		data.put(Codes.RDF_ABOUT, Codes.RDF_ABOUT.CONSTANT + id.substring(0, id.length() - 1));
+		data.put(Codes.WDRS_DESCRIBEDBY, Codes.WDRS_DESCRIBEDBY.CONSTANT + id.substring(0, id.length() - 1));
 
 		// DNB linkage 035 $a(DE-599)DNB860319695
 		data.remove(Codes.OWL_SAMEAS);
-		for (VariableField field : record.getVariableFields(Codes.OWL_SAMEAS.MARC)) {
-			String systemControlNumber = ((DataField) field).getSubfield(Codes.OWL_SAMEAS.subfield).getData();
+		for (VariableField field : record.getVariableFields(Codes.OWL_SAMEAS.MARC_CODE)) {
+			String systemControlNumber = ((DataField) field).getSubfield(Codes.OWL_SAMEAS.SUBFIELD).getData();
 			if (systemControlNumber.startsWith("(DE-599)DNB")) {
 				data.put(Codes.OWL_SAMEAS, "http://d-nb.info/" + systemControlNumber.substring(11));
 			}
@@ -112,8 +114,8 @@ public class DataObject {
 		// 035 $a(OCoLC)43712277
 		Codes code = Codes.BIBO_OCLCNUM;
 		data.remove(code);
-		for (VariableField field : record.getVariableFields(code.MARC)) {
-			String fieldValue = ((DataField) field).getSubfield(code.subfield).getData();
+		for (VariableField field : record.getVariableFields(code.MARC_CODE)) {
+			String fieldValue = ((DataField) field).getSubfield(code.SUBFIELD).getData();
 			if (fieldValue.startsWith("(OCoLC)")) {
 				data.put(code, fieldValue.substring(7));
 			}
@@ -123,8 +125,8 @@ public class DataObject {
 		// GND == 4133806-6
 		code = Codes.DCTERMS_SUBJECT;
 		data.remove(code);
-		for (VariableField field : record.getVariableFields(code.MARC)) {
-			String systemControlNumber = ((DataField) field).getSubfield(code.subfield).getData();
+		for (VariableField field : record.getVariableFields(code.MARC_CODE)) {
+			String systemControlNumber = ((DataField) field).getSubfield(code.SUBFIELD).getData();
 			if (systemControlNumber.startsWith("(DE-588)")) {
 				putMultiple(code, systemControlNumber.substring(8));
 			}
@@ -153,5 +155,33 @@ public class DataObject {
 
 	public String getId() {
 		return (String) data.get(Codes.DCTERMS_IDENTIFIER);
+	}
+
+	public void fromRdfString(String record) {
+		System.out.println(record);
+		for (Codes code : Codes.values()) {
+			Pattern rdfPattern = code.rdfPattern;
+
+			try {
+				if (rdfPattern != null) {
+					Matcher matcher = rdfPattern.matcher(record);
+
+					while (matcher.find()) {
+						String value = matcher.group(1).trim();
+						value = StringEscapeUtils.unescapeHtml4(value);
+						if (code.IS_MULTIPLE)
+							putMultiple(code, value);
+						else
+							data.put(code, value);
+					}
+
+				} else {
+					System.out.println("HOW TO READ " + code + " ??");
+				}
+			} catch (Exception e) {
+				throw new RuntimeException("HOW TO READ " + code + " ??");
+			}
+		}
+
 	}
 }

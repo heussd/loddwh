@@ -21,14 +21,17 @@ public class Config {
 
 		private Dumps(String filename) {
 			this.file = new File(this.getClass().getResource("/" + filename).getFile());
+			this.string = new String(this.getClass().getResource("/" + filename).getFile());
 		}
 
 		private Dumps(String path, String filename) {
 			this.file = new File(path + filename);
+			this.string = new String(path + filename);
 		}
 
 		/* Change this */
 
 		public final File file;
+		public final String string;
 	}
 }

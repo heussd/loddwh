@@ -1,53 +1,78 @@
 package util;
 
+import java.util.regex.Pattern;
+
 public enum Codes {
 
-	DCTERMS_IDENTIFIER("035", 'a'),
-	BIBO_OCLCNUM("035", 'a'),
-	RDF_ABOUT("http://lod.hebis.de/resource/"),
-	DCTERMS_TITLE("245", 'a'),
-	DCTERMS_PUBLISHER("260", 'b'),
-	ISBD_P1017("260", 'b'),
-	ISBD_P1016("260", 'a'),
-	ISBD_P1008("250", 'a'),
-	ISBD_P1006("245", 'b'),
-	ISBD_P1004("245", 'a'),
-	ISBD_P1018("260", 'c'),
-	DCTERMS_ISSUED("260", 'c'),
-	OWL_SAMEAS("035", 'a'),
-	RDF_TYPE("", true),
-	DCTERMS_MEDIUM("paper"), // Via 300?
-	DCTERMS_FORMAT("print"), // Via 300?
-	BIBO_EDITION("250", 'a'),
-	WDRS_DESCRIBEDBY("http://lod.hebis.de/catalog/html/"),
-	DCTERMS_SUBJECT("650", '0', "http://d-nb.info/gnd/", true),
-	TEST_006("TEST_006"),
-	TEST_007("TEST_007");
+	DCTERMS_IDENTIFIER("dcterms:identifier", "035", 'a'),
+	BIBO_OCLCNUM("bibo:oclcnum", "035", 'a'),
+	RDF_ABOUT("rdf:Description rdf:about", "http://lod.hebis.de/resource/", true),
+	DCTERMS_TITLE("dcterms:title", "245", 'a'),
+	DCTERMS_PUBLISHER("dcterms:publisher", "260", 'b'),
+	ISBD_P1017("isbd:P1017", "260", 'b'),
+	ISBD_P1016("isbd:P1016", "260", 'a'),
+	ISBD_P1008("isbd:P1008", "250", 'a'),
+	ISBD_P1006("isbd:P1006", "245", 'b'),
+	ISBD_P1004("isbd:P1004", "245", 'a'),
+	ISBD_P1018("isbd:P1018", "260", 'c'),
+	DCTERMS_ISSUED("dcterms:issued", "260", 'c'),
+	OWL_SAMEAS("owl:sameas", "035", 'a'),
+	RDF_TYPE("rdf:type rdf:resource", true, true),
+	DCTERMS_MEDIUM("dcterms:medium", "paper"), // Via 300?
+	DCTERMS_FORMAT("dcterms:format", "print"), // Via 300?
+	BIBO_EDITION("bibo:edition", "250", 'a'),
+	WDRS_DESCRIBEDBY("wdrs:describedby rdf:resource", "http://lod.hebis.de/catalog/html/", true),
+	DCTERMS_SUBJECT("dcterms:subject", "650", '0', "http://d-nb.info/gnd/", true, false),
+	DCTERM_CONTRIBUTOR("dcterms:contributor");
 
-	Codes(String constant, boolean isMultiple) {
-		this(null, '0', constant, isMultiple);
-	}
-	Codes(String constant) {
-		this(null, '0', constant, false);
+	Codes(String rdfProperty, boolean isMultiple, boolean attributeValue) {
+		this(rdfProperty, null, '0', null, isMultiple, attributeValue);
 	}
 
-	Codes(String marcCode, char subfield, boolean isList) {
-		this(marcCode, subfield, null, isList);
+	Codes(String rdfProperty, String constant, boolean attributeValue) {
+		this(rdfProperty, null, '0', constant, false, attributeValue);
 	}
 
-	Codes(String marcCode, char subfield) {
-		this(marcCode, subfield, null, false);
+	Codes(String rdfProperty, String constant) {
+		this(rdfProperty, null, '0', constant, false, false);
 	}
 
-	Codes(String marcCode, char subfield, String constant, boolean multiple) {
-		this.MARC = marcCode;
-		this.subfield = subfield;
-		this.FIXEDVALUE = constant;
-		this.isMultible = multiple;
+	Codes(String rdfProperty) {
+		this(rdfProperty, null, '0', null, false, false);
 	}
 
-	final String MARC;
-	final char subfield;
-	final String FIXEDVALUE;
-	final boolean isMultible;
+	Codes(String rdfProperty, String marcCode, char subfield, boolean isList) {
+		this(rdfProperty, marcCode, subfield, null, isList, false);
+	}
+
+	Codes(String rdfProperty, String marcCode, char subfield) {
+		this(rdfProperty, marcCode, subfield, null, false, false);
+	}
+
+	Codes(String rdfProperty, String marcCode, char subfield, String constant, boolean multiple, boolean attributeValue) {
+		this.MARC_CODE = marcCode;
+		this.SUBFIELD = subfield;
+		this.CONSTANT = constant;
+		this.IS_MULTIPLE = multiple;
+		this.rdfProperty = rdfProperty;
+		this.attributeValue = attributeValue;
+
+		if (rdfProperty != null) {
+			if (attributeValue) {
+				this.rdfPattern = Pattern.compile(Pattern.quote("<" + rdfProperty + "=\"") + "(.*)" + Pattern.quote("\"") + "/?" + Pattern.quote(">"));
+			} else {
+				this.rdfPattern = Pattern.compile(Pattern.quote("<" + rdfProperty + ">") + "(.*)" + Pattern.quote("</" + rdfProperty + ">"));
+			}
+		} else {
+			this.rdfPattern = null;
+		}
+	}
+
+	final String MARC_CODE;
+	final char SUBFIELD;
+	final String CONSTANT;
+	final boolean IS_MULTIPLE;
+	final String rdfProperty;
+	final Pattern rdfPattern;
+	final boolean attributeValue;
 }
