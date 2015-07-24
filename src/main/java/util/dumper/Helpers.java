@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipException;
@@ -20,8 +21,8 @@ import org.marc4j.MarcWriter;
 import org.marc4j.marc.Record;
 
 import redis.clients.jedis.Jedis;
-import util.Config;
-import util.Config.Dumps;
+import util.DataObject;
+import util.Dataset;
 
 public abstract class Helpers {
 
@@ -99,7 +100,51 @@ public abstract class Helpers {
 		return ids;
 	}
 
-	public static void writeRdfExtract(ArrayList<String> wantedIds, Config.Dumps source, String target) throws Exception {
+	public static void readRdf(Dataset dumps, Consumer<DataObject> dataObjectConsumer) {
+
+		try {
+
+			InputStream inputStream = new GZIPInputStream(new FileInputStream(dumps.file));
+			/*
+			 * Skips "Content-Type: application/rdf+xml; charset=UTF-8
+			 * 
+			 * " at the beginning of each file - what could possibly go wrong?
+			 */
+			inputStream.skip(50);
+			BufferedReader inputReader = new BufferedReader(new InputStreamReader(inputStream));
+			// PrintWriter printWriter = new PrintWriter(new File(target));
+
+			boolean headerWrittenYet = false;
+			int counter = 0, writes = 0;
+			String inline = "", record = "";
+			while ((inline = inputReader.readLine()) != null) {
+				if (inline.contains("<dcterms:identifier>")) {
+					if (++counter % 100000 == 0) {
+						System.out.println(counter + " RDF records so far, " + writes + " writes...");
+					}
+				}
+				if (!headerWrittenYet && inline.contains("<rdf:Description")) {
+					record = "";
+					headerWrittenYet = true;
+				}
+
+				record += inline.trim() + "\n";
+
+				if (inline.contains("</rdf:Description>")) {
+					DataObject dataObject = new DataObject();
+					dataObject.fromRdfString(record);
+					dataObjectConsumer.accept(dataObject);
+					break;
+				}
+			}
+
+			inputReader.close();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static void writeRdfExtract(ArrayList<String> wantedIds, Dataset source, String target) throws Exception {
 		System.out.println("Scanning " + source + " for entites...");
 		BufferedReader inputReader = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(source.file))));
 		PrintWriter printWriter = new PrintWriter(new File(target));
@@ -142,7 +187,7 @@ public abstract class Helpers {
 		inputReader.close();
 	}
 
-	public static void writeRdfIntoRedis(Jedis jedis, Dumps dumps) throws Exception {
+	public static void writeRdfIntoRedis(Jedis jedis, Dataset dumps) throws Exception {
 		BufferedReader inputReader = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(dumps.file))));
 
 		boolean headerWrittenYet = false;
@@ -179,7 +224,7 @@ public abstract class Helpers {
 	}
 
 	public static void writeMarcExtract(ArrayList<String> wantedIds, String target) throws Exception {
-		writeMarcExtract(wantedIds, Dumps.HeBIS_Hauptbestand_in_MARC_gz.file, target);
+		writeMarcExtract(wantedIds, Dataset.HeBIS_Hauptbestand_in_MARC_gz.file, target);
 	}
 
 	public static void writeMarcExtract(ArrayList<String> wantedIds, File marcDump, String target) throws Exception {
@@ -258,7 +303,7 @@ public abstract class Helpers {
 		return maxId + "";
 	}
 
-	protected static void dumpMarc(String minimumId, Dumps marcDump, File file) throws Exception {
+	protected static void dumpMarc(String minimumId, Dataset marcDump, File file) throws Exception {
 		InputStream inputStream = new GZIPInputStream(new FileInputStream(marcDump.file));
 		MarcReader reader = new MarcStreamReader(inputStream);
 
@@ -299,7 +344,7 @@ public abstract class Helpers {
 	}
 
 	protected static void produceIdenticalMarcAndRdfDump(Jedis jedis, String target, int quanity) throws Exception {
-		InputStream inputStream = new GZIPInputStream(new FileInputStream(Dumps.HeBIS_Hauptbestand_in_MARC_gz.file));
+		InputStream inputStream = new GZIPInputStream(new FileInputStream(Dataset.HeBIS_Hauptbestand_in_MARC_gz.file));
 		MarcReader reader = new MarcStreamReader(inputStream);
 
 		MarcWriter writer = new MarcStreamWriter(new GZIPOutputStream(new FileOutputStream(target + "_marc.gz")));
@@ -334,7 +379,7 @@ public abstract class Helpers {
 					continue;
 
 				String recordId = record.getControlNumberField().getData().trim();
-//				System.out.println(recordId);
+				// System.out.println(recordId);
 				String rdfRecord = jedis.get(recordId);
 				if (rdfRecord != null) {
 					written++;

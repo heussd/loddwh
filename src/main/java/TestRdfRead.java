@@ -1,63 +1,39 @@
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.zip.GZIPInputStream;
+import java.util.HashMap;
 
-import util.Config.Dumps;
 import util.DataObject;
+import util.Dataset;
+import util.dumper.Helpers;
 
+public class TestRdfRead extends Helpers {
 
-public class TestRdfRead {
+	HashMap<String, DataObject> data = new HashMap<>();
+
+	public void lalaprinter(DataObject dataObject) {
+
+		if (data.size() % 100 == 0)
+			System.out.println(data.size());
+
+		data.put(dataObject.getId(), dataObject);
+		// System.out.println(dataObject);
+		// return true;
+	}
 
 	public static void main(String[] args) throws Exception {
-		DataObject dataObject = new DataObject();
-		
-		
-		Dumps dumps = Dumps.hebis_26887668_29873805_rdf_gz;
+		TestRdfRead testRdfRead = new TestRdfRead();
+		testRdfRead.doit();
+	}
 
-		InputStream inputStream = new GZIPInputStream(new FileInputStream(dumps.file));
-		/*
-		 * Skips "Content-Type: application/rdf+xml; charset=UTF-8
-		 * 
-		 * " at the beginning of each file - what could possibly go wrong?
-		 */
-		inputStream.skip(50);
-		BufferedReader inputReader = new BufferedReader(new InputStreamReader(inputStream));
-		// PrintWriter printWriter = new PrintWriter(new File(target));
+	public void doit() {
+		Dataset dumps = Dataset.hebis_tiny_rdf;
 
-		String rdfHeader = "";
-		boolean headerWrittenYet = false;
-		int counter = 0, writes = 0;
-		String inline = "", record = "", id = "";
-		while ((inline = inputReader.readLine()) != null) {
-			if (inline.contains("<dcterms:identifier>")) {
-				if (++counter % 100000 == 0) {
-					System.out.println(counter + " RDF records so far, " + writes + " writes...");
-				}
-				id = (inline.substring(inline.lastIndexOf("<dcterms:identifier>") + 20, inline.lastIndexOf("</dcterms:identifier>"))).trim();
-			}
-			if (!headerWrittenYet && inline.contains("<rdf:Description")) {
-				rdfHeader = record.trim();
-				record = "";
-				headerWrittenYet = true;
-			}
+		TestRdfRead testRdfRead = new TestRdfRead();
 
-			record += inline.trim() + "\n";
+		// String lala = "";
 
-			if (inline.contains("</rdf:Description>")) {
-
-//				record = "";
-
-				break;
-
-			}
-
-		}
-		dataObject.fromRdfString(record);
-		System.out.println(dataObject);
-		
-
+		readRdf(dumps, dataObject -> {
+			// System.out.println(lala);
+			lalaprinter(dataObject);
+		});
 	}
 
 }

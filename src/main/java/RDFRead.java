@@ -7,10 +7,10 @@ import java.util.zip.GZIPInputStream;
 
 import org.apache.jena.riot.Lang;
 
-import util.Config.Dumps;
-
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+
+import util.Dataset;
 
 public class RDFRead {
 
@@ -25,7 +25,7 @@ public class RDFRead {
 		// Dataset dataset = TDBFactory.createDataset(tdbPath);
 
 		Model model = ModelFactory.createDefaultModel();
-		Dumps dumps = Dumps.hebis_26887668_29873805_rdf_gz;
+		Dataset dumps = Dataset.hebis_26887668_29873805_rdf_gz;
 
 		InputStream inputStream = new GZIPInputStream(new FileInputStream(dumps.file));
 		/*

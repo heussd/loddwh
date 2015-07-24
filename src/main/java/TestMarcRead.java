@@ -8,13 +8,13 @@ import org.marc4j.MarcReader;
 import org.marc4j.MarcStreamReader;
 import org.marc4j.marc.Record;
 
-import util.Config.Dumps;
 import util.DataObject;
+import util.Dataset;
 
 public class TestMarcRead {
 
 	public static void main(String[] args) throws Exception {
-		InputStream in = new GZIPInputStream(new FileInputStream(Dumps.hebis_tiny_marc.file));
+		InputStream in = new GZIPInputStream(new FileInputStream(Dataset.hebis_tiny_marc.file));
 		MarcReader reader = new MarcStreamReader(in);
 
 //		PrintWriter printWriter = new PrintWriter(new File("lala.txt"));

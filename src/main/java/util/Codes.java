@@ -68,11 +68,11 @@ public enum Codes {
 		}
 	}
 
-	final String MARC_CODE;
-	final char SUBFIELD;
-	final String CONSTANT;
-	final boolean IS_MULTIPLE;
-	final String rdfProperty;
-	final Pattern rdfPattern;
-	final boolean attributeValue;
+	public final String MARC_CODE;
+	public final char SUBFIELD;
+	public final String CONSTANT;
+	public final boolean IS_MULTIPLE;
+	public final String rdfProperty;
+	public final Pattern rdfPattern;
+	public final boolean attributeValue;
 }

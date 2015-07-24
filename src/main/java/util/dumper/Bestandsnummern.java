@@ -11,11 +11,11 @@ import org.marc4j.MarcStreamReader;
 import org.marc4j.marc.Record;
 
 import util.DataObject;
-import util.Config.Dumps;
+import util.Dataset;
 
 public class Bestandsnummern extends Helpers {
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-		InputStream inputStream = new GZIPInputStream(new FileInputStream(Dumps.hebis_small_marc.file));
+		InputStream inputStream = new GZIPInputStream(new FileInputStream(Dataset.hebis_small_marc.file));
 		MarcReader reader = new MarcStreamReader(inputStream);
 
 		// MarcWriter writer = new MarcStreamWriter(new GZIPOutputStream(new

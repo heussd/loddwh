@@ -11,6 +11,9 @@ import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.VariableField;
 
+/**
+ * A RAM-loaded entity interpretation. Use / extend as required.
+ */
 public class DataObject {
 	HashMap<Codes, Object> data = new HashMap<>();
 
@@ -54,7 +57,8 @@ public class DataObject {
 					// throw new
 					// RuntimeException("Dont know this FORM OF MATERIAL: " +
 					// formOfMaterial +
-					// ", see http://www.loc.gov/marc/bibliographic/bd006.html");
+					// ", see
+					// http://www.loc.gov/marc/bibliographic/bd006.html");
 				}
 				break;
 
@@ -158,7 +162,7 @@ public class DataObject {
 	}
 
 	public void fromRdfString(String record) {
-		System.out.println(record);
+		// System.out.println(record);
 		for (Codes code : Codes.values()) {
 			Pattern rdfPattern = code.rdfPattern;
 
@@ -183,5 +187,9 @@ public class DataObject {
 			}
 		}
 
+	}
+
+	public Object get(Codes code) {
+		return data.get(code);
 	}
 }

@@ -2,12 +2,12 @@ package util.dumper;
 
 import java.util.ArrayList;
 
-import util.Config.Dumps;
+import util.Dataset;
 
 public class TestsetProducer extends Helpers {
 
 	public static void main(String[] args) throws Exception {
-		Dumps file = Dumps.hebis_small_rdf;
+		Dataset file = Dataset.hebis_small_rdf;
 
 		ArrayList<String> ids = new ArrayList<String>();
 		// ids.add("000000035");
