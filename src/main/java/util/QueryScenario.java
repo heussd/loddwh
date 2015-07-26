@@ -67,20 +67,29 @@ public enum QueryScenario {
 	 */
 	CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES,
 
-	
 	/**
-	 * Select 
+	 * Select
 	 */
 	GRAPH_LIKE_STROLLING_VIA_DCTERM_SUBJECTS,
 
-	SCHEMA_CHANGE_CREATE_COL,
-	SCHEMA_CHANGE_MIGRATE_COL,
-	SCHEMA_CHANGE_DELETE_COL,
+	SCHEMA_CHANGE_CREATE_COL(false),
+	SCHEMA_CHANGE_MIGRATE_COL(false),
+	SCHEMA_CHANGE_DELETE_COL(false),
 
-	UPDATE_LOW_SELECTIVITY,
-	UPDATE_HIGH_SELECTIVITY,
+	UPDATE_LOW_SELECTIVITY(false),
+	UPDATE_HIGH_SELECTIVITY(false),
 
-	DELETE_LOW_SELECTIVITY,
-	DELETE_HIGH_SELECTIVIY
+	DELETE_LOW_SELECTIVITY(false),
+	DELETE_HIGH_SELECTIVIY(false);
+
+	public final boolean isReadOnly;
+
+	private QueryScenario() {
+		this.isReadOnly = true;
+	}
+
+	QueryScenario(boolean readonly) {
+		this.isReadOnly = readonly;
+	}
 
 }

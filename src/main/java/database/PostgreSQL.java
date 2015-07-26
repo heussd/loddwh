@@ -1,18 +1,14 @@
+package database;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Properties;
-import java.util.concurrent.SynchronousQueue;
-
-import com.hp.hpl.jena.vocabulary.DCTerms;
 
 import util.Codes;
 import util.Config;
-import util.DataObject;
 import util.Dataset;
 import util.QueryScenario;
 import util.dumper.Helpers;
@@ -27,6 +23,16 @@ public class PostgreSQL extends Helpers implements Database {
 	private Properties props;
 	private String createQuery;
 	private String genericInsertStatement;
+
+	@Override
+	public String getName() {
+		return "PostgreSQL (Postgres.app)";
+	}
+
+	@Override
+	public String getVersion() {
+		return "9.4.4 / PostGIS 2.1.7 / 9.4-1201-jdbc41";
+	}
 
 	public static void main(String[] args) throws Exception {
 
@@ -47,6 +53,8 @@ public class PostgreSQL extends Helpers implements Database {
 		props.setProperty("user", Config.USER);
 		props.setProperty("password", Config.PASSWORD);
 
+		// Produce some queries based on Config / Codes enums - do not prepare
+		// statements as PreparedStatements is part of the load() or prepare().
 		createQuery = "CREATE TABLE " + Config.TABLE + " ( \n";
 		genericInsertStatement = "insert into " + Config.TABLE + " (";
 		for (int i = 0; i < Codes.values().length; i++) {
@@ -84,7 +92,7 @@ public class PostgreSQL extends Helpers implements Database {
 
 	@Override
 	public void clear() throws Exception {
-		openOrReopenConnection();
+		reopenConnection(false);
 
 		dropTable = connection.prepareStatement("DROP TABLE " + Config.TABLE);
 
@@ -96,8 +104,7 @@ public class PostgreSQL extends Helpers implements Database {
 
 	@Override
 	public void load(Dataset dataset) throws Exception {
-		if (connection == null)
-			connection = DriverManager.getConnection("jdbc:postgresql://" + Config.HOST_POSTGRES + "/" + Config.DATABASE, props);
+		reopenConnection(false);
 
 		createTable = connection.prepareStatement(createQuery);
 		createTable.execute();
@@ -105,13 +112,34 @@ public class PostgreSQL extends Helpers implements Database {
 		insertStatement = connection.prepareStatement(genericInsertStatement);
 
 		readRdf(dataset, dataObject -> {
-			loadASingleDataObject(dataObject);
+			try {
+				for (int i = 0; i < Codes.values().length; i++) {
+					Codes code = Codes.values()[i];
+					if (dataObject.get(code) == null) {
+						if (code.IS_MULTIPLE) {
+							insertStatement.setArray(i + 1, connection.createArrayOf("text", new String[] {}));
+						} else {
+							insertStatement.setNull(i + 1, java.sql.Types.VARCHAR);
+						}
+					} else {
+						if (code.IS_MULTIPLE) {
+							insertStatement.setArray(i + 1, connection.createArrayOf("text", ((ArrayList<String>) dataObject.get(code)).toArray()));
+						} else {
+							insertStatement.setString(i + 1, (String) dataObject.get(code));
+						}
+					}
+				}
+				insertStatement.execute();
+				insertStatement.clearParameters();
+			} catch (Exception e) {
+				throw new RuntimeException("Cannot insert DataObject: " + dataObject, e);
+			}
 		});
 	}
 
 	@Override
 	public void prepare(QueryScenario queryScenario) throws Exception {
-		openOrReopenConnection();
+		reopenConnection(queryScenario.isReadOnly);
 
 		switch (queryScenario) {
 		case ENTITY_RETRIEVAL_BY_ID_CASE1:
@@ -152,47 +180,14 @@ public class PostgreSQL extends Helpers implements Database {
 		return null;
 	}
 
-	@Override
-	public String getName() {
-		return "PostgreSQL (Postgres.app)";
-	}
+	private void reopenConnection(boolean readonly) throws Exception {
+		props.setProperty("ReadOnly", readonly ? "true" : "false");
 
-	@Override
-	public String getVersion() {
-		return "9.4.4 / PostGIS 2.1.7 / 9.4-1201-jdbc41";
-	}
-
-	private void openOrReopenConnection() throws Exception {
 		if (connection != null && !connection.isClosed())
 			connection.close();
 
 		if (connection == null || connection.isClosed())
 			connection = DriverManager.getConnection("jdbc:postgresql://" + Config.HOST_POSTGRES + "/" + Config.DATABASE, props);
-	}
-
-	private void loadASingleDataObject(DataObject dataObject) {
-		try {
-			for (int i = 0; i < Codes.values().length; i++) {
-				Codes code = Codes.values()[i];
-				if (dataObject.get(code) == null) {
-					if (code.IS_MULTIPLE) {
-						insertStatement.setArray(i + 1, connection.createArrayOf("text", new String[] {}));
-					} else {
-						insertStatement.setNull(i + 1, java.sql.Types.VARCHAR);
-					}
-				} else {
-					if (code.IS_MULTIPLE) {
-						insertStatement.setArray(i + 1, connection.createArrayOf("text", ((ArrayList<String>) dataObject.get(code)).toArray()));
-					} else {
-						insertStatement.setString(i + 1, (String) dataObject.get(code));
-					}
-				}
-			}
-			insertStatement.execute();
-			insertStatement.clearParameters();
-		} catch (Exception e) {
-			throw new RuntimeException("Cannot insert DataObject: " + dataObject, e);
-		}
 	}
 
 }
