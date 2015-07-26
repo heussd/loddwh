@@ -32,30 +32,40 @@ public interface Database {
 
 	/**
 	 * Sets up the environment of the given database, e.g. makes sure it is
-	 * available and prepares internal structures. Should only be executed once.
-	 * After this, everything should be set up to load entities.
-	 * 
-	 * @throws Exception
+	 * available and prepares internal structures. Should only be called
+	 * <b>once</b>, if at all. After this, everything should be set up to load
+	 * entities.
 	 */
 	public void setUp() throws Exception;
-
-	/**
-	 * Initiates the database and resets it to an empty state. Designed to be
-	 * called multiple times during evaluation. After this, the database is
-	 * ready to load entities or to be queried.
-	 */
-	public void initialize() throws Exception;
-
-	/**
-	 * Verifies that an entity with the given id was written.
-	 */
-	public void verifyEntityWrite(String id) throws Exception;
 
 	/**
 	 * Loads the specified {@link Dataset} entirely.
 	 */
 	public void load(Dataset dataset) throws Exception;
 
-	// TODO: @Marco: Rückgabeformat für query-Ergebnisse spezifizieren
-	public String query(QueryScenario queryScenario) throws Exception;
+	/**
+	 * Prepares the given {@link QueryScenario} with specific steps that only
+	 * need to be done once per {@link QueryScenario} respectively once per
+	 * every query.
+	 */
+	public void prepare(QueryScenario queryScenario) throws Exception;
+
+	/**
+	 * Execute the given {@link QueryScenario}.
+	 */
+	public String query(QueryScenario queryScenario) throws Exception; // TODO:
+																		// @Marco:
+																		// Rückgabeformat
+																		// für
+																		// query-Ergebnisse
+																		// spezifizieren
+
+	/**
+	 * Reinitiates the database and resets it to an empty state aka
+	 * "the state after setUp()". Designed to be called execution of a
+	 * {@link QueryScenario}. After this, the database is ready to load entities
+	 * or to be queried (even though it should be empty).
+	 */
+	public void clear() throws Exception;
+
 }

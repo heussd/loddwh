@@ -11,4 +11,6 @@ public class Config {
 	public final static String DATABASE = "loddwhbench";
 
 	public static final String TABLE = "justatable";
+
+	public static final String HOST_POSTGRES = "localhost";
 }
