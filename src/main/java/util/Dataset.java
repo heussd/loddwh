@@ -4,9 +4,11 @@ import java.io.File;
 
 /**
  * Represents a set of "raw" entities to be loaded.
- *
  */
 public enum Dataset {
+
+	// TODO: @Marco: Wir brauchen eine Möglichkeit, pro Dataset und
+	// QueryScenario erwartete Ergebnisse zu formulieren
 	HeBIS_Hauptbestand_in_MARC_gz(Config.WHERE_THE_FILES_AT, "HeBIS_Hauptbestand_in_MARC.gz"),
 	hebis_29873806_36057474_rdf_gz(Config.WHERE_THE_FILES_AT, "hebis-29873806-36057474.rdf.gz"),
 	hebis_00000001_05051126_rdf_gz(Config.WHERE_THE_FILES_AT, "hebis-00000001-05051126.rdf.gz"),
@@ -29,8 +31,6 @@ public enum Dataset {
 		this.file = new File(path + filename);
 		this.string = new String(path + filename);
 	}
-
-	/* Change this */
 
 	public final File file;
 	public final String string;

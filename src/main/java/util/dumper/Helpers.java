@@ -134,7 +134,7 @@ public abstract class Helpers {
 					DataObject dataObject = new DataObject();
 					dataObject.fromRdfString(record);
 					dataObjectConsumer.accept(dataObject);
-					break;
+					record = "";
 				}
 			}
 

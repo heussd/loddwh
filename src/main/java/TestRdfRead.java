@@ -1,5 +1,7 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import util.Codes;
 import util.DataObject;
 import util.Dataset;
 import util.dumper.Helpers;
@@ -31,8 +33,7 @@ public class TestRdfRead extends Helpers {
 		// String lala = "";
 
 		readRdf(dumps, dataObject -> {
-			// System.out.println(lala);
-			lalaprinter(dataObject);
+			System.out.println(((ArrayList<String>)dataObject.get(Codes.RDF_TYPE)).size());
 		});
 	}
 

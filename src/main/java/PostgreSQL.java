@@ -3,12 +3,17 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Properties;
+import java.util.concurrent.SynchronousQueue;
+
+import com.hp.hpl.jena.vocabulary.DCTerms;
 
 import util.Codes;
 import util.Config;
 import util.DataObject;
 import util.Dataset;
+import util.QueryScenario;
 import util.dumper.Helpers;
 
 public class PostgreSQL extends Helpers implements Database {
@@ -17,6 +22,7 @@ public class PostgreSQL extends Helpers implements Database {
 	private PreparedStatement dropTable;
 	private PreparedStatement insertStatement;
 	private PreparedStatement createTable;
+	private HashMap<QueryScenario, PreparedStatement> scenarioQueries = new HashMap<>();
 
 	public static void main(String[] args) throws Exception {
 
@@ -29,46 +35,10 @@ public class PostgreSQL extends Helpers implements Database {
 		postgreSQL.initialize();
 
 		// Load first dump, this is time critical
-		postgreSQL.load(dataset);
+		// postgreSQL.load(dataset);
 
 		postgreSQL.verifyEntityWrite("268876681");
-	}
-
-	@Override
-	public void initialize() throws Exception {
-		String url = "jdbc:postgresql://localhost/postgres";
-		url = "jdbc:postgresql://localhost/" + Config.DATABASE;
-		Properties props = new Properties();
-		props.setProperty("user", Config.USER);
-		props.setProperty("password", Config.PASSWORD);
-		connection = DriverManager.getConnection(url, props);
-
-		dropTable = connection.prepareStatement("DROP TABLE " + Config.TABLE);
-
-		String createQuery = "CREATE TABLE " + Config.TABLE + " ( \n";
-		String genericInsertStatement = "insert into " + Config.TABLE + " (";
-		for (int i = 0; i < Codes.values().length; i++) {
-			Codes code = Codes.values()[i];
-			createQuery += " " + code.toString() + " " + (code.IS_MULTIPLE ? "text ARRAY" : "text");
-			genericInsertStatement += code.toString();
-			// Last one?
-			createQuery += (Codes.values().length - 1 == i ? "\n)" : ",\n");
-			genericInsertStatement += (Codes.values().length - 1 == i ? ")" : ",");
-		}
-		genericInsertStatement += "\nVALUES(";
-		for (int i = 0; i < Codes.values().length; i++) {
-			genericInsertStatement += "?" + (Codes.values().length - 1 == i ? ")" : ",");
-		}
-		insertStatement = connection.prepareStatement(genericInsertStatement);
-
-		createTable = connection.prepareStatement(createQuery);
-
-		try {
-			dropTable.execute();
-		} catch (Exception e) {
-		}
-		;
-		createTable.execute();
+		postgreSQL.query(QueryScenario.CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES);
 	}
 
 	private void loadASingleDataObject(DataObject dataObject) {
@@ -109,7 +79,7 @@ public class PostgreSQL extends Helpers implements Database {
 		Properties props = new Properties();
 		props.setProperty("user", Config.USER);
 		props.setProperty("password", Config.PASSWORD);
-		connection = DriverManager.getConnection(url, props);
+		Connection connection = DriverManager.getConnection(url, props);
 
 		PreparedStatement preparedStatement = connection.prepareStatement("DROP DATABASE " + Config.DATABASE);
 		preparedStatement.execute();
@@ -119,6 +89,78 @@ public class PostgreSQL extends Helpers implements Database {
 
 		preparedStatement.close();
 		connection.close();
+	}
+
+	@Override
+	public void initialize() throws Exception {
+		String url = "jdbc:postgresql://localhost/postgres";
+		url = "jdbc:postgresql://localhost/" + Config.DATABASE;
+		Properties props = new Properties();
+		props.setProperty("user", Config.USER);
+		props.setProperty("password", Config.PASSWORD);
+		connection = DriverManager.getConnection(url, props);
+
+		dropTable = connection.prepareStatement("DROP TABLE " + Config.TABLE);
+
+		String createQuery = "CREATE TABLE " + Config.TABLE + " ( \n";
+		String genericInsertStatement = "insert into " + Config.TABLE + " (";
+		for (int i = 0; i < Codes.values().length; i++) {
+			Codes code = Codes.values()[i];
+			createQuery += " " + code.toString() + " " + (code.IS_MULTIPLE ? "text ARRAY" : "text");
+			genericInsertStatement += code.toString();
+			// Last one?
+			createQuery += (Codes.values().length - 1 == i ? "\n)" : ",\n");
+			genericInsertStatement += (Codes.values().length - 1 == i ? ")" : ",");
+		}
+		genericInsertStatement += "\nVALUES(";
+		for (int i = 0; i < Codes.values().length; i++) {
+			genericInsertStatement += "?" + (Codes.values().length - 1 == i ? ")" : ",");
+		}
+		insertStatement = connection.prepareStatement(genericInsertStatement);
+		createTable = connection.prepareStatement(createQuery);
+
+		for (QueryScenario queryScenario : QueryScenario.values()) {
+			PreparedStatement preparedStatement = null;
+
+			switch (queryScenario) {
+			case ENTITY_RETRIEVAL_BY_ID_CASE1:
+				preparedStatement = connection.prepareStatement("select * from " + Config.TABLE + " where " + Codes.DCTERMS_IDENTIFIER + " = '268893950'");
+				break;
+			case AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10:
+				preparedStatement = connection.prepareStatement("select " + Codes.DCTERMS_PUBLISHER + ", count(" + Codes.DCTERMS_PUBLISHER + ") from " + Config.TABLE + " group by "
+						+ Codes.DCTERMS_PUBLISHER + " order by count(" + Codes.DCTERMS_PUBLISHER + ") desc limit 10");
+				break;
+			case AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100:
+				preparedStatement = connection.prepareStatement("select " + Codes.DCTERMS_PUBLISHER + ", count(" + Codes.DCTERMS_PUBLISHER + ") from " + Config.TABLE + " group by "
+						+ Codes.DCTERMS_PUBLISHER + " order by count(" + Codes.DCTERMS_PUBLISHER + ") desc limit 100");
+				break;
+			case AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL:
+				preparedStatement = connection.prepareStatement("select " + Codes.DCTERMS_PUBLISHER + ", count(" + Codes.DCTERMS_PUBLISHER + ") from " + Config.TABLE + " group by "
+						+ Codes.DCTERMS_PUBLISHER + " order by count(" + Codes.DCTERMS_PUBLISHER + ") desc");
+				break;
+			case AGGREGATE_ISSUES_PER_CENTURY_ALL:
+				preparedStatement = connection.prepareStatement("select SUBSTR(" + Codes.DCTERMS_ISSUED + ", 1, 3), count(" + Codes.DCTERMS_IDENTIFIER
+						+ ") from justatable group by SUBSTR(" + Codes.DCTERMS_ISSUED + ", 1, 3) order by SUBSTR(" + Codes.DCTERMS_ISSUED + ", 1, 3)");
+				break;
+			case CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES:
+				preparedStatement = connection.prepareStatement("select * from " + Config.TABLE + " where 'http://purl.org/dc/terms/BibliographicResource' = ANY(" + Codes.RDF_TYPE
+						+ ") and (LOWER(" + Codes.DCTERMS_TITLE + ") LIKE '%studie%' OR LOWER(" + Codes.DCTERMS_TITLE + ") LIKE '%study%')");
+				break;
+			default:
+				break;
+			// throw new RuntimeException("Do not know what to do with
+			// QueryScenario " + queryScenario);
+			}
+
+			scenarioQueries.put(queryScenario, preparedStatement);
+		}
+
+		try {
+			dropTable.execute();
+		} catch (Exception e) { // Ignore if dropping fails.
+		}
+		;
+		createTable.execute();
 	}
 
 	@Override
@@ -142,14 +184,25 @@ public class PostgreSQL extends Helpers implements Database {
 		boolean idFound = false;
 		while (resultSet.next()) {
 			if (idFound)
-				throw new RuntimeException("ID " + id + " found multiple times");
+				throw new DatabaseException("ID " + id + " found multiple times");
 
 			if (resultSet.getString(1).equals(id)) {
 				idFound = true;
 			}
 		}
 		if (!idFound)
-			throw new RuntimeException("ID " + id + " not found");
+			throw new DatabaseException("ID " + id + " not found");
+	}
+
+	@Override
+	public String query(QueryScenario queryScenario) throws Exception {
+		PreparedStatement preparedStatement = scenarioQueries.get(queryScenario);
+		if (preparedStatement == null)
+			throw new RuntimeException("There is no preparedStatement for QueryScenario " + queryScenario);
+
+		ResultSet resultSet = preparedStatement.executeQuery();
+
+		return null;
 	}
 
 }

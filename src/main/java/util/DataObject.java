@@ -17,6 +17,30 @@ import org.marc4j.marc.VariableField;
 public class DataObject {
 	HashMap<Codes, Object> data = new HashMap<>();
 
+	public void putMultiple(Codes code, String value) {
+		ArrayList<String> returnValue = (ArrayList<String>) data.get(code);
+		if (returnValue == null) {
+			returnValue = new ArrayList<String>();
+		}
+
+		returnValue.add(value);
+		data.put(code, returnValue);
+	}
+
+	@Override
+	public String toString() {
+		String result = "";
+
+		for (Codes code : data.keySet()) {
+			result += code.toString() + ":\t" + data.get(code) + "\n";
+		}
+		return result;
+	}
+
+	public String getId() {
+		return (String) data.get(Codes.DCTERMS_IDENTIFIER);
+	}
+
 	public void fromMarcRecord(Record record) {
 		// Extract subfield a
 		for (Codes code : Codes.values()) {
@@ -137,32 +161,7 @@ public class DataObject {
 		}
 	}
 
-	public void putMultiple(Codes code, String value) {
-		ArrayList<String> returnValue = (ArrayList<String>) data.get(code);
-		if (returnValue == null) {
-			returnValue = new ArrayList<String>();
-		}
-
-		returnValue.add(value);
-		data.put(code, returnValue);
-	}
-
-	@Override
-	public String toString() {
-		String result = "";
-
-		for (Codes code : data.keySet()) {
-			result += code.toString() + ":\t" + data.get(code) + "\n";
-		}
-		return result;
-	}
-
-	public String getId() {
-		return (String) data.get(Codes.DCTERMS_IDENTIFIER);
-	}
-
 	public void fromRdfString(String record) {
-		// System.out.println(record);
 		for (Codes code : Codes.values()) {
 			Pattern rdfPattern = code.rdfPattern;
 
@@ -186,7 +185,6 @@ public class DataObject {
 				throw new RuntimeException("HOW TO READ " + code + " ??");
 			}
 		}
-
 	}
 
 	public Object get(Codes code) {

@@ -1,4 +1,5 @@
 import util.Dataset;
+import util.QueryScenario;
 
 /**
  * Represents a specific database to be evaluated. Here are some principal
@@ -39,9 +40,9 @@ public interface Database {
 	public void setUp() throws Exception;
 
 	/**
-	 * Resets the database to an empty state. Designed to be called multiple
-	 * times during evaluation. After this, the database is ready to load
-	 * entities or to be queried (even though it should be empty).
+	 * Initiates the database and resets it to an empty state. Designed to be
+	 * called multiple times during evaluation. After this, the database is
+	 * ready to load entities or to be queried.
 	 */
 	public void initialize() throws Exception;
 
@@ -54,4 +55,7 @@ public interface Database {
 	 * Loads the specified {@link Dataset} entirely.
 	 */
 	public void load(Dataset dataset) throws Exception;
+
+	// TODO: @Marco: Rückgabeformat für query-Ergebnisse spezifizieren
+	public String query(QueryScenario queryScenario) throws Exception;
 }
