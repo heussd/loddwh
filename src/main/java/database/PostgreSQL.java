@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -38,11 +39,11 @@ public class PostgreSQL extends Helpers implements Database {
 
 		PostgreSQL postgreSQL = new PostgreSQL();
 
-		Dataset dataset = Dataset.hebis_tiny_rdf;
-		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_CASE1;
+		Dataset dataset = Dataset.hebis_medium_rdf;
+		QueryScenario queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP;
 
-		postgreSQL.setUp();
-		postgreSQL.load(dataset);
+		// postgreSQL.setUp();
+		// postgreSQL.load(dataset);
 
 		postgreSQL.prepare(queryScenario);
 		postgreSQL.query(queryScenario);
@@ -79,7 +80,10 @@ public class PostgreSQL extends Helpers implements Database {
 		Connection connection = DriverManager.getConnection("jdbc:postgresql://" + Config.HOST_POSTGRES + "/postgres", props);
 
 		PreparedStatement preparedStatement = connection.prepareStatement("DROP DATABASE " + Config.DATABASE);
-		preparedStatement.execute();
+		try {
+			preparedStatement.execute();
+		} catch (Exception e) {
+		}
 
 		preparedStatement = connection.prepareStatement("CREATE DATABASE " + Config.DATABASE);
 		preparedStatement.execute();
@@ -164,6 +168,20 @@ public class PostgreSQL extends Helpers implements Database {
 		case CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES:
 			preparedScenarioStatement = connection.prepareStatement("select * from " + Config.TABLE + " where 'http://purl.org/dc/terms/BibliographicResource' = ANY("
 					+ Codes.RDF_TYPE + ") and (LOWER(" + Codes.DCTERMS_TITLE + ") LIKE '%studie%' OR LOWER(" + Codes.DCTERMS_TITLE + ") LIKE '%study%')");
+			break;
+		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP:
+			Statement statement = connection.createStatement();
+
+			// XXX: @Timm The select statement does not use this index :/
+			statement.execute("DROP INDEX IF EXISTS idx_identifier");
+			statement.execute("CREATE INDEX idx_identifier on \"" + Config.TABLE + "\" (\"" + Codes.DCTERMS_IDENTIFIER.toString().toLowerCase() + "\")");
+
+			statement.execute("DROP INDEX IF EXISTS idx_subjects");
+			statement.execute("CREATE INDEX idx_subjects on \"" + Config.TABLE + "\" USING GIN (\"" + Codes.DCTERMS_SUBJECT.toString().toLowerCase() + "\")");
+
+			preparedScenarioStatement = connection.prepareStatement(
+					"select * from (SELECT dcterms_identifier, unnest(dcterms_subject) subject FROM justatable) level0 inner join (SELECT dcterms_identifier, unnest(dcterms_subject) subject FROM justatable) level1 on level0.subject = level1.subject and level0.dcterms_identifier != level1.dcterms_identifier");
+
 			break;
 		default:
 			throw new RuntimeException("Do not know what to do with QueryScenario " + queryScenario);

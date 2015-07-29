@@ -1,4 +1,5 @@
 package database;
+
 import util.Dataset;
 import util.QueryScenario;
 
@@ -52,14 +53,10 @@ public interface Database {
 	public void prepare(QueryScenario queryScenario) throws Exception;
 
 	/**
-	 * Execute the given {@link QueryScenario}.
+	 * Execute the given {@link QueryScenario}. // TODO: @Marco: Rückgabeformat
+	 * für query-Ergebnisse spezifizieren
 	 */
-	public String query(QueryScenario queryScenario) throws Exception; // TODO:
-																		// @Marco:
-																		// Rückgabeformat
-																		// für
-																		// query-Ergebnisse
-																		// spezifizieren
+	public String query(QueryScenario queryScenario) throws Exception;
 
 	/**
 	 * Reinitiates the database and resets it to an empty state aka

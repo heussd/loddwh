@@ -68,7 +68,24 @@ public enum QueryScenario {
 	CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES,
 
 	/**
-	 * Select
+	 * For each record, find records that share a DCTERMS_SUBJECT and return:
+	 * original.dcterms_identifier, original.dcterms_subject,
+	 * related.dcterms_identifier. E.g.:
+	 * 
+	 * "272250422" -> "http://d-nb.info/gnd/1007928-2" <- "272527807"
+	 */
+	GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP,
+
+	/**
+	 * For each record, find records that share a DCTERMS_SUBJECT, find records
+	 * that share a DCTERMS-SUBJECT with those, and return:
+	 * original.dcterms_identifier, original.dcterms_subject,
+	 * firstrelated.dcterms_identifier, secondrelated.dcterms_identifier.
+	 */
+	GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS,
+
+	/**
+	 * 
 	 */
 	GRAPH_LIKE_STROLLING_VIA_DCTERM_SUBJECTS,
 
