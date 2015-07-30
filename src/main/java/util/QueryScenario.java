@@ -85,19 +85,50 @@ public enum QueryScenario {
 	GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS,
 
 	/**
-	 * 
+	 * Create a new property for every record, defaulting to "cheesecake".
 	 */
-	GRAPH_LIKE_STROLLING_VIA_DCTERM_SUBJECTS,
+	SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY(false),
 
-	SCHEMA_CHANGE_CREATE_COL(false),
-	SCHEMA_CHANGE_MIGRATE_COL(false),
-	SCHEMA_CHANGE_DELETE_COL(false),
+	/**
+	 * Take the ID-suffix of RDF_ABOUT (e.g. "26887682" in
+	 * "http://lod.hebis.de/resource/26887682") and store it in a new property.
+	 */
+	SCHEMA_CHANGE_INTRODUCE_STRING_OP(false),
 
-	UPDATE_LOW_SELECTIVITY(false),
-	UPDATE_HIGH_SELECTIVITY(false),
+	/**
+	 * Create a boolean field for every single RDF_TYPE, each indicating if a
+	 * record is of this type. After that, remove RDF_TYPE from every record.
+	 */
+	SCHEMA_CHANGE_MIGRATE_RDF_TYPE(false),
 
-	DELETE_LOW_SELECTIVITY(false),
-	DELETE_HIGH_SELECTIVIY(false);
+	/**
+	 * Remove RDF_TYPE from every record.
+	 */
+	SCHEMA_CHANGE_REMOVE_RDF_TYPE(false),
+
+	/**
+	 * Set DCTERMS_MEDIUM to "recycled trees" on records having DCTERMS_MEDIUM
+	 * == "paper". This affects about 90% of the records.
+	 */
+	UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM(false),
+
+	/**
+	 * Set DCTERMS_ISSUED to 0 on records that have no value for this property.
+	 * This affects about 2% of the records.
+	 */
+	UPDATE_HIGH_SELECTIVITY_NON_ISSUED(false),
+
+	/**
+	 * Remove records having DCTERMS_MEDIUM == "paper". This affects about 90%
+	 * of the records.
+	 */
+	DELETE_LOW_SELECTIVITY_PAPER_MEDIUM(false),
+
+	/**
+	 * Remove records that have no value for DCTERMS_ISSUED. This affects about
+	 * 2% of the records.
+	 */
+	DELETE_HIGH_SELECTIVIY_NON_ISSUED(false);
 
 	public final boolean isReadOnly;
 

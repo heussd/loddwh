@@ -40,7 +40,7 @@ public class PostgreSQL extends Helpers implements Database {
 		PostgreSQL postgreSQL = new PostgreSQL();
 
 		Dataset dataset = Dataset.hebis_medium_rdf;
-		QueryScenario queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP;
+		QueryScenario queryScenario = QueryScenario.UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM;
 
 		// postgreSQL.setUp();
 		// postgreSQL.load(dataset);
@@ -145,6 +145,7 @@ public class PostgreSQL extends Helpers implements Database {
 	public void prepare(QueryScenario queryScenario) throws Exception {
 		reopenConnection(queryScenario.isReadOnly);
 
+		Statement statement = connection.createStatement();
 		switch (queryScenario) {
 		case ENTITY_RETRIEVAL_BY_ID_CASE1:
 			preparedScenarioStatement = connection.prepareStatement("select * from " + Config.TABLE + " where " + Codes.DCTERMS_IDENTIFIER + " = '268893950'");
@@ -170,7 +171,6 @@ public class PostgreSQL extends Helpers implements Database {
 					+ Codes.RDF_TYPE + ") and (LOWER(" + Codes.DCTERMS_TITLE + ") LIKE '%studie%' OR LOWER(" + Codes.DCTERMS_TITLE + ") LIKE '%study%')");
 			break;
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP:
-			Statement statement = connection.createStatement();
 
 			// XXX: @Timm The select statement does not use this index :/
 			statement.execute("DROP INDEX IF EXISTS idx_identifier");
@@ -179,10 +179,19 @@ public class PostgreSQL extends Helpers implements Database {
 			statement.execute("DROP INDEX IF EXISTS idx_subjects");
 			statement.execute("CREATE INDEX idx_subjects on \"" + Config.TABLE + "\" USING GIN (\"" + Codes.DCTERMS_SUBJECT.toString().toLowerCase() + "\")");
 
+			// http://www.postgresql.org/docs/8.3/static/functions-array.html
 			preparedScenarioStatement = connection.prepareStatement(
 					"select * from (SELECT dcterms_identifier, unnest(dcterms_subject) subject FROM justatable) level0 inner join (SELECT dcterms_identifier, unnest(dcterms_subject) subject FROM justatable) level1 on level0.subject = level1.subject and level0.dcterms_identifier != level1.dcterms_identifier");
-
 			break;
+		case UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM:
+			statement = connection.createStatement();
+			// XXX: @Timm The select statement does not use this index :/
+			statement.execute("DROP INDEX IF EXISTS idx_types");
+			statement.execute("CREATE INDEX idx_types on \"" + Config.TABLE + "\" USING GIN (\"" + Codes.DCTERMS_SUBJECT.toString().toLowerCase() + "\")");
+
+			preparedScenarioStatement = connection.prepareStatement("select * from justatable where 'http://purl.org/dc/terms/BibliographicResource' = ANY(rdf_type)");
+			break;
+
 		default:
 			throw new RuntimeException("Do not know what to do with QueryScenario " + queryScenario);
 		}
