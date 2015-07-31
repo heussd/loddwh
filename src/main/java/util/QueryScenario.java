@@ -1,5 +1,14 @@
 package util;
 
+import database.Database;
+
+/**
+ * Contains a number of scenarios in which {@link Database} implementations will
+ * be evaluated. The scenarios can be grouped by their fundamental operations,
+ * so there are several queries for ENTITY_RETRIEVAL, AGGREGATE,
+ * CONDITIONAL_TABLE_SCAN, GRAPH_LIKE, SCHEMA_CHANGE, UPDATE and DELETE
+ * scenarios.
+ */
 public enum QueryScenario {
 
 	/**
