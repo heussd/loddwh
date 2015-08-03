@@ -3,7 +3,6 @@ package database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -17,9 +16,6 @@ import util.dumper.Helpers;
 public class PostgreSQL extends Helpers implements Database {
 
 	private Connection connection;
-	private PreparedStatement dropTable;
-	private PreparedStatement insertStatement;
-	private PreparedStatement createTable;
 	private Properties props;
 	private String createQuery;
 	private String genericInsertStatement;
@@ -41,13 +37,15 @@ public class PostgreSQL extends Helpers implements Database {
 		PostgreSQL postgreSQL = new PostgreSQL();
 
 		Dataset dataset = Dataset.hebis_medium_rdf;
-		QueryScenario queryScenario = QueryScenario.SCHEMA_CHANGE_INTRODUCE_STRING_OP;
+
+		QueryScenario queryScenario = QueryScenario.SCHEMA_CHANGE_MIGRATE_RDF_TYPE;
 
 		// postgreSQL.setUp();
 		// postgreSQL.load(dataset);
-
+		// postgreSQL.clear(queryScenario);
 		postgreSQL.prepare(queryScenario);
 		postgreSQL.query(queryScenario);
+
 	}
 
 	public PostgreSQL() {
@@ -80,11 +78,11 @@ public class PostgreSQL extends Helpers implements Database {
 	public void setUp() throws Exception {
 		Connection connection = DriverManager.getConnection("jdbc:postgresql://" + Config.HOST_POSTGRES + "/postgres", props);
 
-		PreparedStatement preparedStatement = connection.prepareStatement("DROP DATABASE " + Config.DATABASE);
-		try {
-			preparedStatement.execute();
-		} catch (Exception e) {
-		}
+		PreparedStatement preparedStatement = connection.prepareStatement("DROP DATABASE IF EXISTS " + Config.DATABASE);
+		// try {
+		preparedStatement.execute();
+		// } catch (Exception e) {
+		// }
 
 		preparedStatement = connection.prepareStatement("CREATE DATABASE " + Config.DATABASE);
 		preparedStatement.execute();
@@ -92,29 +90,31 @@ public class PostgreSQL extends Helpers implements Database {
 		preparedStatement.close();
 		connection.close();
 
-		clear(null);
+		// clear(null);
 	}
 
 	@Override
 	public void clear(QueryScenario queryScenario) throws Exception {
 		reopenConnection(false);
 
-		dropTable = connection.prepareStatement("DROP TABLE " + Config.TABLE);
-
-		try {
-			dropTable.execute();
-		} catch (Exception e) { // Ignore if dropping fails.
-		}
+		// dropTable = connection.prepareStatement("DROP TABLE " +
+		// Config.TABLE);
+		//
+		// try {
+		// dropTable.execute();
+		// } catch (Exception e) { // Ignore if dropping fails.
+		// }
+		connection.createStatement().executeUpdate("alter table " + Config.TABLE + " drop column if exists manifestation");
 	}
 
 	@Override
 	public void load(Dataset dataset) throws Exception {
 		reopenConnection(false);
 
-		createTable = connection.prepareStatement(createQuery);
+		PreparedStatement createTable = connection.prepareStatement(createQuery);
 		createTable.execute();
 
-		insertStatement = connection.prepareStatement(genericInsertStatement);
+		PreparedStatement insertStatement = connection.prepareStatement(genericInsertStatement);
 
 		readRdf(dataset, dataObject -> {
 			try {
@@ -156,7 +156,13 @@ public class PostgreSQL extends Helpers implements Database {
 			scenarioStatements.add(connection.prepareStatement("select * from " + Config.TABLE + " where " + Codes.DCTERMS_IDENTIFIER + " = '268893950'"));
 			break;
 		case AGGREGATE_ISSUES_PER_CENTURY_TOP10:
+			// https://stackoverflow.com/questions/13674031/how-to-get-the-top-10-values-in-postgresql
+			scenarioStatements.add(connection.prepareStatement("select SUBSTR(" + Codes.DCTERMS_ISSUED + ", 1, 3), count(" + Codes.DCTERMS_IDENTIFIER
+					+ ") from justatable group by SUBSTR(" + Codes.DCTERMS_ISSUED + ", 1, 3) order by SUBSTR(" + Codes.DCTERMS_ISSUED + ", 1, 3) top 10"));
+			break;
 		case AGGREGATE_ISSUES_PER_CENTURY_TOP100:
+			scenarioStatements.add(connection.prepareStatement("select SUBSTR(" + Codes.DCTERMS_ISSUED + ", 1, 3), count(" + Codes.DCTERMS_IDENTIFIER
+					+ ") from justatable group by SUBSTR(" + Codes.DCTERMS_ISSUED + ", 1, 3) order by SUBSTR(" + Codes.DCTERMS_ISSUED + ", 1, 3) top 100"));
 			break;
 		case AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10:
 			scenarioStatements.add(connection.prepareStatement("select " + Codes.DCTERMS_PUBLISHER + ", count(" + Codes.DCTERMS_PUBLISHER + ") from " + Config.TABLE + " group by "
@@ -179,10 +185,14 @@ public class PostgreSQL extends Helpers implements Database {
 					+ ") and (LOWER(" + Codes.DCTERMS_TITLE + ") LIKE '%studie%' OR LOWER(" + Codes.DCTERMS_TITLE + ") LIKE '%study%')"));
 			break;
 		case CONDITIONAL_TABLE_SCAN_ALL_STUDIES:
+			scenarioStatements.add(connection.prepareStatement(
+					"select * from " + Config.TABLE + " where (LOWER(" + Codes.DCTERMS_TITLE + ") LIKE '%studie%' OR LOWER(" + Codes.DCTERMS_TITLE + ") LIKE '%study%')"));
+			break;
 		case CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES:
+			scenarioStatements
+					.add(connection.prepareStatement("select * from " + Config.TABLE + " where 'http://purl.org/dc/terms/BibliographicResource' = ANY(" + Codes.RDF_TYPE + ")"));
 			break;
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP:
-
 			// XXX: @Timm The select statement does not use this index :/
 			statement.execute("DROP INDEX IF EXISTS idx_identifier");
 			statement.execute("CREATE INDEX idx_identifier on \"" + Config.TABLE + "\" (\"" + Codes.DCTERMS_IDENTIFIER.toString().toLowerCase() + "\")");
@@ -194,18 +204,28 @@ public class PostgreSQL extends Helpers implements Database {
 			scenarioStatements.add(connection.prepareStatement(
 					"select * from (SELECT dcterms_identifier, unnest(dcterms_subject) subject FROM justatable) level0 inner join (SELECT dcterms_identifier, unnest(dcterms_subject) subject FROM justatable) level1 on level0.subject = level1.subject and level0.dcterms_identifier != level1.dcterms_identifier"));
 			break;
-
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS:
 			break;
 		case SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY:
 			scenarioStatements.add(connection.prepareStatement("alter table " + Config.TABLE + " add column " + Config.NEWCOLUMN + " text default 'cheesecake'"));
 			break;
 		case SCHEMA_CHANGE_INTRODUCE_STRING_OP:
-			scenarioStatements.add(connection.prepareStatement("alter table justatable add column newprop"));
-			scenarioStatements.add(connection.prepareStatement("update justatable set RDF_ABOUT=substring(RDF_ABOUT from '........$')"));
+			scenarioStatements.add(connection.prepareStatement("alter table " + Config.TABLE + " add column " + Config.NEWCOLUMN + " text"));
+			scenarioStatements.add(connection.prepareStatement("update " + Config.TABLE + " set RDF_ABOUT=substring(RDF_ABOUT from '........$')"));
 			break;
 		case SCHEMA_CHANGE_MIGRATE_RDF_TYPE:
+			scenarioStatements.add(connection.prepareStatement("alter table " + Config.TABLE + " add column manifestation boolean default false"));
+			scenarioStatements
+					.add(connection.prepareStatement("update " + Config.TABLE + " set manifestation = true where 'http://purl.org/vocab/frbr/core#Manifestation' = ANY(RDF_TYPE)"));
+			scenarioStatements.add(connection.prepareStatement("alter table " + Config.TABLE + " add column bibliographicresource boolean default false"));
+			scenarioStatements.add(connection
+					.prepareStatement("update " + Config.TABLE + " set bibliographicresource = true where 'http://purl.org/dc/terms/BibliographicResource' = ANY(RDF_TYPE)"));
+			scenarioStatements.add(connection.prepareStatement("alter table " + Config.TABLE + " add column book boolean default false"));
+			scenarioStatements.add(connection.prepareStatement("update " + Config.TABLE + " set book = true where 'http://purl.org/ontology/bibo/Book' = ANY(RDF_TYPE)"));
+			scenarioStatements.add(connection.prepareStatement("alter table " + Config.TABLE + " drop column RDF_TYPE"));
+			break;
 		case SCHEMA_CHANGE_REMOVE_RDF_TYPE:
+			scenarioStatements.add(connection.prepareStatement("alter table " + Config.TABLE + " drop column RDF_TYPE"));
 			break;
 		case UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM:
 			statement = connection.createStatement();
@@ -213,12 +233,17 @@ public class PostgreSQL extends Helpers implements Database {
 			statement.execute("DROP INDEX IF EXISTS idx_types");
 			statement.execute("CREATE INDEX idx_types on \"" + Config.TABLE + "\" USING GIN (\"" + Codes.DCTERMS_SUBJECT.toString().toLowerCase() + "\")");
 
-			scenarioStatements.add(connection.prepareStatement("select * from justatable where 'http://purl.org/dc/terms/BibliographicResource' = ANY(rdf_type)"));
+			scenarioStatements.add(connection.prepareStatement("select * from " + Config.TABLE + " where 'http://purl.org/dc/terms/BibliographicResource' = ANY(rdf_type)"));
 			break;
-
 		case UPDATE_HIGH_SELECTIVITY_NON_ISSUED:
+			scenarioStatements.add(connection.prepareStatement("update " + Config.TABLE + " set dcterms_issued = '0' where dcterms_issued is null"));
+			break;
 		case DELETE_LOW_SELECTIVITY_PAPER_MEDIUM:
+			scenarioStatements.add(connection.prepareStatement("delete from " + Config.TABLE + " where DCTERMS_MEDIUM = 'paper'"));
+			break;
 		case DELETE_HIGH_SELECTIVIY_NON_ISSUED:
+			scenarioStatements.add(connection.prepareStatement("delete from " + Config.TABLE + " where DCTERMS_ISSUED is null"));
+			break;
 		default:
 			throw new RuntimeException("Do not know what to do with QueryScenario " + queryScenario);
 		}
@@ -231,7 +256,11 @@ public class PostgreSQL extends Helpers implements Database {
 			throw new RuntimeException("There is no preparedStatement for QueryScenario " + queryScenario);
 
 		for (PreparedStatement preparedStatement : scenarioStatements) {
-			ResultSet resultSet = preparedStatement.executeQuery();
+			if (queryScenario.isReadOnly) {
+				preparedStatement.executeQuery();
+			} else {
+				preparedStatement.executeUpdate();
+			}
 		}
 
 		return null;
@@ -247,4 +276,7 @@ public class PostgreSQL extends Helpers implements Database {
 			connection = DriverManager.getConnection("jdbc:postgresql://" + Config.HOST_POSTGRES + "/" + Config.DATABASE, props);
 	}
 
+	private void dropConnections() throws Exception {
+		connection.createStatement().executeQuery("select pg_terminate_backend(pid) from pg_stat_activity where datname='loddwhbench';");
+	}
 }
