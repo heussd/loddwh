@@ -64,6 +64,6 @@ public interface Database {
 	 * {@link QueryScenario}. After this, the database is ready to load entities
 	 * or to be queried (even though it should be empty).
 	 */
-	public void clear() throws Exception;
+	public void clear(QueryScenario queryScenario) throws Exception;
 
 }
