@@ -20,10 +20,11 @@ public class PostgreSQL extends Helpers implements Database {
 	private PreparedStatement dropTable;
 	private PreparedStatement insertStatement;
 	private PreparedStatement createTable;
-	private PreparedStatement preparedScenarioStatement;
 	private Properties props;
 	private String createQuery;
 	private String genericInsertStatement;
+	private ArrayList<PreparedStatement> scenarioStatements;
+	private QueryScenario queryScenario;
 
 	@Override
 	public String getName() {
@@ -40,7 +41,7 @@ public class PostgreSQL extends Helpers implements Database {
 		PostgreSQL postgreSQL = new PostgreSQL();
 
 		Dataset dataset = Dataset.hebis_medium_rdf;
-		QueryScenario queryScenario = QueryScenario.UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM;
+		QueryScenario queryScenario = QueryScenario.SCHEMA_CHANGE_INTRODUCE_STRING_OP;
 
 		// postgreSQL.setUp();
 		// postgreSQL.load(dataset);
@@ -91,11 +92,11 @@ public class PostgreSQL extends Helpers implements Database {
 		preparedStatement.close();
 		connection.close();
 
-		clear();
+		clear(null);
 	}
 
 	@Override
-	public void clear() throws Exception {
+	public void clear(QueryScenario queryScenario) throws Exception {
 		reopenConnection(false);
 
 		dropTable = connection.prepareStatement("DROP TABLE " + Config.TABLE);
@@ -146,29 +147,39 @@ public class PostgreSQL extends Helpers implements Database {
 		reopenConnection(queryScenario.isReadOnly);
 
 		Statement statement = connection.createStatement();
+		if (scenarioStatements == null)
+			scenarioStatements = new ArrayList<>();
+
+		scenarioStatements.clear();
 		switch (queryScenario) {
 		case ENTITY_RETRIEVAL_BY_ID_CASE1:
-			preparedScenarioStatement = connection.prepareStatement("select * from " + Config.TABLE + " where " + Codes.DCTERMS_IDENTIFIER + " = '268893950'");
+			scenarioStatements.add(connection.prepareStatement("select * from " + Config.TABLE + " where " + Codes.DCTERMS_IDENTIFIER + " = '268893950'"));
+			break;
+		case AGGREGATE_ISSUES_PER_CENTURY_TOP10:
+		case AGGREGATE_ISSUES_PER_CENTURY_TOP100:
 			break;
 		case AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10:
-			preparedScenarioStatement = connection.prepareStatement("select " + Codes.DCTERMS_PUBLISHER + ", count(" + Codes.DCTERMS_PUBLISHER + ") from " + Config.TABLE
-					+ " group by " + Codes.DCTERMS_PUBLISHER + " order by count(" + Codes.DCTERMS_PUBLISHER + ") desc limit 10");
+			scenarioStatements.add(connection.prepareStatement("select " + Codes.DCTERMS_PUBLISHER + ", count(" + Codes.DCTERMS_PUBLISHER + ") from " + Config.TABLE + " group by "
+					+ Codes.DCTERMS_PUBLISHER + " order by count(" + Codes.DCTERMS_PUBLISHER + ") desc limit 10"));
 			break;
 		case AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100:
-			preparedScenarioStatement = connection.prepareStatement("select " + Codes.DCTERMS_PUBLISHER + ", count(" + Codes.DCTERMS_PUBLISHER + ") from " + Config.TABLE
-					+ " group by " + Codes.DCTERMS_PUBLISHER + " order by count(" + Codes.DCTERMS_PUBLISHER + ") desc limit 100");
+			scenarioStatements.add(connection.prepareStatement("select " + Codes.DCTERMS_PUBLISHER + ", count(" + Codes.DCTERMS_PUBLISHER + ") from " + Config.TABLE + " group by "
+					+ Codes.DCTERMS_PUBLISHER + " order by count(" + Codes.DCTERMS_PUBLISHER + ") desc limit 100"));
 			break;
 		case AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL:
-			preparedScenarioStatement = connection.prepareStatement("select " + Codes.DCTERMS_PUBLISHER + ", count(" + Codes.DCTERMS_PUBLISHER + ") from " + Config.TABLE
-					+ " group by " + Codes.DCTERMS_PUBLISHER + " order by count(" + Codes.DCTERMS_PUBLISHER + ") desc");
+			scenarioStatements.add(connection.prepareStatement("select " + Codes.DCTERMS_PUBLISHER + ", count(" + Codes.DCTERMS_PUBLISHER + ") from " + Config.TABLE + " group by "
+					+ Codes.DCTERMS_PUBLISHER + " order by count(" + Codes.DCTERMS_PUBLISHER + ") desc"));
 			break;
 		case AGGREGATE_ISSUES_PER_CENTURY_ALL:
-			preparedScenarioStatement = connection.prepareStatement("select SUBSTR(" + Codes.DCTERMS_ISSUED + ", 1, 3), count(" + Codes.DCTERMS_IDENTIFIER
-					+ ") from justatable group by SUBSTR(" + Codes.DCTERMS_ISSUED + ", 1, 3) order by SUBSTR(" + Codes.DCTERMS_ISSUED + ", 1, 3)");
+			scenarioStatements.add(connection.prepareStatement("select SUBSTR(" + Codes.DCTERMS_ISSUED + ", 1, 3), count(" + Codes.DCTERMS_IDENTIFIER
+					+ ") from justatable group by SUBSTR(" + Codes.DCTERMS_ISSUED + ", 1, 3) order by SUBSTR(" + Codes.DCTERMS_ISSUED + ", 1, 3)"));
 			break;
 		case CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES:
-			preparedScenarioStatement = connection.prepareStatement("select * from " + Config.TABLE + " where 'http://purl.org/dc/terms/BibliographicResource' = ANY("
-					+ Codes.RDF_TYPE + ") and (LOWER(" + Codes.DCTERMS_TITLE + ") LIKE '%studie%' OR LOWER(" + Codes.DCTERMS_TITLE + ") LIKE '%study%')");
+			scenarioStatements.add(connection.prepareStatement("select * from " + Config.TABLE + " where 'http://purl.org/dc/terms/BibliographicResource' = ANY(" + Codes.RDF_TYPE
+					+ ") and (LOWER(" + Codes.DCTERMS_TITLE + ") LIKE '%studie%' OR LOWER(" + Codes.DCTERMS_TITLE + ") LIKE '%study%')"));
+			break;
+		case CONDITIONAL_TABLE_SCAN_ALL_STUDIES:
+		case CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES:
 			break;
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP:
 
@@ -180,8 +191,21 @@ public class PostgreSQL extends Helpers implements Database {
 			statement.execute("CREATE INDEX idx_subjects on \"" + Config.TABLE + "\" USING GIN (\"" + Codes.DCTERMS_SUBJECT.toString().toLowerCase() + "\")");
 
 			// http://www.postgresql.org/docs/8.3/static/functions-array.html
-			preparedScenarioStatement = connection.prepareStatement(
-					"select * from (SELECT dcterms_identifier, unnest(dcterms_subject) subject FROM justatable) level0 inner join (SELECT dcterms_identifier, unnest(dcterms_subject) subject FROM justatable) level1 on level0.subject = level1.subject and level0.dcterms_identifier != level1.dcterms_identifier");
+			scenarioStatements.add(connection.prepareStatement(
+					"select * from (SELECT dcterms_identifier, unnest(dcterms_subject) subject FROM justatable) level0 inner join (SELECT dcterms_identifier, unnest(dcterms_subject) subject FROM justatable) level1 on level0.subject = level1.subject and level0.dcterms_identifier != level1.dcterms_identifier"));
+			break;
+
+		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS:
+			break;
+		case SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY:
+			scenarioStatements.add(connection.prepareStatement("alter table " + Config.TABLE + " add column " + Config.NEWCOLUMN + " text default 'cheesecake'"));
+			break;
+		case SCHEMA_CHANGE_INTRODUCE_STRING_OP:
+			scenarioStatements.add(connection.prepareStatement("alter table justatable add column newprop"));
+			scenarioStatements.add(connection.prepareStatement("update justatable set RDF_ABOUT=substring(RDF_ABOUT from '........$')"));
+			break;
+		case SCHEMA_CHANGE_MIGRATE_RDF_TYPE:
+		case SCHEMA_CHANGE_REMOVE_RDF_TYPE:
 			break;
 		case UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM:
 			statement = connection.createStatement();
@@ -189,20 +213,26 @@ public class PostgreSQL extends Helpers implements Database {
 			statement.execute("DROP INDEX IF EXISTS idx_types");
 			statement.execute("CREATE INDEX idx_types on \"" + Config.TABLE + "\" USING GIN (\"" + Codes.DCTERMS_SUBJECT.toString().toLowerCase() + "\")");
 
-			preparedScenarioStatement = connection.prepareStatement("select * from justatable where 'http://purl.org/dc/terms/BibliographicResource' = ANY(rdf_type)");
+			scenarioStatements.add(connection.prepareStatement("select * from justatable where 'http://purl.org/dc/terms/BibliographicResource' = ANY(rdf_type)"));
 			break;
 
+		case UPDATE_HIGH_SELECTIVITY_NON_ISSUED:
+		case DELETE_LOW_SELECTIVITY_PAPER_MEDIUM:
+		case DELETE_HIGH_SELECTIVIY_NON_ISSUED:
 		default:
 			throw new RuntimeException("Do not know what to do with QueryScenario " + queryScenario);
 		}
+		this.queryScenario = queryScenario;
 	}
 
 	@Override
 	public String query(QueryScenario queryScenario) throws Exception {
-		if (preparedScenarioStatement == null)
+		if (scenarioStatements == null || this.queryScenario != queryScenario)
 			throw new RuntimeException("There is no preparedStatement for QueryScenario " + queryScenario);
 
-		ResultSet resultSet = preparedScenarioStatement.executeQuery();
+		for (PreparedStatement preparedStatement : scenarioStatements) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+		}
 
 		return null;
 	}

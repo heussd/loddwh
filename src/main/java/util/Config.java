@@ -13,4 +13,6 @@ public class Config {
 	public static final String TABLE = "justatable";
 
 	public static final String HOST_POSTGRES = "localhost";
+
+	public static final String NEWCOLUMN = "newcolumn";
 }
