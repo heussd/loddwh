@@ -40,9 +40,9 @@ public class PostgreSQL extends Helpers implements Database {
 
 		QueryScenario queryScenario = QueryScenario.SCHEMA_CHANGE_MIGRATE_RDF_TYPE;
 
-		// postgreSQL.setUp();
-		// postgreSQL.load(dataset);
-		// postgreSQL.clear(queryScenario);
+		postgreSQL.setUp();
+		postgreSQL.load(dataset);
+		postgreSQL.clear(queryScenario);
 		postgreSQL.prepare(queryScenario);
 		postgreSQL.query(queryScenario);
 
