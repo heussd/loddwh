@@ -110,7 +110,7 @@ public abstract class Helpers {
 			 * 
 			 * " at the beginning of each file - what could possibly go wrong?
 			 */
-			inputStream.skip(50);
+//			inputStream.skip(50);
 			BufferedReader inputReader = new BufferedReader(new InputStreamReader(inputStream));
 			// PrintWriter printWriter = new PrintWriter(new File(target));
 
