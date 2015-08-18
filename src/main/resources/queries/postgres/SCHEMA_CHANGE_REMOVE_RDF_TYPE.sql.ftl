@@ -1,1 +1,1 @@
-alter table " + Config.TABLE + " drop column RDF_TYPE
+alter table ${Config.TABLE} drop column RDF_TYPE;

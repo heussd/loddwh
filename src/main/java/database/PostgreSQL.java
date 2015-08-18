@@ -34,21 +34,22 @@ public class PostgreSQL extends Helpers implements Database {
 		return "9.4.4 / PostGIS 2.1.7 / 9.4-1201-jdbc41";
 	}
 
-	public static void main(String[] args) throws Exception {
-
-		PostgreSQL postgreSQL = new PostgreSQL();
-
-		Dataset dataset = Dataset.hebis_medium_rdf;
-
-		QueryScenario queryScenario = QueryScenario.SCHEMA_CHANGE_MIGRATE_RDF_TYPE;
-
-		postgreSQL.setUp();
-		postgreSQL.load(dataset);
-		postgreSQL.clear(queryScenario);
-		postgreSQL.prepare(queryScenario);
-		postgreSQL.query(queryScenario);
-
-	}
+	// public static void main(String[] args) throws Exception {
+	//
+	// PostgreSQL postgreSQL = new PostgreSQL();
+	//
+	// Dataset dataset = Dataset.hebis_medium_rdf;
+	//
+	// QueryScenario queryScenario =
+	// QueryScenario.SCHEMA_CHANGE_MIGRATE_RDF_TYPE;
+	//
+	// postgreSQL.setUp();
+	// postgreSQL.load(dataset);
+	// postgreSQL.clear(queryScenario);
+	// postgreSQL.prepare(queryScenario);
+	// postgreSQL.query(queryScenario);
+	//
+	// }
 
 	public PostgreSQL() {
 		props = new Properties();
@@ -150,7 +151,6 @@ public class PostgreSQL extends Helpers implements Database {
 	public void prepare(QueryScenario queryScenario) throws Exception {
 		reopenConnection(queryScenario.isReadOnly);
 
-		Statement statement = connection.createStatement();
 		if (scenarioStatements == null)
 			scenarioStatements = new ArrayList<>();
 
@@ -158,9 +158,10 @@ public class PostgreSQL extends Helpers implements Database {
 
 		// SQL queries / prepared statements to be executed before the actual
 		// QueryScenario statement
+		Statement statement = connection.createStatement();
 		switch (queryScenario) {
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP:
-			statement.executeQuery(templates.resolve(queryScenario + "_prepare"));
+			statement.executeUpdate(templates.resolve(queryScenario + "_prepare"));
 			break;
 		default:
 			// No special pre-executions for remaining cases.
@@ -179,6 +180,7 @@ public class PostgreSQL extends Helpers implements Database {
 
 		for (PreparedStatement preparedStatement : scenarioStatements) {
 			if (queryScenario.isReadOnly) {
+				System.out.println(preparedStatement);
 				preparedStatement.executeQuery();
 			} else {
 				preparedStatement.executeUpdate();
