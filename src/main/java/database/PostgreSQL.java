@@ -251,7 +251,7 @@ public class PostgreSQL extends Helpers implements Database {
 	}
 
 	@Override
-	public String query(QueryScenario queryScenario) throws Exception {
+	public void query(QueryScenario queryScenario) throws Exception {
 		if (scenarioStatements == null || this.queryScenario != queryScenario)
 			throw new RuntimeException("There is no preparedStatement for QueryScenario " + queryScenario);
 
@@ -263,7 +263,6 @@ public class PostgreSQL extends Helpers implements Database {
 			}
 		}
 
-		return null;
 	}
 
 	private void reopenConnection(boolean readonly) throws Exception {
@@ -279,4 +278,12 @@ public class PostgreSQL extends Helpers implements Database {
 	private void dropConnections() throws Exception {
 		connection.createStatement().executeQuery("select pg_terminate_backend(pid) from pg_stat_activity where datname='loddwhbench';");
 	}
+
+	@Override
+	public String toString() {
+		return "PostgreSQL [getName()=" + getName() + ", getVersion()="
+				+ getVersion() + "]";
+	}
+	
+	
 }

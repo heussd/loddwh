@@ -53,10 +53,9 @@ public interface Database {
 	public void prepare(QueryScenario queryScenario) throws Exception;
 
 	/**
-	 * Execute the given {@link QueryScenario}. // TODO: @Marco: Rückgabeformat
-	 * für query-Ergebnisse spezifizieren
+	 * Execute the given {@link QueryScenario}.
 	 */
-	public String query(QueryScenario queryScenario) throws Exception;
+	public void query(QueryScenario queryScenario) throws Exception;
 
 	/**
 	 * Reinitiates the database and resets it to an empty state aka
