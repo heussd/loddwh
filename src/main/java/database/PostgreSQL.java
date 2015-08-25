@@ -34,22 +34,22 @@ public class PostgreSQL extends Helpers implements Database {
 		return "9.4.4 / PostGIS 2.1.7 / 9.4-1201-jdbc41";
 	}
 
-	// public static void main(String[] args) throws Exception {
-	//
-	// PostgreSQL postgreSQL = new PostgreSQL();
-	//
-	// Dataset dataset = Dataset.hebis_medium_rdf;
-	//
-	// QueryScenario queryScenario =
-	// QueryScenario.SCHEMA_CHANGE_MIGRATE_RDF_TYPE;
-	//
-	// postgreSQL.setUp();
-	// postgreSQL.load(dataset);
-	// postgreSQL.clear(queryScenario);
-	// postgreSQL.prepare(queryScenario);
-	// postgreSQL.query(queryScenario);
-	//
-	// }
+	public static void main(String[] args) throws Exception {
+
+		PostgreSQL postgreSQL = new PostgreSQL();
+
+		System.out.println(postgreSQL.getName() + " " + postgreSQL.getVersion());
+		Dataset dataset = Dataset.hebis_tiny_rdf;
+
+		QueryScenario queryScenario = QueryScenario.AGGREGATE_ISSUES_PER_DECADE_TOP10;
+
+		postgreSQL.setUp();
+		postgreSQL.load(dataset);
+//		postgreSQL.clear(queryScenario);
+		postgreSQL.prepare(queryScenario);
+		postgreSQL.query(queryScenario);
+
+	}
 
 	public PostgreSQL() {
 		props = new Properties();
@@ -180,7 +180,6 @@ public class PostgreSQL extends Helpers implements Database {
 
 		for (PreparedStatement preparedStatement : scenarioStatements) {
 			if (queryScenario.isReadOnly) {
-				System.out.println(preparedStatement);
 				preparedStatement.executeQuery();
 			} else {
 				preparedStatement.executeUpdate();

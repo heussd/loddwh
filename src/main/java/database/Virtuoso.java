@@ -87,10 +87,10 @@ public class Virtuoso implements Database {
 				"%s\\%s", vAD, graphId)));
 		List<String> updatedLines = lines.stream()
 				.filter(s -> !s.startsWith("Content-Type"))
-				.collect(Collectors.toList()); // iterate lines und aufhören
+				.collect(Collectors.toList()); // iterate lines und aufhï¿½ren
 												// sobald <?xml kommt alles
-												// vorher löschen wäre
-												// effizienter (also wenn nicht alle lines auf einmal gelesen würden)
+												// vorher lï¿½schen wï¿½re
+												// effizienter (also wenn nicht alle lines auf einmal gelesen wï¿½rden)
 		FileUtils.writeLines(new File(String.format("%s\\%s", vAD, graphId)),
 				"utf-8", updatedLines, false);
 
@@ -113,15 +113,15 @@ public class Virtuoso implements Database {
 			stmt.execute(String.format("sparql select * from <%s> where {	?s <http://purl.org/dc/terms/identifier> '268876681' ; 	<http://purl.org/dc/terms/medium> ?medium ;		<http://purl.org/dc/terms/format> ?format ;		<http://purl.org/dc/terms/issued> ?issued ;		<http://purl.org/dc/terms/title> ?title ; 	<http://purl.org/dc/terms/contributor> ?contributor ; 	<http://purl.org/dc/terms/publisher> ?publisher ; 	<http://purl.org/dc/terms/identifier> ?id ; 	<http://iflastandards.info/ns/isbd/elements/P1018> ?P1018 ; 	<http://iflastandards.info/ns/isbd/elements/P1004> ?P1004 ; 	<http://iflastandards.info/ns/isbd/elements/P1006> ?P1006 ; 	<http://iflastandards.info/ns/isbd/elements/P1016> ?P1016 ; 	<http://iflastandards.info/ns/isbd/elements/P1017> ?P1017 ; 	<http://purl.org/ontology/bibo/oclcnum> ?oclcnum }", graphId));
 			break;
 			
-		case AGGREGATE_ISSUES_PER_CENTURY_TOP10:
+		case AGGREGATE_ISSUES_PER_DECADE_TOP10:
 			stmt.execute(String.format("sparql select ?century, (count(*) as ?count) from <%s> where {	?a <http://purl.org/dc/terms/issued> ?century} group by ?century order by desc(?count) limit 10", graphId));
 			break;
 			
-		case AGGREGATE_ISSUES_PER_CENTURY_TOP100:
+		case AGGREGATE_ISSUES_PER_DECADE_TOP100:
 			stmt.execute(String.format("sparql select ?century, (count(*) as ?count) from <%s> where {	?a <http://purl.org/dc/terms/issued> ?century} group by ?century order by desc(?count) limit 100", graphId));
 			break;
 			
-		case AGGREGATE_ISSUES_PER_CENTURY_ALL:
+		case AGGREGATE_ISSUES_PER_DECADE_ALL:
 			stmt.execute(String.format("sparql select ?century, (count(*) as ?count) from <%s> where {	?a <http://purl.org/dc/terms/issued> ?century} group by ?century order by desc(?count)", graphId));
 			break;
 			

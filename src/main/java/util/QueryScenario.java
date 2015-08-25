@@ -42,21 +42,21 @@ public enum QueryScenario {
 	 * descending. Return two columns (century + the respective count). Show the
 	 * 10 highest counts.
 	 */
-	AGGREGATE_ISSUES_PER_CENTURY_TOP10,
+	AGGREGATE_ISSUES_PER_DECADE_TOP10,
 
 	/**
 	 * Count the publications per issued century and order by this count
 	 * descending. Return two columns (century + the respective count). Show the
 	 * 100 highest counts.
 	 */
-	AGGREGATE_ISSUES_PER_CENTURY_TOP100,
+	AGGREGATE_ISSUES_PER_DECADE_TOP100,
 
 	/**
 	 * Count the publications per issued century and order by this count
 	 * descending. Return two columns (century + the respective count). Show all
 	 * results.
 	 */
-	AGGREGATE_ISSUES_PER_CENTURY_ALL,
+	AGGREGATE_ISSUES_PER_DECADE_ALL,
 
 	/**
 	 * Returns all complete entities which contain the word "Studie" or "Study"
