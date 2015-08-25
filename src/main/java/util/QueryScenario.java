@@ -1,6 +1,7 @@
 package util;
 
 import database.Database;
+import util.QueryResult.Type;
 
 /**
  * Contains a number of scenarios in which {@link Database} implementations will
@@ -15,7 +16,7 @@ public enum QueryScenario {
 	 * Retrieve all information associated to the single entity specified by a
 	 * given ID.
 	 */
-	ENTITY_RETRIEVAL_BY_ID_CASE1,
+	ENTITY_RETRIEVAL_BY_ID_CASE1(QueryResult.Type.COMPLETE_ENTITIES),
 	// TINY: 268893950
 
 	/**
@@ -23,58 +24,58 @@ public enum QueryScenario {
 	 * Return two columns (publisher + the respective count). Show the 10
 	 * highest counts.
 	 */
-	AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10,
+	AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10(QueryResult.Type.TWO_COLUMNS),
 	/**
 	 * Count the publications per publisher and order by this count descending.
 	 * Return two columns (publisher + the respective count). Show the 100
 	 * highest counts.
 	 */
-	AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100,
+	AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100(QueryResult.Type.TWO_COLUMNS),
 
 	/**
 	 * Count the publications per publisher and order by this count descending.
 	 * Return two columns (publisher + the respective count). Show all counts.
 	 */
-	AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL,
+	AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL(QueryResult.Type.TWO_COLUMNS),
 
 	/**
 	 * Count the publications per issued century and order by this count
 	 * descending. Return two columns (century + the respective count). Show the
 	 * 10 highest counts.
 	 */
-	AGGREGATE_ISSUES_PER_DECADE_TOP10,
+	AGGREGATE_ISSUES_PER_DECADE_TOP10(QueryResult.Type.TWO_COLUMNS),
 
 	/**
 	 * Count the publications per issued century and order by this count
 	 * descending. Return two columns (century + the respective count). Show the
 	 * 100 highest counts.
 	 */
-	AGGREGATE_ISSUES_PER_DECADE_TOP100,
+	AGGREGATE_ISSUES_PER_DECADE_TOP100(QueryResult.Type.TWO_COLUMNS),
 
 	/**
 	 * Count the publications per issued century and order by this count
 	 * descending. Return two columns (century + the respective count). Show all
 	 * results.
 	 */
-	AGGREGATE_ISSUES_PER_DECADE_ALL,
+	AGGREGATE_ISSUES_PER_DECADE_ALL(QueryResult.Type.TWO_COLUMNS),
 
 	/**
 	 * Returns all complete entities which contain the word "Studie" or "Study"
 	 * (case insensitive) in their title. This effects about 2%.
 	 */
-	CONDITIONAL_TABLE_SCAN_ALL_STUDIES,
+	CONDITIONAL_TABLE_SCAN_ALL_STUDIES(QueryResult.Type.COMPLETE_ENTITIES),
 
 	/**
 	 * Returns all complete entities which are "Bibliographic Resources". This
 	 * effects about 92% of all entities in the Dataset.
 	 */
-	CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES,
+	CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES(QueryResult.Type.COMPLETE_ENTITIES),
 
 	/**
 	 * Returns all complete entities which are "Bibliographic Resource" and
 	 * contain the word "Studie" or "Study" (case insensitive) in their title.
 	 */
-	CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES,
+	CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES(QueryResult.Type.COMPLETE_ENTITIES),
 
 	/**
 	 * For each record, find records that share a DCTERMS_SUBJECT and return:
@@ -83,7 +84,7 @@ public enum QueryScenario {
 	 * 
 	 * "272250422" -> "http://d-nb.info/gnd/1007928-2" <- "272527807"
 	 */
-	GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP,
+	GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP(QueryResult.Type.GRAPH),
 
 	/**
 	 * For each record, find records that share a DCTERMS_SUBJECT, find records
@@ -91,7 +92,7 @@ public enum QueryScenario {
 	 * original.dcterms_identifier, original.dcterms_subject,
 	 * firstrelated.dcterms_identifier, secondrelated.dcterms_identifier.
 	 */
-	GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS,
+	GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS(QueryResult.Type.GRAPH),
 
 	/**
 	 * Create a new property for every record, defaulting to "cheesecake".
@@ -140,13 +141,16 @@ public enum QueryScenario {
 	DELETE_HIGH_SELECTIVIY_NON_ISSUED(false);
 
 	public final boolean isReadOnly;
+	public final Type queryResultType;
 
-	private QueryScenario() {
+	private QueryScenario(QueryResult.Type type) {
+		this.queryResultType = type;
 		this.isReadOnly = true;
 	}
 
 	QueryScenario(boolean readonly) {
 		this.isReadOnly = readonly;
+		this.queryResultType = QueryResult.Type.NONE;
 	}
 
 }
