@@ -19,8 +19,19 @@
 			</plugin>
 		</plugins>
 	</build>
+	<repositories>
+		<repository>
+			<id>my-local-repo</id>
+			<url>file://${basedir}/lib</url>
+		</repository>
+	</repositories>
 	<groupId>loddwhbench</groupId>
 	<dependencies>
+	<dependency>
+			<groupId>virtuosojdbc</groupId>
+			<artifactId>virtuosojdbc</artifactId>
+			<version>4.1.0</version>
+		</dependency>
 		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
