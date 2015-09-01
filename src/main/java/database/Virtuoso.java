@@ -17,6 +17,7 @@ import util.Codes;
 import util.Config;
 import util.Dataset;
 import util.QueryScenario;
+import util.Templates;
 
 public class Virtuoso implements Database {
 
@@ -33,6 +34,7 @@ public class Virtuoso implements Database {
 	private String graphId, fpTGZ, vAD, vADRtVE;
 	private Connection c;
 	private Statement stmt;
+	private Templates templates;
 
 	public Virtuoso(String identifier, String filePathToGZ,
 			String virtuosoAccessibleDir,
@@ -61,6 +63,8 @@ public class Virtuoso implements Database {
 
 		// Drop auf evtl. alten Identifier
 		stmt.execute(String.format("SPARQL CLEAR GRAPH <%s>", graphId));
+		
+		templates = new Templates("virtuoso", ".sql");
 	}
 
 	@Override
@@ -154,6 +158,7 @@ public class Virtuoso implements Database {
 			break;
 			
 		case SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY:
+			stmt.execute(String.format("sparql insert data into <%s> {<http://www.w3.org/1999/02/22-rdf-syntax-ns#Description> <http://my.schema/change> 'cheesecake'}", graphId));
 			break;
 			
 		case SCHEMA_CHANGE_INTRODUCE_STRING_OP:
@@ -163,9 +168,12 @@ public class Virtuoso implements Database {
 			break;
 			
 		case SCHEMA_CHANGE_REMOVE_RDF_TYPE:
+			stmt.execute(String.format("sparql delete from <%s> {?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?v} where {?s a <http://www.w3.org/1999/02/22-rdf-syntax-ns#Description>}", graphId));
 			break;
 			
 		case UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM:
+			stmt.execute(String.format("sparql delete data from <%s> {<http://www.w3.org/1999/02/22-rdf-syntax-ns#Description> <http://purl.org/dc/terms/medium> 'paper'}", graphId));
+			stmt.execute(String.format("sparql insert data into <%s> {<http://www.w3.org/1999/02/22-rdf-syntax-ns#Description> <http://purl.org/dc/terms/medium> 'recycled trees'}", graphId));
 			break;
 			
 		case UPDATE_HIGH_SELECTIVITY_NON_ISSUED:
