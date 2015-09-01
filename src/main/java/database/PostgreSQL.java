@@ -41,11 +41,11 @@ public class PostgreSQL extends Helpers implements Database {
 		System.out.println(postgreSQL.getName() + " " + postgreSQL.getVersion());
 		Dataset dataset = Dataset.hebis_tiny_rdf;
 
-		QueryScenario queryScenario = QueryScenario.AGGREGATE_ISSUES_PER_DECADE_TOP10;
+		QueryScenario queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP;
 
 		postgreSQL.setUp();
 		postgreSQL.load(dataset);
-//		postgreSQL.clear(queryScenario);
+		// postgreSQL.clear(queryScenario);
 		postgreSQL.prepare(queryScenario);
 		postgreSQL.query(queryScenario);
 
@@ -81,7 +81,12 @@ public class PostgreSQL extends Helpers implements Database {
 	public void setUp() throws Exception {
 		Connection connection = DriverManager.getConnection("jdbc:postgresql://" + Config.HOST_POSTGRES + "/postgres", props);
 
-		PreparedStatement preparedStatement = connection.prepareStatement("DROP DATABASE IF EXISTS " + Config.DATABASE);
+		// Aggressively drop possibly open connections
+		// https://stackoverflow.com/questions/7073773/drop-postgresql-database-through-command-line
+		PreparedStatement preparedStatement = connection.prepareStatement("select pg_terminate_backend(pid) from pg_stat_activity where datname='" + Config.DATABASE + "';");
+		preparedStatement.execute();
+
+		preparedStatement = connection.prepareStatement("DROP DATABASE IF EXISTS " + Config.DATABASE);
 		// try {
 		preparedStatement.execute();
 		// } catch (Exception e) {
@@ -161,6 +166,9 @@ public class PostgreSQL extends Helpers implements Database {
 		Statement statement = connection.createStatement();
 		switch (queryScenario) {
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP:
+			statement.executeUpdate(templates.resolve(queryScenario + "_prepare"));
+			break;
+		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS:
 			statement.executeUpdate(templates.resolve(queryScenario + "_prepare"));
 			break;
 		default:
