@@ -32,29 +32,29 @@ public class Benchmark {
 			long setUpStart, setUpEnd, loadStart, loadEnd;
 			
 			try{
-				setUpStart = System.nanoTime();
+				setUpStart = System.currentTimeMillis();
 				db.setUp();
-				setUpEnd = System.nanoTime();
+				setUpEnd = System.currentTimeMillis();
 				
-				loadStart = System.nanoTime();
+				loadStart = System.currentTimeMillis();
 				db.load(benchmarkObject.getLoadDataset());
-				loadEnd = System.nanoTime();
+				loadEnd = System.currentTimeMillis();
 				
 				for(QueryScenario queryScenario : QueryScenario.values()){
 					long prepareStart, prepareEnd, queryStart, queryEnd, clearStart, clearEnd;
 					
 					try{
-						prepareStart = System.nanoTime();
+						prepareStart = System.currentTimeMillis();
 						db.prepare(queryScenario);
-						prepareEnd = System.nanoTime();
+						prepareEnd = System.currentTimeMillis();
 						
-						queryStart = System.nanoTime();
+						queryStart = System.currentTimeMillis();
 						db.query(queryScenario);
-						queryEnd = System.nanoTime();
+						queryEnd = System.currentTimeMillis();
 						
-						clearStart = System.nanoTime();
+						clearStart = System.currentTimeMillis();
 						db.clear(queryScenario);
-						clearEnd = System.nanoTime();
+						clearEnd = System.currentTimeMillis();
 						
 						benchmarkObject.getPrepareQueryScenarioResults().put(queryScenario, prepareEnd - prepareStart);
 						benchmarkObject.getQueryQueryScenarioResults().put(queryScenario, queryEnd - queryStart);
