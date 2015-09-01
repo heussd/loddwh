@@ -55,6 +55,12 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.9</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>info.freelibrary</groupId>
 			<artifactId>freelib-marc4j</artifactId>
 			<version>2.6.7</version>
