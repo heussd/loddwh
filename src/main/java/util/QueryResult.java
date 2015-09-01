@@ -17,16 +17,6 @@ public class QueryResult {
 	public QueryResult(Type type) {
 		this.type = type;
 	}
-
-	public static void main(String[] args) {
-		QueryResult queryResult = new QueryResult(Type.SCALAR_VALUE);
-
-		String scalarValue = "thisismyvalue";
-
-		queryResult.put(scalarValue);
-		queryResult.push(null);
-	}
-
 	private Object scalarValue;
 
 	public void put(String scalarValue) {
