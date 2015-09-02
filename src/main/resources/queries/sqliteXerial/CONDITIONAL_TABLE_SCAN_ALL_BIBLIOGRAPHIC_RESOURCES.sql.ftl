@@ -1,0 +1,1 @@
+select * from justatable where RDF_TYPE LIKE '%http://purl.org/dc/terms/BibliographicResource%'

@@ -1,0 +1,1 @@
+alter table ${Config.TABLE} add column ${Config.NEWCOLUMN} text default 'cheesecake'
