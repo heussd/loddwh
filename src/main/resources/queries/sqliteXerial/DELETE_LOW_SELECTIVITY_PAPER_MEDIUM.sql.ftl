@@ -1,1 +1,0 @@
-delete from ${Config.TABLE} where DCTERMS_MEDIUM = 'paper'

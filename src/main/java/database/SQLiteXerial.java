@@ -59,7 +59,7 @@ public class SQLiteXerial extends Helpers implements Database {
 	public void setUp() throws Exception {
 		reopenConnection(false);
 		connection.prepareStatement("drop table if exists " + Config.TABLE).executeUpdate();
-		templates = new Templates("sqliteXerial", ".sql");
+		templates = new Templates("sqlite", ".sql");
 	}
 
 	@Override

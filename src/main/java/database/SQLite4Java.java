@@ -59,7 +59,7 @@ public class SQLite4Java extends Helpers implements Database {
 	public void setUp() throws Exception {
 		reopenConnection(false);
 		connection.exec("drop table if exists " + Config.TABLE);
-		templates = new Templates("sqlite4java", ".sql");
+		templates = new Templates("sqlite", ".sql");
 	}
 
 	@Override
@@ -100,13 +100,14 @@ public class SQLite4Java extends Helpers implements Database {
 			//
 			// // connection = DriverManager.getConnection("jdbc:sqlite:" +
 			// // Config.DATABASE + ".db");
+			if (connection == null) {
+				connection = new SQLiteConnection(new File("sqlite4java.db"));
 
-			connection = new SQLiteConnection(new File("sqlite4java.db"));
-
-			if (readonly)
-				connection.openReadonly();
-			else
+				// if (readonly)
+				// connection.openReadonly();
+				// else
 				connection.open(true);
+			}
 
 			// connection.is
 			// connection = sqLiteConfig.createConnection("jdbc:sqlite:" +
@@ -131,14 +132,12 @@ public class SQLite4Java extends Helpers implements Database {
 		switch (queryScenario) {
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP:
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS:
-
-			throw new RuntimeException(queryScenario + " not yet implemented");
+			System.out.println("WARNING: " + queryScenario + " not yet implemented");
+			break;
 		default:
-			// No special pre-executions for remaining cases.
+			// Resolves the template associated with this queryScenario
+			scenarioStatements.add(connection.prepare(templates.resolve(queryScenario)));
 		}
-
-		// Resolves the template associated with this queryScenario
-		scenarioStatements.add(connection.prepare(templates.resolve(queryScenario)));
 
 		this.queryScenario = queryScenario;
 	}
@@ -148,21 +147,17 @@ public class SQLite4Java extends Helpers implements Database {
 		if (scenarioStatements == null || this.queryScenario != queryScenario)
 			throw new RuntimeException("There is no preparedStatement for QueryScenario " + queryScenario);
 
-		for (SQLiteStatement preparedStatement : scenarioStatements) {
-			if (queryScenario.isReadOnly) {
-				preparedStatement.step();
-				// while (resultSet.next()) {
-				// System.out.println(resultSet.getString(1) + " " +
-				// resultSet.getString(2));
-				// System.out.println();
-				// // read the result set
-				// System.out.println("name = " + rs.getString("name"));
-				// System.out.println("id = " + rs.getInt("id"));
-				// }
-			} else {
+		switch (queryScenario) {
+		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP:
+		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS:
+			System.out.println("WARNING: " + queryScenario + " not yet implemented");
+			break;
+		default:
+			for (SQLiteStatement preparedStatement : scenarioStatements) {
 				preparedStatement.step();
 			}
 		}
+
 	}
 
 	@Override
@@ -177,7 +172,7 @@ public class SQLite4Java extends Helpers implements Database {
 		sqLiteXerial.setUp();
 		sqLiteXerial.load(Dataset.hebis_tiny_rdf);
 
-		QueryScenario queryScenario = QueryScenario.CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES;
+		QueryScenario queryScenario = QueryScenario.SCHEMA_CHANGE_REMOVE_RDF_TYPE;
 		sqLiteXerial.prepare(queryScenario);
 		sqLiteXerial.query(queryScenario);
 
