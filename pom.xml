@@ -38,6 +38,11 @@
 			<version>20141113</version>
 		</dependency>
 		<dependency>
+			<groupId>com.almworks.sqlite4java</groupId>
+			<artifactId>sqlite4java</artifactId>
+			<version>1.0.392</version>
+		</dependency>
+		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
 			<version>2.3.23</version>
