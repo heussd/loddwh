@@ -1,0 +1,1 @@
+update ${Config.TABLE} set dcterms_issued = '0' where dcterms_issued is null
