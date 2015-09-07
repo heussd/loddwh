@@ -1,1 +1,1 @@
-update ${Config.TABLE} set ${Codes.DCTERMS_MEDIUM} = 'recycled trees' where ${Codes.DCTERMS_MEDIUM} = 'paper'
+update justatable set DCTERMS_MEDIUM = 'recycled trees' where DCTERMS_MEDIUM = 'paper'

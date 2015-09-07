@@ -1,1 +1,1 @@
-select * from justatable where 'http://purl.org/dc/terms/BibliographicResource' = ANY(${Codes.RDF_TYPE})
+select * from justatable where 'http://purl.org/dc/terms/BibliographicResource' = ANY(RDF_TYPE)

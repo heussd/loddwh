@@ -41,7 +41,7 @@ public class PostgreSQL extends Helpers implements Database {
 		System.out.println(postgreSQL.getName() + " " + postgreSQL.getVersion());
 		Dataset dataset = Dataset.hebis_tiny_rdf;
 
-		QueryScenario queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP;
+		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_CASE1;
 
 		postgreSQL.setUp();
 		postgreSQL.load(dataset);
@@ -79,6 +79,13 @@ public class PostgreSQL extends Helpers implements Database {
 	 */
 	@Override
 	public void setUp() throws Exception {
+		try {
+			reopenConnection(false);
+			dropConnections();
+		} catch (Exception e) {
+			// Will drop its own connection - ignore
+		}
+
 		Connection connection = DriverManager.getConnection("jdbc:postgresql://" + Config.HOST_POSTGRES + "/postgres", props);
 
 		// Aggressively drop possibly open connections
@@ -165,14 +172,11 @@ public class PostgreSQL extends Helpers implements Database {
 		// QueryScenario statement
 		Statement statement = connection.createStatement();
 		switch (queryScenario) {
-		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP:
-			statement.executeUpdate(templates.resolve(queryScenario + "_prepare"));
-			break;
-		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS:
-			statement.executeUpdate(templates.resolve(queryScenario + "_prepare"));
+		case SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY:
+		case SCHEMA_CHANGE_REMOVE_RDF_TYPE:
 			break;
 		default:
-			// No special pre-executions for remaining cases.
+			statement.executeUpdate(templates.resolve(queryScenario + "_prepare"));
 		}
 
 		// Resolves the template associated with this queryScenario
