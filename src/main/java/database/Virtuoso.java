@@ -77,7 +77,7 @@ public class Virtuoso implements Database {
 		// 1.
 		byte[] buffer = new byte[1024];
 		GZIPInputStream gzis = new GZIPInputStream(new FileInputStream(fpTGZ));
-		FileOutputStream out = new FileOutputStream(String.format("%s\\%s",
+		FileOutputStream out = new FileOutputStream(String.format("%s//%s",
 				vAD, graphId));
 		int len;
 		while ((len = gzis.read(buffer)) > 0) {
@@ -88,14 +88,14 @@ public class Virtuoso implements Database {
 
 		// 2.
 		List<String> lines = FileUtils.readLines(new File(String.format(
-				"%s\\%s", vAD, graphId)));
+				"%s//%s", vAD, graphId)));
 		List<String> updatedLines = lines.stream()
 				.filter(s -> !s.startsWith("Content-Type"))
 				.collect(Collectors.toList()); // iterate lines und aufh�ren
 												// sobald <?xml kommt alles
 												// vorher l�schen w�re
 												// effizienter (also wenn nicht alle lines auf einmal gelesen w�rden)
-		FileUtils.writeLines(new File(String.format("%s\\%s", vAD, graphId)),
+		FileUtils.writeLines(new File(String.format("%s//%s", vAD, graphId)),
 				"utf-8", updatedLines, false);
 
 		// 3.
