@@ -177,6 +177,7 @@ public class Virtuoso implements Database {
 			break;
 			
 		case UPDATE_HIGH_SELECTIVITY_NON_ISSUED:
+			stmt.execute(String.format("sparql INSERT into <%s> {  ?s <http://purl.org/dc/terms/issued> '0'}WHERE {  ?s ?p ?o .   FILTER(     !EXISTS{      ?s <http://purl.org/dc/terms/issued> ?a    }  )};", graphId));
 			break;
 			
 		case DELETE_LOW_SELECTIVITY_PAPER_MEDIUM:
