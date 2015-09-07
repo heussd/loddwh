@@ -59,13 +59,13 @@ public class SQLiteXerial extends Helpers implements Database {
 	public void setUp() throws Exception {
 		reopenConnection(false);
 		connection.prepareStatement("drop table if exists " + Config.TABLE).executeUpdate();
+
 		templates = new Templates("sqlite", ".sql");
 	}
 
 	@Override
 	public void load(Dataset dataset) throws Exception {
-		reopenConnection(false);
-
+		connection.setAutoCommit(false);
 		PreparedStatement createTable = connection.prepareStatement(createQuery);
 		createTable.execute();
 
@@ -99,19 +99,21 @@ public class SQLiteXerial extends Helpers implements Database {
 				throw new RuntimeException("Cannot insert DataObject: " + dataObject, e);
 			}
 		});
+		connection.commit();
 	}
 
 	private void reopenConnection(boolean readonly) {
 		try {
-			if (connection != null && !connection.isClosed())
+			if (connection != null && !connection.isClosed()) {
 				connection.close();
+			}
 
 			// connection = DriverManager.getConnection("jdbc:sqlite:" +
 			// Config.DATABASE + ".db");
 
 			SQLiteConfig sqLiteConfig = new SQLiteConfig();
 			sqLiteConfig.setReadOnly(readonly);
-			connection = sqLiteConfig.createConnection("jdbc:sqlite:" + Config.DATABASE + ".db");
+			connection = sqLiteConfig.createConnection("jdbc:sqlite:sqlitexerial.db");
 		} catch (SQLException e) {
 			throw new RuntimeException("Cannot open connection", e);
 		}
@@ -119,7 +121,7 @@ public class SQLiteXerial extends Helpers implements Database {
 
 	@Override
 	public void prepare(QueryScenario queryScenario) throws Exception {
-		reopenConnection(queryScenario.isReadOnly);
+		reopenConnection(false);
 
 		if (scenarioStatements == null)
 			scenarioStatements = new ArrayList<>();
@@ -128,16 +130,25 @@ public class SQLiteXerial extends Helpers implements Database {
 
 		// SQL queries / prepared statements to be executed before the actual
 		// QueryScenario statement
+		connection.setAutoCommit(false);
 		Statement statement = connection.createStatement();
+
 		switch (queryScenario) {
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP:
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS:
-			
-			throw new RuntimeException(queryScenario + " not yet implemented");
+			System.out.println("Not implemented: " + queryScenario);
+			return;
+		case SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY:
+		case SCHEMA_CHANGE_REMOVE_RDF_TYPE:
+			break;
 		default:
-			// No special pre-executions for remaining cases.
+			statement.executeUpdate(templates.resolve(queryScenario + "_prepare"));
 		}
+		connection.commit();
 
+		
+		reopenConnection(queryScenario.isReadOnly);
+		connection.setAutoCommit(false);
 		// Resolves the template associated with this queryScenario
 		scenarioStatements.add(connection.prepareStatement(templates.resolve(queryScenario)));
 
@@ -148,21 +159,23 @@ public class SQLiteXerial extends Helpers implements Database {
 	public void query(QueryScenario queryScenario) throws Exception {
 		if (scenarioStatements == null || this.queryScenario != queryScenario)
 			throw new RuntimeException("There is no preparedStatement for QueryScenario " + queryScenario);
-
+		
 		for (PreparedStatement preparedStatement : scenarioStatements) {
 			if (queryScenario.isReadOnly) {
 				ResultSet resultSet = preparedStatement.executeQuery();
-//				while (resultSet.next()) {
-//					System.out.println(resultSet.getString(1) + " " + resultSet.getString(2));
-//					System.out.println();
-					// // read the result set
-					// System.out.println("name = " + rs.getString("name"));
-					// System.out.println("id = " + rs.getInt("id"));
-//				}
+				// while (resultSet.next()) {
+				// System.out.println(resultSet.getString(1) + " " +
+				// resultSet.getString(2));
+				// System.out.println();
+				// // read the result set
+				// System.out.println("name = " + rs.getString("name"));
+				// System.out.println("id = " + rs.getInt("id"));
+				// }
 			} else {
 				preparedStatement.executeUpdate();
 			}
 		}
+		connection.commit();
 	}
 
 	@Override
@@ -178,6 +191,10 @@ public class SQLiteXerial extends Helpers implements Database {
 		sqLiteXerial.load(Dataset.hebis_tiny_rdf);
 
 		QueryScenario queryScenario = QueryScenario.CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES;
+		sqLiteXerial.prepare(queryScenario);
+		sqLiteXerial.query(queryScenario);
+
+		queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_CASE1;
 		sqLiteXerial.prepare(queryScenario);
 		sqLiteXerial.query(queryScenario);
 

@@ -1,1 +1,1 @@
-delete from ${Config.TABLE} where DCTERMS_MEDIUM = 'paper'
+delete from justatable where DCTERMS_MEDIUM = 'paper'

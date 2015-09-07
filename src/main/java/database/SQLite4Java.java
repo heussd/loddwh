@@ -1,13 +1,13 @@
 package database;
 
 import java.io.File;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
 
 import com.almworks.sqlite4java.SQLiteConnection;
+import com.almworks.sqlite4java.SQLiteJob;
+import com.almworks.sqlite4java.SQLiteQueue;
 import com.almworks.sqlite4java.SQLiteStatement;
 
 import util.Codes;
@@ -19,12 +19,14 @@ import util.dumper.Helpers;
 
 public class SQLite4Java extends Helpers implements Database {
 
+	private static final File DATABASE_FILE = new File("sqlite4java.db");
 	private SQLiteConnection connection;
 	private String createQuery;
 	private String genericInsertStatement;
 	private ArrayList<SQLiteStatement> scenarioStatements;
 	private QueryScenario queryScenario;
 	private Templates templates;
+	private SQLiteQueue queue;
 
 	public SQLite4Java() {
 		// Produce some queries based on Config / Codes enums - do not prepare
@@ -58,13 +60,18 @@ public class SQLite4Java extends Helpers implements Database {
 	@Override
 	public void setUp() throws Exception {
 		reopenConnection(false);
+
 		connection.exec("drop table if exists " + Config.TABLE);
 		templates = new Templates("sqlite", ".sql");
 	}
 
 	@Override
 	public void load(Dataset dataset) throws Exception {
-		reopenConnection(false);
+		// reopenConnection(false);
+
+		// Auto commit setting:
+		// https://stackoverflow.com/questions/4998630/how-to-disable-autocommit-in-sqlite4java#5005785
+		connection.exec("BEGIN");
 
 		connection.exec(createQuery);
 
@@ -91,6 +98,7 @@ public class SQLite4Java extends Helpers implements Database {
 				throw new RuntimeException("Cannot insert DataObject: " + dataObject, e);
 			}
 		});
+		connection.exec("COMMIT");
 	}
 
 	private void reopenConnection(boolean readonly) {
@@ -101,13 +109,14 @@ public class SQLite4Java extends Helpers implements Database {
 			// // connection = DriverManager.getConnection("jdbc:sqlite:" +
 			// // Config.DATABASE + ".db");
 			if (connection == null) {
-				connection = new SQLiteConnection(new File("sqlite4java.db"));
+				connection = new SQLiteConnection(DATABASE_FILE);
 
 				// if (readonly)
 				// connection.openReadonly();
 				// else
 				connection.open(true);
 			}
+			queue = new SQLiteQueue(DATABASE_FILE);
 
 			// connection.is
 			// connection = sqLiteConfig.createConnection("jdbc:sqlite:" +
@@ -119,25 +128,55 @@ public class SQLite4Java extends Helpers implements Database {
 
 	@Override
 	public void prepare(QueryScenario queryScenario) throws Exception {
-		reopenConnection(queryScenario.isReadOnly);
+		// reopenConnection(queryScenario.isReadOnly);
 
 		if (scenarioStatements == null)
 			scenarioStatements = new ArrayList<>();
 
 		scenarioStatements.clear();
 
+		queue.start();
+		queue.execute(new SQLiteJob<Object>() {
+
+			@Override
+			protected Object job(SQLiteConnection connection) throws Throwable {
+				connection.exec("BEGIN");
+				return null;
+			}
+		});
 		// SQL queries / prepared statements to be executed before the actual
 		// QueryScenario statement
-		// Statement statement = connection.createStatement();
 		switch (queryScenario) {
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP:
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS:
-			System.out.println("WARNING: " + queryScenario + " not yet implemented");
+			System.out.println("Not implemented: " + queryScenario);
+			return;
+		case SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY:
+		case SCHEMA_CHANGE_REMOVE_RDF_TYPE:
 			break;
 		default:
-			// Resolves the template associated with this queryScenario
-			scenarioStatements.add(connection.prepare(templates.resolve(queryScenario)));
+			queue.execute(new SQLiteJob<Object>() {
+
+				@Override
+				protected Object job(SQLiteConnection connection) throws Throwable {
+					connection.exec(templates.resolve(queryScenario + "_prepare"));
+					return null;
+				}
+			});
 		}
+
+		queue.execute(new SQLiteJob<Object>() {
+
+			@Override
+			protected Object job(SQLiteConnection connection) throws Throwable {
+				connection.exec("COMMIT");
+				return null;
+			}
+		});
+
+		queue.stop(true).join();
+
+		scenarioStatements.add(connection.prepare(templates.resolve(queryScenario)));
 
 		this.queryScenario = queryScenario;
 	}
@@ -146,6 +185,10 @@ public class SQLite4Java extends Helpers implements Database {
 	public void query(QueryScenario queryScenario) throws Exception {
 		if (scenarioStatements == null || this.queryScenario != queryScenario)
 			throw new RuntimeException("There is no preparedStatement for QueryScenario " + queryScenario);
+
+		// Auto commit setting:
+		// https://stackoverflow.com/questions/4998630/how-to-disable-autocommit-in-sqlite4java#5005785
+		connection.exec("BEGIN");
 
 		switch (queryScenario) {
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP:
@@ -158,6 +201,7 @@ public class SQLite4Java extends Helpers implements Database {
 			}
 		}
 
+		connection.exec("COMMIT");
 	}
 
 	@Override
@@ -172,7 +216,11 @@ public class SQLite4Java extends Helpers implements Database {
 		sqLiteXerial.setUp();
 		sqLiteXerial.load(Dataset.hebis_tiny_rdf);
 
-		QueryScenario queryScenario = QueryScenario.SCHEMA_CHANGE_REMOVE_RDF_TYPE;
+		QueryScenario queryScenario = QueryScenario.AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100;
+		sqLiteXerial.prepare(queryScenario);
+		sqLiteXerial.query(queryScenario);
+
+		queryScenario = QueryScenario.AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10;
 		sqLiteXerial.prepare(queryScenario);
 		sqLiteXerial.query(queryScenario);
 

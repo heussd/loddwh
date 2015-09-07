@@ -1,4 +1,4 @@
 alter table justatable
-add column ${Config.NEWCOLUMN} text;
+add column istrop text;
 
-update justatable set RDF_ABOUT=substring(RDF_ABOUT from '........$');
+update justatable set istrop=substring(RDF_ABOUT from '........$');

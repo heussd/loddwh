@@ -9,6 +9,6 @@ CREATE INDEX unnestedsubjects_subject ON unnestedsubjects (subject);
 
 -- Old gin index - was never really used.
 -- DROP INDEX IF EXISTS idx_identifier;
--- CREATE INDEX idx_identifier on "${Config.TABLE}" ("dcterms_identifier");
+-- CREATE INDEX idx_identifier on "justatable" ("dcterms_identifier");
 -- DROP INDEX IF EXISTS idx_subjects;
--- CREATE INDEX idx_subjects on "${Config.TABLE}" USING GIN ("dcterms_subject");
+-- CREATE INDEX idx_subjects on "justatable" USING GIN ("dcterms_subject");

@@ -1,1 +1,1 @@
-select * from justatable where (LOWER(${Codes.DCTERMS_TITLE}) LIKE '%studie%' OR LOWER(${Codes.DCTERMS_TITLE}) LIKE '%study%');
+select * from justatable where (LOWER(DCTERMS_TITLE) LIKE '%studie%' OR LOWER(DCTERMS_TITLE) LIKE '%study%');

@@ -85,8 +85,8 @@ public class PostgreSQL extends Helpers implements Database {
 		} catch (Exception e) {
 			// Will drop its own connection - ignore
 		}
-
 		Connection connection = DriverManager.getConnection("jdbc:postgresql://" + Config.HOST_POSTGRES + "/postgres", props);
+//		connection.setAutoCommit(false);
 
 		// Aggressively drop possibly open connections
 		// https://stackoverflow.com/questions/7073773/drop-postgresql-database-through-command-line
@@ -105,6 +105,7 @@ public class PostgreSQL extends Helpers implements Database {
 		templates = new Templates("postgres", ".sql");
 
 		preparedStatement.close();
+//		connection.commit();
 		connection.close();
 
 		// clear(null);
@@ -127,6 +128,7 @@ public class PostgreSQL extends Helpers implements Database {
 	@Override
 	public void load(Dataset dataset) throws Exception {
 		reopenConnection(false);
+		connection.setAutoCommit(false);
 
 		PreparedStatement createTable = connection.prepareStatement(createQuery);
 		createTable.execute();
@@ -157,11 +159,14 @@ public class PostgreSQL extends Helpers implements Database {
 				throw new RuntimeException("Cannot insert DataObject: " + dataObject, e);
 			}
 		});
+		
+		connection.commit();
 	}
 
 	@Override
 	public void prepare(QueryScenario queryScenario) throws Exception {
 		reopenConnection(queryScenario.isReadOnly);
+		connection.setAutoCommit(false);
 
 		if (scenarioStatements == null)
 			scenarioStatements = new ArrayList<>();
@@ -178,6 +183,10 @@ public class PostgreSQL extends Helpers implements Database {
 		default:
 			statement.executeUpdate(templates.resolve(queryScenario + "_prepare"));
 		}
+		
+		connection.commit();
+		reopenConnection(queryScenario.isReadOnly);
+		connection.setAutoCommit(false);
 
 		// Resolves the template associated with this queryScenario
 		scenarioStatements.add(connection.prepareStatement(templates.resolve(queryScenario)));
@@ -198,6 +207,7 @@ public class PostgreSQL extends Helpers implements Database {
 			}
 		}
 
+		connection.commit();
 	}
 
 	private void reopenConnection(boolean readonly) throws Exception {

@@ -1,4 +1,4 @@
-select ${Codes.DCTERMS_PUBLISHER}, count(${Codes.DCTERMS_PUBLISHER}) from ${Config.TABLE}
-group by ${Codes.DCTERMS_PUBLISHER}
-order by count(${Codes.DCTERMS_PUBLISHER})
+select DCTERMS_PUBLISHER, count(DCTERMS_PUBLISHER) from justatable
+group by DCTERMS_PUBLISHER
+order by count(DCTERMS_PUBLISHER)
 desc
