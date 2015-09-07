@@ -70,12 +70,9 @@ public class Templates {
 
 			TemplateHashModel staticModels = wrapper.getStaticModels();
 			TemplateHashModel config = (TemplateHashModel) staticModels.get("util.Config");
-			TemplateHashModel enumModels = wrapper.getEnumModels();
-			TemplateHashModel codes = (TemplateHashModel) enumModels.get("util.Codes");
-
+			
 			root = new HashMap<>();
 			root.put("Config", config);
-			root.put("Codes", codes);
 
 			// Warm up with demo template
 			resolve("", "demo", "");
