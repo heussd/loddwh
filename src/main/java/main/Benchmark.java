@@ -1,15 +1,23 @@
 package main;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+
+import org.apache.commons.io.FileUtils;
+import org.pegdown.Extensions;
+import org.pegdown.PegDownProcessor;
+
+import com.hp.hpl.jena.query.Query;
 
 import database.*;
 import util.*;
 
 public class Benchmark {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 
 		List<BenchmarkObject> benchmarkObjects = new ArrayList<BenchmarkObject>();
 
@@ -22,10 +30,10 @@ public class Benchmark {
 		// PostgreSQL(), Dataset.hebis_small_rdf));
 
 		// SQLite (Xerial)
-		benchmarkObjects.add(new BenchmarkObject("sqlite4java Medium", new SQLite4Java(), Dataset.hebis_small_rdf));
+		//benchmarkObjects.add(new BenchmarkObject("sqlite4java Medium", new SQLite4Java(), Dataset.hebis_small_rdf));
 
 		// SQLite (Xerial)
-		benchmarkObjects.add(new BenchmarkObject("SQLite Xerial Medium", new SQLiteXerial(), Dataset.hebis_small_rdf));
+		//benchmarkObjects.add(new BenchmarkObject("SQLite Xerial Medium", new SQLiteXerial(), Dataset.hebis_small_rdf));
 
 		// VIRTUOSO
 		benchmarkObjects.add(new BenchmarkObject("Virtuoso 1.000", new Virtuoso("hebis_1000_test", Dataset.hebis_tiny_rdf, "C:\\RDSTUDIES\\db\\virtuoso-opensource", ".."), null));
@@ -97,6 +105,55 @@ public class Benchmark {
 			System.out.println(benchmarkObject);
 		}
 
+		makeReports(benchmarkObjects);		
+	}
+
+	private static void makeReports(List<BenchmarkObject> benchmarkObjects) throws IOException {
+		int rows = QueryScenario.values().length + 2 + 1, columns = benchmarkObjects.size() + 1;
+		Hashtable<QueryScenario, Integer> qsreportrowmapping = new Hashtable<QueryScenario, Integer>();
+		int temp = 3;
+		for (QueryScenario qs : QueryScenario.values()) {
+			qsreportrowmapping.put(qs, temp);
+			temp++;
+		}
+		String[][] reportmatrix = new String[rows][columns];
+		reportmatrix[0][0] = "TESTCASE";
+		reportmatrix[1][0] = "SETUP";
+		reportmatrix[2][0] = "LOAD";		
+		for (QueryScenario qs : QueryScenario.values()) {
+			reportmatrix[qsreportrowmapping.get(qs)][0] = qs.toString();
+		}
+		
+		int curcol = 1;
+		for (BenchmarkObject bmo : benchmarkObjects) {
+			reportmatrix[0][curcol] = bmo.getTitle();
+			reportmatrix[1][curcol] = Long.toString(bmo.getSetUpTime());
+			reportmatrix[2][curcol] = Long.toString(bmo.getLoadTime());
+			for (QueryScenario qs : QueryScenario.values()) {
+				reportmatrix[qsreportrowmapping.get(qs)][curcol] = Long.toString(bmo.getPrepareQueryScenarioResults().get(qs) + bmo.getQueryQueryScenarioResults().get(qs) + bmo.getClearQueryScenarioResults().get(qs)); 
+			}
+			
+			curcol++;
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("|");
+		for(int c=0;c<columns;c++)
+			sb.append(" " + reportmatrix[0][c] + " |");
+		sb.append(System.lineSeparator());
+		sb.append("| :- | :-: | :-: |" + System.lineSeparator());
+		for(int i=1;i<rows;i++){
+			sb.append("|");
+			for(int j=0;j<columns;j++) sb.append(" " + reportmatrix[i][j] + " |");
+			if(i+1<rows) sb.append(System.lineSeparator());
+		}
+		//sb.append(System.lineSeparator() + "[Prototype table][reference_table]");
+		
+		FileUtils.writeStringToFile(new File(Config.WHERE_THE_RESULTS_AT + "\\results.md"), sb.toString());
+		
+		PegDownProcessor pdp = new PegDownProcessor(Extensions.ALL);
+		String htmlResult = pdp.markdownToHtml(sb.toString());
+		FileUtils.writeStringToFile(new File(Config.WHERE_THE_RESULTS_AT + "\\results.html"), htmlResult);
 	}
 
 }

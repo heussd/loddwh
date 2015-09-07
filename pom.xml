@@ -91,5 +91,10 @@
 			<artifactId>sqlite-jdbc</artifactId>
 			<version>3.8.11</version>
 		</dependency>
+		<dependency>
+			<groupId>org.pegdown</groupId>
+			<artifactId>pegdown</artifactId>
+			<version>1.5.0</version>
+		</dependency>
 	</dependencies>
 </project>
