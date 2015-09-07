@@ -37,7 +37,7 @@ public class Benchmark {
 
 		// VIRTUOSO
 		benchmarkObjects.add(new BenchmarkObject("Virtuoso 1.000", new Virtuoso("hebis_1000_test", Dataset.hebis_tiny_rdf, "C:\\RDSTUDIES\\db\\virtuoso-opensource", ".."), null));
-		benchmarkObjects.add(new BenchmarkObject("Virtuoso 10.000", new Virtuoso("hebis_10000_test", Dataset.hebis_small_rdf, "C:\\RDSTUDIES\\db\\virtuoso-opensource", ".."), null));
+		//benchmarkObjects.add(new BenchmarkObject("Virtuoso 10.000", new Virtuoso("hebis_10000_test", Dataset.hebis_small_rdf, "C:\\RDSTUDIES\\db\\virtuoso-opensource", ".."), null));
 		//benchmarkObjects.add(new BenchmarkObject("Virtuoso 100.000", new Virtuoso("hebis_100000_test", Dataset.hebis_medium_rdf, "C:\\RDSTUDIES\\db\\virtuoso-opensource", ".."), null));
 	// OBJECTS
 		
