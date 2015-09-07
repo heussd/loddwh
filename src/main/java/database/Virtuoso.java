@@ -36,11 +36,11 @@ public class Virtuoso implements Database {
 	private Statement stmt;
 	private Templates templates;
 
-	public Virtuoso(String identifier, String filePathToGZ,
+	public Virtuoso(String identifier, Dataset filePathToGZ,
 			String virtuosoAccessibleDir,
 			String virtuosoAccessibleDirRelativeToVirtuosoTExe) {
 		graphId = identifier;
-		fpTGZ = filePathToGZ;
+		fpTGZ = filePathToGZ.string;
 		vAD = virtuosoAccessibleDir;
 		vADRtVE = virtuosoAccessibleDirRelativeToVirtuosoTExe;
 	}
