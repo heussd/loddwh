@@ -149,11 +149,11 @@ public class Benchmark {
 		}
 		//sb.append(System.lineSeparator() + "[Prototype table][reference_table]");
 		
-		FileUtils.writeStringToFile(new File(Config.WHERE_THE_RESULTS_AT + "\\results.md"), sb.toString());
+		FileUtils.writeStringToFile(new File(Config.WHERE_THE_RESULTS_AT + "results.md"), sb.toString());
 		
 		PegDownProcessor pdp = new PegDownProcessor(Extensions.ALL);
 		String htmlResult = pdp.markdownToHtml(sb.toString());
-		FileUtils.writeStringToFile(new File(Config.WHERE_THE_RESULTS_AT + "\\results.html"), htmlResult);
+		FileUtils.writeStringToFile(new File(Config.WHERE_THE_RESULTS_AT + "results.html"), htmlResult);
 	}
 
 }
