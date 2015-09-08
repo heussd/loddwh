@@ -13,20 +13,26 @@ import util.QueryResult.Type;
 public enum QueryScenario {
 
 	/**
-	 * Randomly retrieve a single ID. In a second step, retrieve all the entire
-	 * {@link DataObject} associated to that IDs.
+	 * Randomly retrieve a single ID. In a second step, retrieve the entire
+	 * {@link DataObject} associated to that ID. These two steps can be taken
+	 * within a single query call. <b>Do not use prepare for the random
+	 * pre-selection</b>.
 	 */
 	ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY(QueryResult.Type.COMPLETE_ENTITIES),
 
 	/**
 	 * Randomly retrieve ten IDs. In a second step, retrieve all ten
-	 * {@link DataObject}s associated to that IDs.
+	 * {@link DataObject}s associated to that IDs. These two steps can be taken
+	 * within a single query call. <b>Do not use prepare for the random
+	 * pre-selection</b>.
 	 */
 	ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES(QueryResult.Type.COMPLETE_ENTITIES),
 
 	/**
 	 * Randomly retrieve 100 IDs. In a second step, retrieve all 100
-	 * {@link DataObject}s associated to that IDs.
+	 * {@link DataObject}s associated to that IDs. These two steps can be taken
+	 * within a single query call. <b>Do not use prepare for the random
+	 * pre-selection</b>.
 	 */
 	ENTITY_RETRIEVAL_BY_ID_100_ENTITIES(QueryResult.Type.COMPLETE_ENTITIES),
 
