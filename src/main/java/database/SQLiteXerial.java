@@ -194,7 +194,7 @@ public class SQLiteXerial extends Helpers implements Database {
 		sqLiteXerial.prepare(queryScenario);
 		sqLiteXerial.query(queryScenario);
 
-		queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_CASE1;
+		queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY;
 		sqLiteXerial.prepare(queryScenario);
 		sqLiteXerial.query(queryScenario);
 

@@ -113,7 +113,7 @@ public class Virtuoso implements Database {
 
 		// IN DEN ABFRAGEN IM STRING KEIN SEMIKOLON AM ENDE MACHEN! DER BRICHT SONST EINFACH OHNE FEHLERMELDUNG AB! UNFASSBAR!
 		switch (queryScenario) {
-		case ENTITY_RETRIEVAL_BY_ID_CASE1:
+		case ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY:
 			stmt.execute(String.format("sparql select * from <%s> where {	?s <http://purl.org/dc/terms/identifier> '268876681' ; 	<http://purl.org/dc/terms/medium> ?medium ;		<http://purl.org/dc/terms/format> ?format ;		<http://purl.org/dc/terms/issued> ?issued ;		<http://purl.org/dc/terms/title> ?title ; 	<http://purl.org/dc/terms/contributor> ?contributor ; 	<http://purl.org/dc/terms/publisher> ?publisher ; 	<http://purl.org/dc/terms/identifier> ?id ; 	<http://iflastandards.info/ns/isbd/elements/P1018> ?P1018 ; 	<http://iflastandards.info/ns/isbd/elements/P1004> ?P1004 ; 	<http://iflastandards.info/ns/isbd/elements/P1006> ?P1006 ; 	<http://iflastandards.info/ns/isbd/elements/P1016> ?P1016 ; 	<http://iflastandards.info/ns/isbd/elements/P1017> ?P1017 ; 	<http://purl.org/ontology/bibo/oclcnum> ?oclcnum }", graphId));
 			break;
 			
@@ -183,22 +183,22 @@ public class Virtuoso implements Database {
 			stmt.execute(String.format("sparql insert data into <%s> {<http://www.w3.org/1999/02/22-rdf-syntax-ns#Description> <http://purl.org/dc/terms/medium> 'recycled trees'}", graphId));
 			break;
 			
-			// todo bei hebis_1000_test fügt er 5196 ein?
+			// todo bei hebis_1000_test fï¿½gt er 5196 ein?
 		case UPDATE_HIGH_SELECTIVITY_NON_ISSUED:
-			stmt.execute(String.format("sparql INSERT into <%s> {  ?s <http://purl.org/dc/terms/issued> '0'} WHERE { ?s ?p ?o .   FILTER(     !EXISTS{      ?s <http://purl.org/dc/terms/issued> ?a    }  )}", graphId));
+			stmt.execute(String.format("sparql INSERT into <%s> {  ?s <http://purl.org/dc/terms/issued> '0'} WHERE { ?s  <http://purl.org/dc/terms/issued> ?o .   FILTER(     !EXISTS{      ?s <http://purl.org/dc/terms/issued> ?a    }  )}", graphId));
 			break;
 			
 			// ok
-		case DELETE_LOW_SELECTIVITY_PAPER_MEDIUM:
-			stmt.execute(String.format("sparql WITH <%s> DELETE { ?s ?p ?o } WHERE { ?s ?p ?o ; <http://purl.org/dc/terms/medium> 'paper' }", graphId));
-			break;
-			
-			// kollidiert doch stark mit update_high_selectivity_non_issued
-			// viel zu wenige die da gelöscht werden. 10. das sind nicht mal 2 teile
-		case DELETE_HIGH_SELECTIVIY_NON_ISSUED:
-			stmt.execute(String.format("sparql WITH <%s> DELETE { ?s ?p ?o } WHERE {    ?s ?p ?o .   filter(     not exists{       ?s <http://purl.org/dc/terms/issued> ?a     }   )}", graphId));
-			break;
-			
+//		case DELETE_LOW_SELECTIVITY_PAPER_MEDIUM:
+//			stmt.execute(String.format("sparql WITH <%s> DELETE { ?s ?p ?o } WHERE { ?s ?p ?o ; <http://purl.org/dc/terms/medium> 'paper' }", graphId));
+//			break;
+//			
+//			// kollidiert doch stark mit update_high_selectivity_non_issued
+//			// viel zu wenige die da gelï¿½scht werden. 10. das sind nicht mal 2 teile
+//		case DELETE_HIGH_SELECTIVIY_NON_ISSUED:
+//			stmt.execute(String.format("sparql WITH <%s> DELETE { ?s ?p ?o } WHERE {    ?s ?p ?o .   filter(     not exists{       ?s <http://purl.org/dc/terms/issued> ?a     }   )}", graphId));
+//			break;
+//			
 		default:
 			throw new RuntimeException("Do not know what to do with QueryScenario "	+ queryScenario);
 		}

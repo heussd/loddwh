@@ -41,7 +41,7 @@ public class PostgreSQL extends Helpers implements Database {
 		System.out.println(postgreSQL.getName() + " " + postgreSQL.getVersion());
 		Dataset dataset = Dataset.hebis_tiny_rdf;
 
-		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_CASE1;
+		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY;
 
 		postgreSQL.setUp();
 		postgreSQL.load(dataset);

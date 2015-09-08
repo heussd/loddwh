@@ -117,7 +117,7 @@ public class Templates {
 
 	public static void main(String[] args) {
 		Templates templates = new Templates("postgres", ".sql");
-		System.out.println(templates.resolve(QueryScenario.ENTITY_RETRIEVAL_BY_ID_CASE1));
+		System.out.println(templates.resolve(QueryScenario.ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY));
 	}
 
 }

@@ -13,11 +13,22 @@ import util.QueryResult.Type;
 public enum QueryScenario {
 
 	/**
-	 * Retrieve all information associated to the single entity specified by a
-	 * given ID.
+	 * Randomly retrieve a single ID. In a second step, retrieve all the entire
+	 * {@link DataObject} associated to that IDs.
 	 */
-	ENTITY_RETRIEVAL_BY_ID_CASE1(QueryResult.Type.COMPLETE_ENTITIES),
-	// TINY: 268893950
+	ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY(QueryResult.Type.COMPLETE_ENTITIES),
+
+	/**
+	 * Randomly retrieve ten IDs. In a second step, retrieve all ten
+	 * {@link DataObject}s associated to that IDs.
+	 */
+	ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES(QueryResult.Type.COMPLETE_ENTITIES),
+
+	/**
+	 * Randomly retrieve 100 IDs. In a second step, retrieve all 100
+	 * {@link DataObject}s associated to that IDs.
+	 */
+	ENTITY_RETRIEVAL_BY_ID_100_ENTITIES(QueryResult.Type.COMPLETE_ENTITIES),
 
 	/**
 	 * Count the publications per publisher and order by this count descending.
