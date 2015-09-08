@@ -16,6 +16,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import util.Codes;
 import util.Config;
 import util.Dataset;
+import util.QueryResult;
 import util.QueryScenario;
 import util.Templates;
 
@@ -109,7 +110,7 @@ public class Virtuoso implements Database {
 	}
 
 	@Override
-	public void query(QueryScenario queryScenario) throws Exception {
+	public QueryResult query(QueryScenario queryScenario) throws Exception {
 
 		// IN DEN ABFRAGEN IM STRING KEIN SEMIKOLON AM ENDE MACHEN! DER BRICHT SONST EINFACH OHNE FEHLERMELDUNG AB! UNFASSBAR!
 		switch (queryScenario) {

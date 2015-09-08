@@ -1,6 +1,7 @@
 package database;
 
 import util.Dataset;
+import util.QueryResult;
 import util.QueryScenario;
 
 /**
@@ -55,7 +56,7 @@ public interface Database {
 	/**
 	 * Execute the given {@link QueryScenario}.
 	 */
-	public void query(QueryScenario queryScenario) throws Exception;
+	public QueryResult query(QueryScenario queryScenario) throws Exception;
 
 	/**
 	 * Reinitiates the database and resets it to an empty state aka

@@ -13,6 +13,7 @@ import com.almworks.sqlite4java.SQLiteStatement;
 import util.Codes;
 import util.Config;
 import util.Dataset;
+import util.QueryResult;
 import util.QueryScenario;
 import util.Templates;
 import util.dumper.Helpers;
@@ -182,7 +183,7 @@ public class SQLite4Java extends Helpers implements Database {
 	}
 
 	@Override
-	public void query(QueryScenario queryScenario) throws Exception {
+	public QueryResult query(QueryScenario queryScenario) throws Exception {
 		if (scenarioStatements == null || this.queryScenario != queryScenario)
 			throw new RuntimeException("There is no preparedStatement for QueryScenario " + queryScenario);
 

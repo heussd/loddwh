@@ -1,6 +1,7 @@
 package database;
 
 import util.Dataset;
+import util.QueryResult;
 import util.QueryScenario;
 
 public class DummyDatabase implements Database {
@@ -31,7 +32,7 @@ public class DummyDatabase implements Database {
 	}
 
 	@Override
-	public void query(QueryScenario queryScenario) throws Exception {
+	public QueryResult query(QueryScenario queryScenario) throws Exception {
 		System.out.println("query(): " + queryScenario.toString());
 	}
 
