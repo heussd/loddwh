@@ -11,34 +11,22 @@ public class QueryResultTest {
 
 	@Test(expected = RuntimeException.class)
 	public void testInvalidScalarValueMethodUse() {
-		QueryResult queryResult = new QueryResult(Type.SCALAR_VALUE);
+		QueryResult queryResult = new QueryResult(Type.GRAPH);
 
 		queryResult.push(null);
 	}
 
 	@Test
 	public void testTypeComparsion() {
-		QueryResult qR1 = new QueryResult(Type.SCALAR_VALUE);
+		QueryResult qR1 = new QueryResult(Type.COMPLETE_ENTITIES);
 		QueryResult qR2 = new QueryResult(Type.GRAPH);
 
 		assertFalse(qR1.equals(qR2));
 
-		QueryResult qR3 = new QueryResult(Type.SCALAR_VALUE);
+		QueryResult qR3 = new QueryResult(Type.COMPLETE_ENTITIES);
 		assertTrue(qR1.equals(qR3));
 
 		assertFalse(qR2.equals(qR3));
-	}
-
-	@Test
-	public void testScalarComparsion() {
-		QueryResult qR1 = new QueryResult(Type.SCALAR_VALUE);
-		QueryResult qR2 = new QueryResult(Type.SCALAR_VALUE);
-
-		qR1.put("mystring");
-		assertFalse(qR1.equals(qR2));
-
-		qR2.put("mystring");
-		assertTrue(qR1.equals(qR2));
 	}
 
 	@Test

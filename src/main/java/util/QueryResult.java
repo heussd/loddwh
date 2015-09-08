@@ -11,7 +11,6 @@ import java.util.ArrayList;
 public class QueryResult {
 
 	public static enum Type {
-		SCALAR_VALUE,
 		COMPLETE_ENTITIES,
 		TWO_COLUMNS,
 		GRAPH,
@@ -29,12 +28,6 @@ public class QueryResult {
 		this.type = type;
 	}
 
-	public void put(String scalarValue) {
-		if (this.type != Type.SCALAR_VALUE)
-			throw new RuntimeException("Invalid method call. This method is only allowed for type " + Type.SCALAR_VALUE + ", but was called for type " + this.type);
-
-		this.scalarValue = scalarValue;
-	}
 
 	/**
 	 * Setter method for {@link Type#TWO_COLUMNS}.
@@ -108,14 +101,6 @@ public class QueryResult {
 			return false;
 
 		switch (type) {
-		case SCALAR_VALUE:
-			if (scalarValue == null) {
-				if (other.scalarValue != null)
-					return false;
-			} else if (!scalarValue.equals(other.scalarValue))
-				return false;
-
-			break;
 		case COMPLETE_ENTITIES:
 			if (dataObjects == null) {
 				if (other.dataObjects != null)
