@@ -86,7 +86,7 @@ public class PostgreSQL extends Helpers implements Database {
 			// Will drop its own connection - ignore
 		}
 		Connection connection = DriverManager.getConnection("jdbc:postgresql://" + Config.HOST_POSTGRES + "/postgres", props);
-//		connection.setAutoCommit(false);
+		// connection.setAutoCommit(false);
 
 		// Aggressively drop possibly open connections
 		// https://stackoverflow.com/questions/7073773/drop-postgresql-database-through-command-line
@@ -105,7 +105,7 @@ public class PostgreSQL extends Helpers implements Database {
 		templates = new Templates("postgres", ".sql");
 
 		preparedStatement.close();
-//		connection.commit();
+		// connection.commit();
 		connection.close();
 
 		// clear(null);
@@ -159,7 +159,7 @@ public class PostgreSQL extends Helpers implements Database {
 				throw new RuntimeException("Cannot insert DataObject: " + dataObject, e);
 			}
 		});
-		
+
 		connection.commit();
 	}
 
@@ -183,7 +183,7 @@ public class PostgreSQL extends Helpers implements Database {
 		default:
 			statement.executeUpdate(templates.resolve(queryScenario + "_prepare"));
 		}
-		
+
 		connection.commit();
 		reopenConnection(queryScenario.isReadOnly);
 		connection.setAutoCommit(false);
