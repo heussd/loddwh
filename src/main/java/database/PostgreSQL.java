@@ -1,14 +1,18 @@
 package database;
 
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Properties;
 
 import util.Codes;
 import util.Config;
+import util.DataObject;
 import util.Dataset;
 import util.QueryResult;
 import util.QueryScenario;
@@ -42,14 +46,14 @@ public class PostgreSQL extends Helpers implements Database {
 		System.out.println(postgreSQL.getName() + " " + postgreSQL.getVersion());
 		Dataset dataset = Dataset.hebis_tiny_rdf;
 
-		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY;
+		QueryScenario queryScenario = QueryScenario.CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES;
 
 		postgreSQL.setUp();
 		postgreSQL.load(dataset);
 		// postgreSQL.clear(queryScenario);
 		postgreSQL.prepare(queryScenario);
-		postgreSQL.query(queryScenario);
-
+		QueryResult queryResult = postgreSQL.query(queryScenario);
+		System.out.println(queryResult);
 	}
 
 	public PostgreSQL() {
@@ -200,15 +204,62 @@ public class PostgreSQL extends Helpers implements Database {
 		if (scenarioStatements == null || this.queryScenario != queryScenario)
 			throw new RuntimeException("There is no preparedStatement for QueryScenario " + queryScenario);
 
+		QueryResult queryResult = new QueryResult(queryScenario.queryResultType);
+
 		for (PreparedStatement preparedStatement : scenarioStatements) {
-			if (queryScenario.isReadOnly) {
-				preparedStatement.executeQuery();
-			} else {
+			ResultSet resultSet;
+			switch (queryScenario.queryResultType) {
+			case GRAPH:
+				resultSet = preparedStatement.executeQuery();
+				while (resultSet.next()) {
+					switch (resultSet.getMetaData().getColumnCount()) {
+					case 3:
+						queryResult.push(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3));
+						break;
+					case 5:
+						queryResult.push(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
+						break;
+					default:
+						throw new RuntimeException("Cannot parse " + resultSet.getMetaData().getColumnCount() + " columns in result set");
+					}
+				}
+				break;
+			case TWO_COLUMNS:
+				resultSet = preparedStatement.executeQuery();
+				while (resultSet.next()) {
+					queryResult.push(resultSet.getString(1), resultSet.getString(2));
+				}
+				break;
+			case COMPLETE_ENTITIES:
+				resultSet = preparedStatement.executeQuery();
+				while (resultSet.next()) {
+					DataObject dataObject = new DataObject();
+					for (Codes code : Codes.values()) {
+						if (code.IS_MULTIPLE) {
+							for (String value : (String[]) resultSet.getArray(code.ordinal() + 1).getArray()) {
+								dataObject.putMultiple(code, value);
+							}
+
+						} else {
+							dataObject.set(code, resultSet.getString(code.ordinal() + 1));
+						}
+					}
+					queryResult.push(dataObject);
+				}
+				break;
+
+			case NONE:
+				// dies here
+			default:
+				// This will only work for non-readOnly-scenarios!
 				preparedStatement.executeUpdate();
+				break;
 			}
 		}
 
 		connection.commit();
+		return queryResult;
+
 	}
 
 	private void reopenConnection(boolean readonly) throws Exception {
