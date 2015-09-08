@@ -1,13 +1,11 @@
 package database;
 
-import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Properties;
 
 import util.Codes;
@@ -247,9 +245,7 @@ public class PostgreSQL extends Helpers implements Database {
 					queryResult.push(dataObject);
 				}
 				break;
-
 			case NONE:
-				// dies here
 			default:
 				// This will only work for non-readOnly-scenarios!
 				preparedStatement.executeUpdate();

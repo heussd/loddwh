@@ -12,6 +12,7 @@ import org.sqlite.SQLiteConfig;
 
 import util.Codes;
 import util.Config;
+import util.DataObject;
 import util.Dataset;
 import util.QueryResult;
 import util.QueryScenario;
@@ -147,7 +148,6 @@ public class SQLiteXerial extends Helpers implements Database {
 		}
 		connection.commit();
 
-		
 		reopenConnection(queryScenario.isReadOnly);
 		connection.setAutoCommit(false);
 		// Resolves the template associated with this queryScenario
@@ -160,23 +160,66 @@ public class SQLiteXerial extends Helpers implements Database {
 	public QueryResult query(QueryScenario queryScenario) throws Exception {
 		if (scenarioStatements == null || this.queryScenario != queryScenario)
 			throw new RuntimeException("There is no preparedStatement for QueryScenario " + queryScenario);
-		
+
+		QueryResult queryResult = new QueryResult(queryScenario.queryResultType);
+
 		for (PreparedStatement preparedStatement : scenarioStatements) {
-			if (queryScenario.isReadOnly) {
-				ResultSet resultSet = preparedStatement.executeQuery();
-				// while (resultSet.next()) {
-				// System.out.println(resultSet.getString(1) + " " +
-				// resultSet.getString(2));
-				// System.out.println();
-				// // read the result set
-				// System.out.println("name = " + rs.getString("name"));
-				// System.out.println("id = " + rs.getInt("id"));
-				// }
-			} else {
+			ResultSet resultSet;
+			switch (queryScenario.queryResultType) {
+			case GRAPH:
+				resultSet = preparedStatement.executeQuery();
+				while (resultSet.next()) {
+					switch (resultSet.getMetaData().getColumnCount()) {
+					case 3:
+						queryResult.push(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3));
+						break;
+					case 5:
+						queryResult.push(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
+						break;
+					default:
+						throw new RuntimeException("Cannot parse " + resultSet.getMetaData().getColumnCount() + " columns in result set");
+					}
+				}
+				break;
+			case TWO_COLUMNS:
+				resultSet = preparedStatement.executeQuery();
+				while (resultSet.next()) {
+					queryResult.push(resultSet.getString(1), resultSet.getString(2));
+				}
+				break;
+			case COMPLETE_ENTITIES:
+				resultSet = preparedStatement.executeQuery();
+				while (resultSet.next()) {
+					DataObject dataObject = new DataObject();
+					for (Codes code : Codes.values()) {
+						if (resultSet.getObject(code.ordinal() + 1) == null)
+							continue;
+
+						if (code.IS_MULTIPLE) {
+							// https://stackoverflow.com/questions/3395729/convert-json-array-to-normal-java-array
+							JSONArray jsonArray = new JSONArray(resultSet.getString(code.ordinal() + 1));
+							if (jsonArray != null) {
+								int len = jsonArray.length();
+								for (int i = 0; i < len; i++) {
+									dataObject.putMultiple(code, jsonArray.get(i).toString());
+								}
+							}
+						} else {
+							dataObject.set(code, resultSet.getString(code.ordinal() + 1));
+						}
+					}
+					queryResult.push(dataObject);
+				}
+				break;
+
+			case NONE:
+			default:
 				preparedStatement.executeUpdate();
+				break;
 			}
 		}
 		connection.commit();
+		return queryResult;
 	}
 
 	@Override
@@ -191,13 +234,13 @@ public class SQLiteXerial extends Helpers implements Database {
 		sqLiteXerial.setUp();
 		sqLiteXerial.load(Dataset.hebis_tiny_rdf);
 
-		QueryScenario queryScenario = QueryScenario.CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES;
+		QueryScenario queryScenario = QueryScenario.AGGREGATE_ISSUES_PER_DECADE_TOP100;
 		sqLiteXerial.prepare(queryScenario);
-		sqLiteXerial.query(queryScenario);
+		System.out.println(sqLiteXerial.query(queryScenario));
 
 		queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY;
 		sqLiteXerial.prepare(queryScenario);
-		sqLiteXerial.query(queryScenario);
+		System.out.println(sqLiteXerial.query(queryScenario));
 
 		// sqLiteXerial.
 

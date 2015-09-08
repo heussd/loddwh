@@ -34,6 +34,7 @@ public class DummyDatabase implements Database {
 	@Override
 	public QueryResult query(QueryScenario queryScenario) throws Exception {
 		System.out.println("query(): " + queryScenario.toString());
+		return null;
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import com.almworks.sqlite4java.SQLiteStatement;
 
 import util.Codes;
 import util.Config;
+import util.DataObject;
 import util.Dataset;
 import util.QueryResult;
 import util.QueryScenario;
@@ -187,6 +188,8 @@ public class SQLite4Java extends Helpers implements Database {
 		if (scenarioStatements == null || this.queryScenario != queryScenario)
 			throw new RuntimeException("There is no preparedStatement for QueryScenario " + queryScenario);
 
+		QueryResult queryResult = new QueryResult(queryScenario.queryResultType);
+
 		// Auto commit setting:
 		// https://stackoverflow.com/questions/4998630/how-to-disable-autocommit-in-sqlite4java#5005785
 		connection.exec("BEGIN");
@@ -197,12 +200,48 @@ public class SQLite4Java extends Helpers implements Database {
 			System.out.println("WARNING: " + queryScenario + " not yet implemented");
 			break;
 		default:
+
 			for (SQLiteStatement preparedStatement : scenarioStatements) {
-				preparedStatement.step();
+				switch (queryScenario.queryResultType) {
+				case TWO_COLUMNS:
+					while (preparedStatement.step()) {
+						queryResult.push(preparedStatement.columnString(0), preparedStatement.columnString(1));
+					}
+					break;
+				case COMPLETE_ENTITIES:
+					while (preparedStatement.step()) {
+						DataObject dataObject = new DataObject();
+						for (Codes code : Codes.values()) {
+							if (preparedStatement.columnNull(code.ordinal()))
+								continue;
+							if (code.IS_MULTIPLE) {
+								// https://stackoverflow.com/questions/3395729/convert-json-array-to-normal-java-array
+								JSONArray jsonArray = new JSONArray(preparedStatement.columnString(code.ordinal()));
+								if (jsonArray != null) {
+									int len = jsonArray.length();
+									for (int i = 0; i < len; i++) {
+										dataObject.putMultiple(code, jsonArray.get(i).toString());
+									}
+								}
+							} else {
+								dataObject.set(code, preparedStatement.columnString(code.ordinal()));
+							}
+						}
+						queryResult.push(dataObject);
+					}
+					break;
+
+				case NONE:
+				default:
+					preparedStatement.step();
+					break;
+				}
+
 			}
 		}
 
 		connection.exec("COMMIT");
+		return queryResult;
 	}
 
 	@Override
@@ -219,11 +258,11 @@ public class SQLite4Java extends Helpers implements Database {
 
 		QueryScenario queryScenario = QueryScenario.AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100;
 		sqLiteXerial.prepare(queryScenario);
-		sqLiteXerial.query(queryScenario);
+		System.out.println(sqLiteXerial.query(queryScenario));
 
 		queryScenario = QueryScenario.AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10;
 		sqLiteXerial.prepare(queryScenario);
-		sqLiteXerial.query(queryScenario);
+		System.out.println(sqLiteXerial.query(queryScenario));
 
 	}
 
