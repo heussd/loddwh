@@ -203,4 +203,33 @@ public class QueryResult {
 		}
 
 	}
+
+	@Override
+	public String toString() {
+		String out = "";
+
+		switch (type) {
+		case GRAPH:
+		case TWO_COLUMNS:
+			for (Row row : rows) {
+				out += row.col1 + "\t\t" + row.col2;
+
+				if (type == Type.GRAPH)
+					out += "\t\t" + row.col3 + "\t\t" + row.col4 + "\t\t" + row.col5;
+
+				out += "\n";
+			}
+			break;
+		case COMPLETE_ENTITIES:
+			for (DataObject dataObject : dataObjects) {
+				out += dataObject.toString();
+			}
+			break;
+		default:
+			out += "How to display " + type + "?";
+			break;
+		}
+
+		return out;
+	}
 }
