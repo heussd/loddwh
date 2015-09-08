@@ -190,4 +190,45 @@ public class DataObject {
 	public Object get(Codes code) {
 		return data.get(code);
 	}
+
+	public void set(Codes key, String value) {
+		this.data.put(key, value);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((data == null) ? 0 : data.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DataObject other = (DataObject) obj;
+		if (data == null) {
+			if (other.data != null)
+				return false;
+		} else if (!data.equals(other.data))
+			return false;
+
+		for (Codes code : Codes.values()) {
+			if (this.data.get(code) == null) {
+				if (other.data.get(code) != null)
+					return false;
+			}
+
+			System.out.println(data);
+			if (this.data.get(code) != other.data.get(code))
+				return false;
+		}
+
+		return true;
+	}
 }
