@@ -1,11 +1,10 @@
-DELETE from <hebis_1000_test> 
- { ?s ?p ?o }
-WHERE
- { 
-   ?s ?p ?o .
-   FILTER (
-    EXISTS{
-     ?s <http://purl.org/dc/terms/medium> 'paper' 
-}
-   )
- }
+sparql WITH <%s> 
+DELETE 
+	{ 
+		?s ?p ?o 
+	} 
+WHERE 
+	{ 
+		?s ?p ?o ; 
+			<http://purl.org/dc/terms/medium> 'paper' 
+	}

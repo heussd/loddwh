@@ -17,21 +17,20 @@ import util.Codes;
 import util.Config;
 import util.Dataset;
 import util.QueryResult;
+import util.QueryResult.Type;
 import util.QueryScenario;
 import util.Templates;
 
 public class Virtuoso implements Database {
 
-//	public static void main(String[] args) throws Throwable {
-//		Virtuoso testVirtuoso = new Virtuoso(
-//				"hebis_1000_test",
-//				"C:\\RDSTUDIES\\src\\loddwhbench\\src\\main\\resources\\hebis_1000_rdf.gz",
-//				"C:\\RDSTUDIES\\db\\virtuoso-opensource", "..");
-//
-//		testVirtuoso.setUp();
-//		testVirtuoso.load(null);
-//	}
+	public static void main(String[] args) throws Throwable {
+		Virtuoso testVirtuoso = new Virtuoso("hebis_1000_test", Dataset.hebis_tiny_rdf, "C:\\RDSTUDIES\\db\\virtuoso-opensource", "..");
+		for (QueryScenario qs : QueryScenario.values()) {
+			System.out.println(String.format(testVirtuoso.templates.resolve(qs), "GRAPH_ID"));
+		}
+	}
 
+	// TODO graphId irrelevant, immer denselben Graphen löschen und neu aufbauen, überall anpassen, in query und den templates
 	private String graphId, fpTGZ, vAD, vADRtVE;
 	private Connection c;
 	private Statement stmt;
@@ -44,6 +43,8 @@ public class Virtuoso implements Database {
 		fpTGZ = filePathToGZ.string;
 		vAD = virtuosoAccessibleDir;
 		vADRtVE = virtuosoAccessibleDirRelativeToVirtuosoTExe;
+		
+		templates = new Templates("virtuoso", ".sql");
 	}
 
 	@Override
@@ -64,8 +65,6 @@ public class Virtuoso implements Database {
 
 		// Drop auf evtl. alten Identifier
 		stmt.execute(String.format("SPARQL CLEAR GRAPH <%s>", graphId));
-		
-		templates = new Templates("virtuoso", ".sql");
 	}
 
 	@Override
@@ -111,99 +110,11 @@ public class Virtuoso implements Database {
 
 	@Override
 	public QueryResult query(QueryScenario queryScenario) throws Exception {
-
-		// IN DEN ABFRAGEN IM STRING KEIN SEMIKOLON AM ENDE MACHEN! DER BRICHT SONST EINFACH OHNE FEHLERMELDUNG AB! UNFASSBAR!
-		switch (queryScenario) {
-		case ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY:
-			stmt.execute(String.format("sparql select * from <%s> where {	?s <http://purl.org/dc/terms/identifier> '268876681' ; 	<http://purl.org/dc/terms/medium> ?medium ;		<http://purl.org/dc/terms/format> ?format ;		<http://purl.org/dc/terms/issued> ?issued ;		<http://purl.org/dc/terms/title> ?title ; 	<http://purl.org/dc/terms/contributor> ?contributor ; 	<http://purl.org/dc/terms/publisher> ?publisher ; 	<http://purl.org/dc/terms/identifier> ?id ; 	<http://iflastandards.info/ns/isbd/elements/P1018> ?P1018 ; 	<http://iflastandards.info/ns/isbd/elements/P1004> ?P1004 ; 	<http://iflastandards.info/ns/isbd/elements/P1006> ?P1006 ; 	<http://iflastandards.info/ns/isbd/elements/P1016> ?P1016 ; 	<http://iflastandards.info/ns/isbd/elements/P1017> ?P1017 ; 	<http://purl.org/ontology/bibo/oclcnum> ?oclcnum }", graphId));
-			break;
-			
-			// decade
-		case AGGREGATE_ISSUES_PER_DECADE_TOP10:
-			stmt.execute(String.format("sparql select ?century, (count(*) as ?count) from <%s> where {	?a <http://purl.org/dc/terms/issued> ?century} group by ?century order by desc(?count) limit 10", graphId));
-			break;
-			
-			// decade
-		case AGGREGATE_ISSUES_PER_DECADE_TOP100:
-			stmt.execute(String.format("sparql select ?century, (count(*) as ?count) from <%s> where {	?a <http://purl.org/dc/terms/issued> ?century} group by ?century order by desc(?count) limit 100", graphId));
-			break;
-			
-			// decade
-		case AGGREGATE_ISSUES_PER_DECADE_ALL:
-			stmt.execute(String.format("sparql select ?century, (count(*) as ?count) from <%s> where {	?a <http://purl.org/dc/terms/issued> ?century} group by ?century order by desc(?count)", graphId));
-			break;
-			
-		case AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10:
-			stmt.execute(String.format("sparql select ?publisher, (count(*) as ?count) from <%s> where {	?a <http://purl.org/dc/terms/publisher> ?publisher} group by ?publisher order by desc(?count) limit 10", graphId));
-			break;
-			
-		case AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100:
-			stmt.execute(String.format("sparql select ?publisher, (count(*) as ?count) from <%s> where {	?a <http://purl.org/dc/terms/publisher> ?publisher} group by ?publisher order by desc(?count) limit 100", graphId));
-			break;
-			
-		case AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL:
-			stmt.execute(String.format("sparql select ?publisher, (count(*) as ?count) from <%s> where {	?a <http://purl.org/dc/terms/publisher> ?publisher} group by ?publisher order by desc(?count)", graphId));
-			break;
-			
-		case CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES:
-			stmt.execute(String.format("sparql select * from <%s> where {	?s <http://purl.org/dc/terms/title> ?title 	filter regex(?title, 'stud(ie|y)', 'i') . 	?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/dc/terms/BibliographicResource> optional{?s <http://purl.org/ontology/bibo/oclcnum> ?oclcnum}	optional{?s <http://purl.org/dc/terms/identifier> ?id}	optional{?s <http://purl.org/dc/terms/publisher> ?publisher}	optional{?s <http://iflastandards.info/ns/isbd/elements/P1017> ?P1017}	optional{?s <http://iflastandards.info/ns/isbd/elements/P1016> ?P1016}	optional{?s <http://iflastandards.info/ns/isbd/elements/P1008> ?P1008}	optional{?s <http://iflastandards.info/ns/isbd/elements/P1006> ?P1006}	optional{?s <http://iflastandards.info/ns/isbd/elements/P1004> ?P1004}	optional{?s <http://iflastandards.info/ns/isbd/elements/P1018> ?P1018}	optional{?s <http://purl.org/dc/terms/issued> ?issued}	optional{?s <http://www.w3.org/2002/07/owl#sameAs> ?sameAs}	optional{?s <http://purl.org/dc/terms/medium> ?medium}	optional{?s <http://purl.org/dc/terms/format> ?format}	optional{?s <http://purl.org/ontology/bibo/edition> ?edition}	optional{?s <http://purl.org/dc/terms/subject> ?subject}	optional{?s <http://purl.org/dc/terms/contributor> ?contributor}}", graphId));
-			break;
-			
-		case CONDITIONAL_TABLE_SCAN_ALL_STUDIES:
-			stmt.execute(String.format("sparql select * from <%s> where {	?s <http://purl.org/dc/terms/title> ?title 	filter regex(?title, 'stud(ie|y)', 'i') . 	optional{?s <http://purl.org/ontology/bibo/oclcnum> ?oclcnum}	optional{?s <http://purl.org/dc/terms/identifier> ?id}	optional{?s <http://purl.org/dc/terms/publisher> ?publisher}	optional{?s <http://iflastandards.info/ns/isbd/elements/P1017> ?P1017}	optional{?s <http://iflastandards.info/ns/isbd/elements/P1016> ?P1016}	optional{?s <http://iflastandards.info/ns/isbd/elements/P1008> ?P1008}	optional{?s <http://iflastandards.info/ns/isbd/elements/P1006> ?P1006}	optional{?s <http://iflastandards.info/ns/isbd/elements/P1004> ?P1004}	optional{?s <http://iflastandards.info/ns/isbd/elements/P1018> ?P1018}	optional{?s <http://purl.org/dc/terms/issued> ?issued}	optional{?s <http://www.w3.org/2002/07/owl#sameAs> ?sameAs}	optional{?s <http://purl.org/dc/terms/medium> ?medium}	optional{?s <http://purl.org/dc/terms/format> ?format}	optional{?s <http://purl.org/ontology/bibo/edition> ?edition}	optional{?s <http://purl.org/dc/terms/subject> ?subject}	optional{?s <http://purl.org/dc/terms/contributor> ?contributor}}", graphId));
-			break;
-			
-			// mit count(distinct ?s) sind es 927, sollte passen
-		case CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES:
-			stmt.execute(String.format("sparql select * from <%s> where {	?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/dc/terms/BibliographicResource> optional{?s <http://purl.org/dc/terms/title> ?title}	optional{?s <http://purl.org/ontology/bibo/oclcnum> ?oclcnum}	optional{?s <http://purl.org/dc/terms/identifier> ?id}	optional{?s <http://purl.org/dc/terms/publisher> ?publisher}	optional{?s <http://iflastandards.info/ns/isbd/elements/P1017> ?P1017}	optional{?s <http://iflastandards.info/ns/isbd/elements/P1016> ?P1016}	optional{?s <http://iflastandards.info/ns/isbd/elements/P1008> ?P1008}	optional{?s <http://iflastandards.info/ns/isbd/elements/P1006> ?P1006}	optional{?s <http://iflastandards.info/ns/isbd/elements/P1004> ?P1004}	optional{?s <http://iflastandards.info/ns/isbd/elements/P1018> ?P1018}	optional{?s <http://purl.org/dc/terms/issued> ?issued}	optional{?s <http://www.w3.org/2002/07/owl#sameAs> ?sameAs}	optional{?s <http://purl.org/dc/terms/medium> ?medium}	optional{?s <http://purl.org/dc/terms/format> ?format}	optional{?s <http://purl.org/ontology/bibo/edition> ?edition}	optional{?s <http://purl.org/dc/terms/subject> ?subject}	optional{?s <http://purl.org/dc/terms/contributor> ?contributor}}", graphId));
-			break;
-			
-		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP:
-			stmt.execute(String.format("sparql select ?orig_id ?orig_subj ?related_id from <%s> where{  ?s1 <http://purl.org/dc/terms/identifier> ?orig_id .   ?s1 <http://purl.org/dc/terms/subject> ?orig_subj .   ?s2 <http://purl.org/dc/terms/identifier> ?related_id .   ?s2 <http://purl.org/dc/terms/subject> ?related_subj .   filter(    sameterm(?orig_subj, ?related_subj) && !sameterm(?orig_id, ?related_id)  )}", graphId));
-			break;
-			
-		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS:
-			break;
-			
-		case SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY:
-			stmt.execute(String.format("sparql insert data into <%s> {<http://www.w3.org/1999/02/22-rdf-syntax-ns#Description> <http://my.schema/change> 'cheesecake'}", graphId));
-			break;
-			
-		case SCHEMA_CHANGE_INTRODUCE_STRING_OP:
-			break;
-			
-		case SCHEMA_CHANGE_MIGRATE_RDF_TYPE:
-			break;
-			
-		case SCHEMA_CHANGE_REMOVE_RDF_TYPE:
-			stmt.execute(String.format("sparql delete from <%s> {?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?v} where {?s a <http://www.w3.org/1999/02/22-rdf-syntax-ns#Description>}", graphId));
-			break;
-			
-		case UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM:
-			stmt.execute(String.format("sparql delete data from <%s> {<http://www.w3.org/1999/02/22-rdf-syntax-ns#Description> <http://purl.org/dc/terms/medium> 'paper'}", graphId));
-			stmt.execute(String.format("sparql insert data into <%s> {<http://www.w3.org/1999/02/22-rdf-syntax-ns#Description> <http://purl.org/dc/terms/medium> 'recycled trees'}", graphId));
-			break;
-			
-			// todo bei hebis_1000_test fï¿½gt er 5196 ein?
-		case UPDATE_HIGH_SELECTIVITY_NON_ISSUED:
-			stmt.execute(String.format("sparql INSERT into <%s> {  ?s <http://purl.org/dc/terms/issued> '0'} WHERE { ?s  <http://purl.org/dc/terms/issued> ?o .   FILTER(     !EXISTS{      ?s <http://purl.org/dc/terms/issued> ?a    }  )}", graphId));
-			break;
-			
-			// ok
-//		case DELETE_LOW_SELECTIVITY_PAPER_MEDIUM:
-//			stmt.execute(String.format("sparql WITH <%s> DELETE { ?s ?p ?o } WHERE { ?s ?p ?o ; <http://purl.org/dc/terms/medium> 'paper' }", graphId));
-//			break;
-//			
-//			// kollidiert doch stark mit update_high_selectivity_non_issued
-//			// viel zu wenige die da gelï¿½scht werden. 10. das sind nicht mal 2 teile
-//		case DELETE_HIGH_SELECTIVIY_NON_ISSUED:
-//			stmt.execute(String.format("sparql WITH <%s> DELETE { ?s ?p ?o } WHERE {    ?s ?p ?o .   filter(     not exists{       ?s <http://purl.org/dc/terms/issued> ?a     }   )}", graphId));
-//			break;
-//			
-		default:
-			throw new RuntimeException("Do not know what to do with QueryScenario "	+ queryScenario);
-		}
-
+		
+		stmt.execute(String.format(templates.resolve(queryScenario), graphId));
+		
+		// TODO 
+		return new QueryResult(Type.NONE);
 	}
 
 	@Override
