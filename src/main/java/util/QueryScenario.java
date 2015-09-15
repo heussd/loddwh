@@ -13,26 +13,20 @@ import util.QueryResult.Type;
 public enum QueryScenario {
 
 	/**
-	 * Randomly retrieve a single ID. In a second step, retrieve the entire
-	 * {@link DataObject} associated to that ID. These two steps can be taken
-	 * within a single query call. <b>Do not use prepare for the random
-	 * pre-selection</b>.
+	 * Retrieve the first {@link DataObject} of a list of all data, ordered by
+	 * dcterms_medium, isbd_p1008, dcterm_contributor, and dcterms_subject.
 	 */
 	ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY(QueryResult.Type.COMPLETE_ENTITIES),
 
 	/**
-	 * Randomly retrieve ten IDs. In a second step, retrieve all ten
-	 * {@link DataObject}s associated to that IDs. These two steps can be taken
-	 * within a single query call. <b>Do not use prepare for the random
-	 * pre-selection</b>.
+	 * Retrieve the first 10 {@link DataObject}s of a list of all data, ordered
+	 * by dcterms_medium, isbd_p1008, dcterm_contributor, and dcterms_subject.
 	 */
 	ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES(QueryResult.Type.COMPLETE_ENTITIES),
 
 	/**
-	 * Randomly retrieve 100 IDs. In a second step, retrieve all 100
-	 * {@link DataObject}s associated to that IDs. These two steps can be taken
-	 * within a single query call. <b>Do not use prepare for the random
-	 * pre-selection</b>.
+	 * Retrieve the first 100 {@link DataObject}s of a list of all data, ordered
+	 * by dcterms_medium, isbd_p1008, dcterm_contributor, and dcterms_subject.
 	 */
 	ENTITY_RETRIEVAL_BY_ID_100_ENTITIES(QueryResult.Type.COMPLETE_ENTITIES),
 
