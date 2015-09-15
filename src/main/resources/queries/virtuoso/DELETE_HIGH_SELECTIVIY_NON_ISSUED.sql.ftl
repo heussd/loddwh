@@ -10,8 +10,6 @@ WHERE
 			not exists
 				{       
 					?s <http://purl.org/dc/terms/issued> ?a     
-				}   
+				}
 		)
 	}
-
-<#-- Kann nicht richtig sein, löscht nur 2 Teile oder so -->

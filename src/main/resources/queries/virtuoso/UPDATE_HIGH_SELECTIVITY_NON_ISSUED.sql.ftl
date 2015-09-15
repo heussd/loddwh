@@ -4,13 +4,11 @@ sparql INSERT into <%s>
 	} 
 WHERE 
 	{ 
-		?s <http://purl.org/dc/terms/issued> ?o .    
-		FILTER(     
-			!EXISTS
-			{      
-				?s <http://purl.org/dc/terms/issued> ?a    
-			} 
+		?s ?p ?o . 
+		filter(     
+			not exists
+				{       
+					?s <http://purl.org/dc/terms/issued> ?a     
+				}
 		)
 	}
-
-<#-- Bei hebis_1000 fügt er über 5000 ein? Kann ja nicht richtig sein. -->
