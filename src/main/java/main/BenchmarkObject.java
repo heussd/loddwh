@@ -16,9 +16,9 @@ public class BenchmarkObject {
 	private Hashtable<QueryScenario, Long> prepareQueryScenarioResults, queryQueryScenarioResults, clearQueryScenarioResults;
 	private long setUpTime, loadTime;
 	
-	public BenchmarkObject(String title, Database database, Dataset loadDataset) {
+	public BenchmarkObject(Database database, Dataset loadDataset) {
 		super();
-		this.title = title;
+		this.title = database.getName() + " " + loadDataset.datasetName;
 		this.database = database;
 		this.loadDataset = loadDataset;
 		

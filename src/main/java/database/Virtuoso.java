@@ -24,23 +24,22 @@ import util.Templates;
 public class Virtuoso implements Database {
 
 	public static void main(String[] args) throws Throwable {
-		Virtuoso testVirtuoso = new Virtuoso("hebis_1000_test", Dataset.hebis_tiny_rdf, "C:\\RDSTUDIES\\db\\virtuoso-opensource", "..");
+		Virtuoso testVirtuoso = new Virtuoso("hebis_1000_test", "C:\\RDSTUDIES\\db\\virtuoso-opensource", "..");
 		for (QueryScenario qs : QueryScenario.values()) {
 			System.out.println(String.format(testVirtuoso.templates.resolve(qs), "GRAPH_ID"));
 		}
 	}
 
 	// TODO graphId irrelevant, immer denselben Graphen löschen und neu aufbauen, überall anpassen, in query und den templates
-	private String graphId, fpTGZ, vAD, vADRtVE;
+	private String graphId, vAD, vADRtVE;
 	private Connection c;
 	private Statement stmt;
 	private Templates templates;
 
-	public Virtuoso(String identifier, Dataset filePathToGZ,
+	public Virtuoso(String identifier,
 			String virtuosoAccessibleDir,
 			String virtuosoAccessibleDirRelativeToVirtuosoTExe) {
 		graphId = identifier;
-		fpTGZ = filePathToGZ.string;
 		vAD = virtuosoAccessibleDir;
 		vADRtVE = virtuosoAccessibleDirRelativeToVirtuosoTExe;
 		
@@ -76,7 +75,7 @@ public class Virtuoso implements Database {
 
 		// 1.
 		byte[] buffer = new byte[1024];
-		GZIPInputStream gzis = new GZIPInputStream(new FileInputStream(fpTGZ));
+		GZIPInputStream gzis = new GZIPInputStream(new FileInputStream(dataset.string));
 		FileOutputStream out = new FileOutputStream(String.format("%s//%s",
 				vAD, graphId));
 		int len;

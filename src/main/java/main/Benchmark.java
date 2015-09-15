@@ -21,24 +21,20 @@ public class Benchmark {
 
 		List<BenchmarkObject> benchmarkObjects = new ArrayList<BenchmarkObject>();
 
-		// OBJECTS
-		// benchmarkObjects.add(new BenchmarkObject("Dummy Object", new
-		// DummyDatabase(), null));
-
+	// OBJECTS
 		// POSTGRESQL
-		// benchmarkObjects.add(new BenchmarkObject("PostgreSQL Medium", new
-		// PostgreSQL(), Dataset.hebis_small_rdf));
+		//benchmarkObjects.add(new BenchmarkObject(new PostgreSQL(), Dataset.hebis_small_rdf));
 
 		// SQLite (Xerial)
-		//benchmarkObjects.add(new BenchmarkObject("sqlite4java Medium", new SQLite4Java(), Dataset.hebis_small_rdf));
+		//benchmarkObjects.add(new BenchmarkObject(new SQLite4Java(), Dataset.hebis_small_rdf));
 
 		// SQLite (Xerial)
-		//benchmarkObjects.add(new BenchmarkObject("SQLite Xerial Medium", new SQLiteXerial(), Dataset.hebis_small_rdf));
+		//benchmarkObjects.add(new BenchmarkObject(new SQLiteXerial(), Dataset.hebis_small_rdf));
 
 		// VIRTUOSO
-		benchmarkObjects.add(new BenchmarkObject("Virtuoso 1.000", new Virtuoso("hebis_1000_test", Dataset.hebis_tiny_rdf, "C:\\RDSTUDIES\\db\\virtuoso-opensource", ".."), null));
-		//benchmarkObjects.add(new BenchmarkObject("Virtuoso 10.000", new Virtuoso("hebis_10000_test", Dataset.hebis_small_rdf, "C:\\RDSTUDIES\\db\\virtuoso-opensource", ".."), null));
-		//benchmarkObjects.add(new BenchmarkObject("Virtuoso 100.000", new Virtuoso("hebis_100000_test", Dataset.hebis_medium_rdf, "C:\\RDSTUDIES\\db\\virtuoso-opensource", ".."), null));
+		benchmarkObjects.add(new BenchmarkObject(new Virtuoso("hebis_1000_test", "C:\\RDSTUDIES\\db\\virtuoso-opensource", ".."), Dataset.hebis_tiny_rdf));
+		benchmarkObjects.add(new BenchmarkObject(new Virtuoso("hebis_10000_test", "C:\\RDSTUDIES\\db\\virtuoso-opensource", ".."), Dataset.hebis_small_rdf));
+		//benchmarkObjects.add(new BenchmarkObject(new Virtuoso("hebis_100000_test", "C:\\RDSTUDIES\\db\\virtuoso-opensource", ".."), Dataset.hebis_medium_rdf));
 	// OBJECTS
 		
 		
