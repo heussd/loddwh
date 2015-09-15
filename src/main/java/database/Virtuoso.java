@@ -66,10 +66,8 @@ public class Virtuoso implements Database {
 
 	@Override
 	public void load(Dataset dataset) throws Exception {
-		// Aktuell:
 		// 1. UnGzip to virtuosoAccessibleDir
-		// 2. Remove Line 1
-		// 3. Load Data into Graph
+		// 2. Load Data into Graph
 
 		// 1.
 		byte[] buffer = new byte[1024];
@@ -84,18 +82,6 @@ public class Virtuoso implements Database {
 		out.close();
 
 		// 2.
-		List<String> lines = FileUtils.readLines(new File(String.format(
-				"%s//%s", vAD, graphId)));
-		List<String> updatedLines = lines.stream()
-				.filter(s -> !s.startsWith("Content-Type"))
-				.collect(Collectors.toList()); // iterate lines und aufh�ren
-												// sobald <?xml kommt alles
-												// vorher l�schen w�re
-												// effizienter (also wenn nicht alle lines auf einmal gelesen w�rden)
-		FileUtils.writeLines(new File(String.format("%s//%s", vAD, graphId)),
-				"utf-8", updatedLines, false);
-
-		// 3.
 		stmt.executeQuery(String
 				.format("DB.DBA.RDF_LOAD_RDFXML_MT (file_to_string_output ('%s/%s'), '', '%s')",
 						vADRtVE, graphId, graphId));
