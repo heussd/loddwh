@@ -140,7 +140,11 @@ public class Benchmark {
 		sb.append("| :- | :-: | :-: |" + System.lineSeparator());
 		for(int i=1;i<rows;i++){
 			sb.append("|");
-			for(int j=0;j<columns;j++) sb.append(" " + reportmatrix[i][j] + " |");
+			for(int j=0;j<columns;j++) {
+				String val = reportmatrix[i][j];
+				if(j>0) val += " ms";
+				sb.append(" " + val + " |");
+			}
 			if(i+1<rows) sb.append(System.lineSeparator());
 		}
 		//sb.append(System.lineSeparator() + "[Prototype table][reference_table]");
