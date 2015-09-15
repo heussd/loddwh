@@ -19,4 +19,8 @@ public class Config extends DefaultObjectWrapper {
 	public static final String HOST_POSTGRES = "localhost";
 
 	public static final String NEWCOLUMN = "newcolumn";
+	
+	
+	public static final String VIRTUOSO_ACCESSIBLE_DIRECTORY = "C:\\RDSTUDIES\\db\\virtuoso-opensource";
+	public static final String VIRTUOSO_ACCESSIBLE_DIRECTORY_RELATIVE_TO_VIRTUOSO_T_EXE = "..";	
 }

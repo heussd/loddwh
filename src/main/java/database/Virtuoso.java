@@ -24,7 +24,7 @@ import util.Templates;
 public class Virtuoso implements Database {
 
 	public static void main(String[] args) throws Throwable {
-		Virtuoso testVirtuoso = new Virtuoso("hebis_1000_test", "C:\\RDSTUDIES\\db\\virtuoso-opensource", "..");
+		Virtuoso testVirtuoso = new Virtuoso("hebis_1000_test");
 		for (QueryScenario qs : QueryScenario.values()) {
 			System.out.println(String.format(testVirtuoso.templates.resolve(qs), "GRAPH_ID"));
 		}
@@ -36,12 +36,10 @@ public class Virtuoso implements Database {
 	private Statement stmt;
 	private Templates templates;
 
-	public Virtuoso(String identifier,
-			String virtuosoAccessibleDir,
-			String virtuosoAccessibleDirRelativeToVirtuosoTExe) {
+	public Virtuoso(String identifier) {
 		graphId = identifier;
-		vAD = virtuosoAccessibleDir;
-		vADRtVE = virtuosoAccessibleDirRelativeToVirtuosoTExe;
+		vAD = Config.VIRTUOSO_ACCESSIBLE_DIRECTORY;
+		vADRtVE = Config.VIRTUOSO_ACCESSIBLE_DIRECTORY_RELATIVE_TO_VIRTUOSO_T_EXE;
 		
 		templates = new Templates("virtuoso", ".sql");
 	}

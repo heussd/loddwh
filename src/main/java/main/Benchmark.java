@@ -32,9 +32,9 @@ public class Benchmark {
 		//benchmarkObjects.add(new BenchmarkObject(new SQLiteXerial(), Dataset.hebis_small_rdf));
 
 		// VIRTUOSO
-		benchmarkObjects.add(new BenchmarkObject(new Virtuoso("hebis_1000_test", "C:\\RDSTUDIES\\db\\virtuoso-opensource", ".."), Dataset.hebis_tiny_rdf));
-		benchmarkObjects.add(new BenchmarkObject(new Virtuoso("hebis_10000_test", "C:\\RDSTUDIES\\db\\virtuoso-opensource", ".."), Dataset.hebis_small_rdf));
-		//benchmarkObjects.add(new BenchmarkObject(new Virtuoso("hebis_100000_test", "C:\\RDSTUDIES\\db\\virtuoso-opensource", ".."), Dataset.hebis_medium_rdf));
+		benchmarkObjects.add(new BenchmarkObject(new Virtuoso("hebis_1000_test"), Dataset.hebis_tiny_rdf));
+		benchmarkObjects.add(new BenchmarkObject(new Virtuoso("hebis_10000_test"), Dataset.hebis_small_rdf));
+		//benchmarkObjects.add(new BenchmarkObject(new Virtuoso("hebis_100000_test"), Dataset.hebis_medium_rdf));
 	// OBJECTS
 		
 		
