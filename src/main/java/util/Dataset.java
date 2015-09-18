@@ -10,6 +10,8 @@ public enum Dataset {
 	HeBIS_Hauptbestand_in_MARC_gz(Config.WHERE_THE_FILES_AT, "HeBIS_Hauptbestand_in_MARC.gz"),
 	hebis_29873806_36057474_rdf_gz(Config.WHERE_THE_FILES_AT, "hebis-29873806-36057474.rdf.gz"),
 	hebis_00000001_05051126_rdf_gz(Config.WHERE_THE_FILES_AT, "hebis-00000001-05051126.rdf.gz"),
+	hebis_05051127_10147115_rdf_gz(Config.WHERE_THE_FILES_AT, "hebis-05051127-10147115.rdf"),
+	hebis_10147116_13050073_rdf_gz(Config.WHERE_THE_FILES_AT, "hebis-10147116-13050073.rdf"),
 	hebis_26887668_29873805_rdf_gz(Config.WHERE_THE_FILES_AT, "hebis-26887668-29873805.rdf.gz"),
 	hebis_21257740_26887667_rdf_gz(Config.WHERE_THE_FILES_AT, "hebis-21257740-26887667.rdf.gz"),
 	hebis_13050073_21257739_rdf_gz(Config.WHERE_THE_FILES_AT, "hebis-13050073-21257739.rdf.gz"),
