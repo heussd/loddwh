@@ -101,6 +101,10 @@ public abstract class Helpers {
 	}
 
 	public static void readRdf(Dataset dumps, Consumer<DataObject> dataObjectConsumer) {
+		readRdf(dumps, dataObjectConsumer, null);
+	}
+
+	public static void readRdf(Dataset dumps, Consumer<DataObject> dataObjectConsumer, Consumer<Integer> intConsumer) {
 
 		try {
 
@@ -110,7 +114,7 @@ public abstract class Helpers {
 			 * 
 			 * " at the beginning of each file - what could possibly go wrong?
 			 */
-//			inputStream.skip(50);
+			// inputStream.skip(50);
 			BufferedReader inputReader = new BufferedReader(new InputStreamReader(inputStream));
 			// PrintWriter printWriter = new PrintWriter(new File(target));
 
@@ -134,6 +138,9 @@ public abstract class Helpers {
 					DataObject dataObject = new DataObject();
 					dataObject.fromRdfString(record);
 					dataObjectConsumer.accept(dataObject);
+
+					if (intConsumer != null)
+						intConsumer.accept(counter);
 					record = "";
 				}
 			}

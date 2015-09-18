@@ -26,6 +26,7 @@ public class PostgreSQL extends Helpers implements Database {
 	private ArrayList<PreparedStatement> scenarioStatements;
 	private QueryScenario queryScenario;
 	private Templates templates;
+	private int i;
 
 	@Override
 	public String getName() {
@@ -44,14 +45,15 @@ public class PostgreSQL extends Helpers implements Database {
 		System.out.println(postgreSQL.getName() + " " + postgreSQL.getVersion());
 		Dataset dataset = Dataset.hebis_tiny_rdf;
 
-		QueryScenario queryScenario = QueryScenario.CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES;
+		// QueryScenario queryScenario =
+		// QueryScenario.CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES;
 
 		postgreSQL.setUp();
 		postgreSQL.load(dataset);
 		// postgreSQL.clear(queryScenario);
-		postgreSQL.prepare(queryScenario);
-		QueryResult queryResult = postgreSQL.query(queryScenario);
-		System.out.println(queryResult);
+		// postgreSQL.prepare(queryScenario);
+		// QueryResult queryResult = postgreSQL.query(queryScenario);
+		// System.out.println(queryResult);
 	}
 
 	public PostgreSQL() {
@@ -161,9 +163,19 @@ public class PostgreSQL extends Helpers implements Database {
 			} catch (Exception e) {
 				throw new RuntimeException("Cannot insert DataObject: " + dataObject, e);
 			}
+		} , counter -> {
+			if (counter % 100000 == 0)
+				try {
+					connection.commit();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 		});
 
 		connection.commit();
+
 	}
 
 	@Override
