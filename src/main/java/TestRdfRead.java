@@ -26,7 +26,7 @@ public class TestRdfRead extends Helpers {
 	}
 
 	public void doit() {
-		Dataset dumps = Dataset.hebis_tiny_rdf;
+		Dataset dumps = Dataset.hebis_1000_records;
 
 		TestRdfRead testRdfRead = new TestRdfRead();
 

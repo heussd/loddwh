@@ -8,7 +8,7 @@ public class Infos extends Helpers {
 
 	public static void main(String[] args) throws Exception {
 
-		ArrayList<String> rdfIds = idsFromRdfDump(Dataset.hebis_medium_rdf.file);
+		ArrayList<String> rdfIds = idsFromRdfDump(Dataset.hebis_100000_records.file);
 		ArrayList<String> marcIds = idsFromMarcDump(Dataset.hebis_medium_marc.file);
 		
 		

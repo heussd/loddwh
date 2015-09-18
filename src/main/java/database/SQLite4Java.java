@@ -254,7 +254,7 @@ public class SQLite4Java extends Helpers implements Database {
 
 		SQLite4Java sqLiteXerial = new SQLite4Java();
 		sqLiteXerial.setUp();
-		sqLiteXerial.load(Dataset.hebis_tiny_rdf);
+		sqLiteXerial.load(Dataset.hebis_1000_records);
 
 		QueryScenario queryScenario = QueryScenario.AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100;
 		sqLiteXerial.prepare(queryScenario);

@@ -10,10 +10,11 @@ import org.apache.commons.io.FileUtils;
 import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
 
-import com.hp.hpl.jena.query.Query;
-
-import database.*;
-import util.*;
+import database.Database;
+import database.Virtuoso;
+import util.Config;
+import util.Dataset;
+import util.QueryScenario;
 
 public class Benchmark {
 
@@ -23,7 +24,7 @@ public class Benchmark {
 
 	// OBJECTS
 		// POSTGRESQL
-		//benchmarkObjects.add(new BenchmarkObject(new PostgreSQL(), Dataset.hebis_small_rdf));
+//		benchmarkObjects.add(new BenchmarkObject(new PostgreSQL(), Dataset.hebis_small_rdf));
 
 		// SQLite (Xerial)
 		//benchmarkObjects.add(new BenchmarkObject(new SQLite4Java(), Dataset.hebis_small_rdf));
@@ -32,8 +33,8 @@ public class Benchmark {
 		//benchmarkObjects.add(new BenchmarkObject(new SQLiteXerial(), Dataset.hebis_small_rdf));
 
 		// VIRTUOSO
-		benchmarkObjects.add(new BenchmarkObject(new Virtuoso("hebis_1000_test"), Dataset.hebis_tiny_rdf));
-		benchmarkObjects.add(new BenchmarkObject(new Virtuoso("hebis_10000_test"), Dataset.hebis_small_rdf));
+		benchmarkObjects.add(new BenchmarkObject(new Virtuoso("hebis_1000_test"), Dataset.hebis_1000_records));
+		benchmarkObjects.add(new BenchmarkObject(new Virtuoso("hebis_10000_test"), Dataset.hebis_10000_records));
 		//benchmarkObjects.add(new BenchmarkObject(new Virtuoso("hebis_100000_test"), Dataset.hebis_medium_rdf));
 	// OBJECTS
 		

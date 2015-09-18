@@ -232,7 +232,7 @@ public class SQLiteXerial extends Helpers implements Database {
 
 		SQLiteXerial sqLiteXerial = new SQLiteXerial();
 		sqLiteXerial.setUp();
-		sqLiteXerial.load(Dataset.hebis_tiny_rdf);
+		sqLiteXerial.load(Dataset.hebis_1000_records);
 
 		QueryScenario queryScenario = QueryScenario.AGGREGATE_ISSUES_PER_DECADE_TOP100;
 		sqLiteXerial.prepare(queryScenario);

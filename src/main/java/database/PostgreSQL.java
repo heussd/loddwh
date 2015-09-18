@@ -43,7 +43,7 @@ public class PostgreSQL extends Helpers implements Database {
 		PostgreSQL postgreSQL = new PostgreSQL();
 
 		System.out.println(postgreSQL.getName() + " " + postgreSQL.getVersion());
-		Dataset dataset = Dataset.hebis_tiny_rdf;
+		Dataset dataset = Dataset.hebis_29873806_36057474_rdf_gz;
 
 		// QueryScenario queryScenario =
 		// QueryScenario.CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES;
@@ -164,14 +164,12 @@ public class PostgreSQL extends Helpers implements Database {
 				throw new RuntimeException("Cannot insert DataObject: " + dataObject, e);
 			}
 		} , counter -> {
-			if (counter % 100000 == 0)
+			if (counter % 1000000 == 0)
 				try {
+					System.out.println(counter + " records so far...");
 					connection.commit();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
-
 		});
 
 		connection.commit();

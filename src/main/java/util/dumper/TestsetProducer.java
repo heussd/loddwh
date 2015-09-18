@@ -7,7 +7,7 @@ import util.Dataset;
 public class TestsetProducer extends Helpers {
 
 	public static void main(String[] args) throws Exception {
-		Dataset file = Dataset.hebis_small_rdf;
+		Dataset file = Dataset.hebis_10000_records;
 
 		ArrayList<String> ids = new ArrayList<String>();
 		// ids.add("000000035");
