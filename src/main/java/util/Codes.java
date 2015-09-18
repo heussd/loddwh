@@ -16,7 +16,7 @@ public enum Codes {
 	ISBD_P1004("isbd:P1004", "245", 'a'),
 	ISBD_P1018("isbd:P1018", "260", 'c'),
 	DCTERMS_ISSUED("dcterms:issued", "260", 'c'),
-	OWL_SAMEAS("owl:sameas", "035", 'a'),
+	OWL_SAMEAS("owl:sameAs", "035", 'a'),
 	RDF_TYPE("rdf:type rdf:resource", true, true),
 	DCTERMS_MEDIUM("dcterms:medium", "paper"), // Via 300?
 	DCTERMS_FORMAT("dcterms:format", "print"), // Via 300?
