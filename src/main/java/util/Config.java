@@ -6,7 +6,7 @@ import freemarker.template.DefaultObjectWrapper;
  * A collection of magic strings.
  */
 public class Config extends DefaultObjectWrapper {
-	public final static String WHERE_THE_FILES_AT = "/Users/th/Ph.D./HeBIS Zulieferungen Juni 2015/";
+	public final static String WHERE_THE_FILES_AT = "/Users/th/Ph.D./hebisdumps/noHeader/";
 	public final static String WHERE_THE_RESULTS_AT = "";
 	
 	
