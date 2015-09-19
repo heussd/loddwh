@@ -2,97 +2,180 @@
   <thead>
     <tr>
       <th align="left">TESTCASE </th>
-      <th align="center">Virtuoso 1.000 </th>
+      <th align="center">PostgreSQL (Postgres.app) hebis_1000_rdf.gz </th>
+      <th align="center">sqlite4java hebis_1000_rdf.gz </th>
+      <th align="center">SQLite JDBC Xerial hebis_1000_rdf.gz </th>
+      <th align="center">Virtuoso hebis_1000_rdf.gz </th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td align="left">SETUP </td>
-      <td align="center">252 </td>
+      <td align="center">451 ms </td>
+      <td align="center">29 ms </td>
+      <td align="center">92 ms </td>
+      <td align="center">30 ms </td>
     </tr>
     <tr>
       <td align="left">LOAD </td>
-      <td align="center">258 </td>
+      <td align="center">523 ms </td>
+      <td align="center">249 ms </td>
+      <td align="center">217 ms </td>
+      <td align="center">125 ms </td>
     </tr>
     <tr>
-      <td align="left">ENTITY_RETRIEVAL_BY_ID_CASE1 </td>
-      <td align="center">6045 </td>
+      <td align="left">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY </td>
+      <td align="center">37 ms </td>
+      <td align="center">7 ms </td>
+      <td align="center">7 ms </td>
+      <td align="center">1633 ms </td>
+    </tr>
+    <tr>
+      <td align="left">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES </td>
+      <td align="center">38 ms </td>
+      <td align="center">3 ms </td>
+      <td align="center">6 ms </td>
+      <td align="center">1865 ms </td>
+    </tr>
+    <tr>
+      <td align="left">ENTITY_RETRIEVAL_BY_ID_100_ENTITIES </td>
+      <td align="center">37 ms </td>
+      <td align="center">2 ms </td>
+      <td align="center">5 ms </td>
+      <td align="center">2148 ms </td>
     </tr>
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10 </td>
-      <td align="center">1 </td>
+      <td align="center">30 ms </td>
+      <td align="center">2 ms </td>
+      <td align="center">4 ms </td>
+      <td align="center">3 ms </td>
     </tr>
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100 </td>
-      <td align="center">1 </td>
+      <td align="center">29 ms </td>
+      <td align="center">2 ms </td>
+      <td align="center">4 ms </td>
+      <td align="center">2 ms </td>
     </tr>
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL </td>
-      <td align="center">2 </td>
+      <td align="center">28 ms </td>
+      <td align="center">1 ms </td>
+      <td align="center">4 ms </td>
+      <td align="center">2 ms </td>
     </tr>
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_TOP10 </td>
-      <td align="center">1 </td>
+      <td align="center">43 ms </td>
+      <td align="center">2 ms </td>
+      <td align="center">8 ms </td>
+      <td align="center">4 ms </td>
     </tr>
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_TOP100 </td>
-      <td align="center">2 </td>
+      <td align="center">43 ms </td>
+      <td align="center">2 ms </td>
+      <td align="center">9 ms </td>
+      <td align="center">4 ms </td>
     </tr>
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_ALL </td>
-      <td align="center">1 </td>
+      <td align="center">44 ms </td>
+      <td align="center">1 ms </td>
+      <td align="center">7 ms </td>
+      <td align="center">4 ms </td>
     </tr>
     <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_STUDIES </td>
-      <td align="center">29 </td>
+      <td align="center">44 ms </td>
+      <td align="center">3 ms </td>
+      <td align="center">9 ms </td>
+      <td align="center">302 ms </td>
     </tr>
     <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES </td>
-      <td align="center">0 </td>
+      <td align="center">63 ms </td>
+      <td align="center">19 ms </td>
+      <td align="center">19 ms </td>
+      <td align="center">2180 ms </td>
     </tr>
     <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES </td>
-      <td align="center">0 </td>
+      <td align="center">55 ms </td>
+      <td align="center">3 ms </td>
+      <td align="center">6 ms </td>
+      <td align="center">249 ms </td>
     </tr>
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP </td>
-      <td align="center">0 </td>
+      <td align="center">33 ms </td>
+      <td align="center">-3 ms </td>
+      <td align="center">-3 ms </td>
+      <td align="center">2 ms </td>
     </tr>
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS </td>
-      <td align="center">0 </td>
+      <td align="center">30 ms </td>
+      <td align="center">-3 ms </td>
+      <td align="center">-3 ms </td>
+      <td align="center">5 ms </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY </td>
-      <td align="center">3 </td>
+      <td align="center">72 ms </td>
+      <td align="center">2 ms </td>
+      <td align="center">2 ms </td>
+      <td align="center">170 ms </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_INTRODUCE_STRING_OP </td>
-      <td align="center">0 </td>
+      <td align="center">145 ms </td>
+      <td align="center">1 ms </td>
+      <td align="center">5 ms </td>
+      <td align="center">2 ms </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_MIGRATE_RDF_TYPE </td>
-      <td align="center">0 </td>
+      <td align="center">565 ms </td>
+      <td align="center">2 ms </td>
+      <td align="center">2 ms </td>
+      <td align="center">-3 ms </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_REMOVE_RDF_TYPE </td>
-      <td align="center">4 </td>
+      <td align="center">-3 ms </td>
+      <td align="center">0 ms </td>
+      <td align="center">1 ms </td>
+      <td align="center">48 ms </td>
     </tr>
     <tr>
       <td align="left">UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM </td>
-      <td align="center">3 </td>
+      <td align="center">133 ms </td>
+      <td align="center">11 ms </td>
+      <td align="center">18 ms </td>
+      <td align="center">25 ms </td>
     </tr>
     <tr>
       <td align="left">UPDATE_HIGH_SELECTIVITY_NON_ISSUED </td>
-      <td align="center">-3 </td>
+      <td align="center">27 ms </td>
+      <td align="center">2 ms </td>
+      <td align="center">2 ms </td>
+      <td align="center">5 ms </td>
     </tr>
     <tr>
       <td align="left">DELETE_LOW_SELECTIVITY_PAPER_MEDIUM </td>
-      <td align="center">0 </td>
+      <td align="center">36 ms </td>
+      <td align="center">1 ms </td>
+      <td align="center">5 ms </td>
+      <td align="center">5 ms </td>
     </tr>
     <tr>
       <td align="left">DELETE_HIGH_SELECTIVIY_NON_ISSUED </td>
-      <td align="center">0 </td>
+      <td align="center">37 ms </td>
+      <td align="center">1 ms </td>
+      <td align="center">4 ms </td>
+      <td align="center">4 ms </td>
     </tr>
   </tbody>
 </table>
