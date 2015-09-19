@@ -10,7 +10,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.zip.GZIPInputStream;
 
+import util.Codes;
 import util.Config;
+import util.DataObject;
 import util.Dataset;
 import util.QueryResult;
 import util.QueryResult.Type;
@@ -26,7 +28,8 @@ public class Virtuoso implements Database {
 
 		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES;
 		testVirtuoso.prepare(queryScenario);
-		testVirtuoso.query(queryScenario);
+		QueryResult queryResult = testVirtuoso.query(queryScenario);
+		System.out.println(queryResult);
 
 	}
 
@@ -103,69 +106,63 @@ public class Virtuoso implements Database {
 
 		// stmt.executeQuery(stmt.execute(String.format(templates.resolve(queryScenario),
 		// graphId))
+		QueryResult queryResult = new QueryResult(queryScenario.queryResultType);
 		for (PreparedStatement preparedStatement : scenarioStatements) {
 			ResultSet resultSet;
-//			System.out.println(preparedStatement);
+			// System.out.println(preparedStatement);
 			switch (queryScenario.queryResultType) {
 			case GRAPH:
 				resultSet = preparedStatement.executeQuery();
 				while (resultSet.next()) {
-//					System.out.println(resultSet.getString(1));
-					// switch (resultSet.getMetaData().getColumnCount()) {
-					// case 3:
-					// queryResult.push(resultSet.getString(1),
-					// resultSet.getString(2), resultSet.getString(3));
-					// break;
-					// case 5:
-					// queryResult.push(resultSet.getString(1),
-					// resultSet.getString(2), resultSet.getString(3),
-					// resultSet.getString(4), resultSet.getString(5));
-					// break;
-					// default:
-					// throw new RuntimeException("Cannot parse " +
-					// resultSet.getMetaData().getColumnCount() + " columns in
-					// result set");
-					// }
+					switch (resultSet.getMetaData().getColumnCount()) {
+					case 3:
+						queryResult.push(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3));
+						break;
+					case 5:
+						queryResult.push(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
+						break;
+					default:
+						throw new RuntimeException("Cannot parse " + resultSet.getMetaData().getColumnCount() + " columns in result set");
+					}
 				}
 				break;
 			case TWO_COLUMNS:
 				resultSet = preparedStatement.executeQuery();
 				while (resultSet.next()) {
-					// queryResult.push(resultSet.getString(1),
-					// resultSet.getString(2));
-					String s = "";
-					for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
-						s += resultSet.getMetaData().getColumnLabel(i) + ": " + resultSet.getString(i) + " ";
-					}
-//					System.out.println(s);
+					queryResult.push(resultSet.getString(1), resultSet.getString(2));
 				}
 				break;
 			case COMPLETE_ENTITIES:
 				resultSet = preparedStatement.executeQuery();
 
 				while (resultSet.next()) {
-					String s = "";
-					for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
-						s += resultSet.getMetaData().getColumnLabel(i) + ": " + resultSet.getString(i) + " ";
+					DataObject dataObject = new DataObject();
+					for (int i = 0; i < Codes.values().length; i++) {
+						Codes code = Codes.values()[i];
+						String fieldValue = resultSet.getString(i + 1);
+						if (fieldValue == null) {
+							dataObject.set(code, null);
+							continue;
+						}
+
+						if (code.IS_MULTIPLE) {
+							if (!fieldValue.contains(",")) {
+								// Code is defined to be multiple put field only
+								// contains a single value
+								dataObject.putMultiple(code, fieldValue);
+							} else {
+								// Assemble the SPARQL-group-concat expressions
+								// - workaround for missing efficient describe
+								for (String fieldValueIteration : fieldValue.split(",")) {
+									dataObject.putMultiple(code, fieldValueIteration);
+								}
+							}
+						} else {
+							// Straight forward
+							dataObject.set(code, fieldValue);
+						}
 					}
-					// System.out.println(s);
-					// System.out.println(resultSet.getString(1) + " " +
-					// resultSet.getString(2) + " " + resultSet.getString(3) + "
-					// " + resultSet.getString(4));
-					// DataObject dataObject = new DataObject();
-					// for (Codes code : Codes.values()) {
-					// if (code.IS_MULTIPLE) {
-					// for (String value : (String[])
-					// resultSet.getArray(code.ordinal() + 1).getArray()) {
-					// dataObject.putMultiple(code, value);
-					// }
-					//
-					// } else {
-					// dataObject.set(code, resultSet.getString(code.ordinal() +
-					// 1));
-					// }
-					// }
-					// queryResult.push(dataObject);
+					queryResult.push(dataObject);
 				}
 				break;
 			case NONE:
@@ -175,8 +172,7 @@ public class Virtuoso implements Database {
 				break;
 			}
 		}
-		// TODO
-		return new QueryResult(Type.NONE);
+		return queryResult;
 	}
 
 	@Override
