@@ -1,9 +1,8 @@
-sparql select substr(?century,1,3) as ?decade, (count(*) as ?count) 
-from <%s> 
+select ?decade (count(*) as ?count) from <loddwhbench>
 where 
-	{	
-		?a <http://purl.org/dc/terms/issued> ?century
-	} 
-group by substr(?century,1,3) 
+{	
+	?a <http://purl.org/dc/terms/issued> ?century
+} 
+group by (substr(?century,1,3) as ?decade)
 order by desc(?count) 
 limit 10

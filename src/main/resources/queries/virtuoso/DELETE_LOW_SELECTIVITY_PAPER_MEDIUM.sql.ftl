@@ -1,4 +1,4 @@
-sparql WITH <%s> 
+WITH <loddwhbench> 
 DELETE 
 	{ 
 		?s ?p ?o 
