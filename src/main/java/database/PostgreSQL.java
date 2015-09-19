@@ -43,7 +43,7 @@ public class PostgreSQL extends Helpers implements Database {
 		PostgreSQL postgreSQL = new PostgreSQL();
 
 		System.out.println(postgreSQL.getName() + " " + postgreSQL.getVersion());
-		Dataset dataset = Dataset.hebis_29873806_36057474_rdf_gz;
+		Dataset dataset = Dataset.hebis_1000_records;
 
 		// QueryScenario queryScenario =
 		// QueryScenario.CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES;
