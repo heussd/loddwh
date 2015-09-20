@@ -47,33 +47,33 @@ public class Benchmark {
 			long setUpStart, setUpEnd, loadStart, loadEnd;
 
 			try {
-				setUpStart = System.currentTimeMillis();
+				setUpStart = System.nanoTime();
 				db.setUp();
-				setUpEnd = System.currentTimeMillis();
+				setUpEnd = System.nanoTime();
 
-				loadStart = System.currentTimeMillis();
+				loadStart = System.nanoTime();
 				db.load(benchmarkObject.getLoadDataset());
-				loadEnd = System.currentTimeMillis();
+				loadEnd = System.nanoTime();
 
 				for (QueryScenario queryScenario : QueryScenario.values()) {
 					long prepareStart, prepareEnd, queryStart, queryEnd, clearStart, clearEnd;
 
 					try {
-						prepareStart = System.currentTimeMillis();
+						prepareStart = System.nanoTime();
 						db.prepare(queryScenario);
-						prepareEnd = System.currentTimeMillis();
+						prepareEnd = System.nanoTime();
 
-						queryStart = System.currentTimeMillis();
+						queryStart = System.nanoTime();
 						db.query(queryScenario);
-						queryEnd = System.currentTimeMillis();
+						queryEnd = System.nanoTime();
 
-						clearStart = System.currentTimeMillis();
+						clearStart = System.nanoTime();
 						db.clear(queryScenario);
-						clearEnd = System.currentTimeMillis();
+						clearEnd = System.nanoTime();
 
-						benchmarkObject.getPrepareQueryScenarioResults().put(queryScenario, prepareEnd - prepareStart);
-						benchmarkObject.getQueryQueryScenarioResults().put(queryScenario, queryEnd - queryStart);
-						benchmarkObject.getClearQueryScenarioResults().put(queryScenario, clearEnd - clearStart);
+						benchmarkObject.getPrepareQueryScenarioResults().put(queryScenario, nanoExecutionTimeInMilliseconds(prepareStart, prepareEnd));
+						benchmarkObject.getQueryQueryScenarioResults().put(queryScenario, nanoExecutionTimeInMilliseconds(queryStart, queryEnd));
+						benchmarkObject.getClearQueryScenarioResults().put(queryScenario, nanoExecutionTimeInMilliseconds(clearStart, clearEnd));
 
 					} catch (Exception e) { // TODO genauer spezifizieren?
 						// Abort only current QueryScenario
@@ -87,8 +87,8 @@ public class Benchmark {
 					}
 				}
 
-				benchmarkObject.setSetUpTime(setUpEnd - setUpStart);
-				benchmarkObject.setLoadTime(loadEnd - loadStart);
+				benchmarkObject.setSetUpTime(nanoExecutionTimeInMilliseconds(setUpStart, setUpEnd));
+				benchmarkObject.setLoadTime(nanoExecutionTimeInMilliseconds(loadStart, loadEnd));
 
 			} catch (Exception e) { // TODO genauer spezifizieren?
 				// Abort only current BenchmarkObject
@@ -106,6 +106,10 @@ public class Benchmark {
 		}
 
 		makeReports(benchmarkObjects);		
+	}
+	
+	private static long nanoExecutionTimeInMilliseconds(long start, long end){
+		return (end-start) / 1000000;		
 	}
 
 	private static void makeReports(List<BenchmarkObject> benchmarkObjects) throws IOException {
