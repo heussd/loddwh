@@ -1,6 +1,5 @@
 WITH <loddwhbench> DELETE {
-?s ?p ?o
+?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?o
 } WHERE {
-  ?s ?p ?o ;
-	 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?o
+  ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?o
 }
