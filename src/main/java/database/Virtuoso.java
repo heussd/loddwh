@@ -26,7 +26,7 @@ public class Virtuoso implements Database {
 		testVirtuoso.setUp();
 		testVirtuoso.load(Dataset.hebis_1000_records);
 
-		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES;
+		QueryScenario queryScenario = QueryScenario.SCHEMA_CHANGE_MIGRATE_RDF_TYPE;
 		testVirtuoso.prepare(queryScenario);
 		QueryResult queryResult = testVirtuoso.query(queryScenario);
 		System.out.println(queryResult);
@@ -94,7 +94,15 @@ public class Virtuoso implements Database {
 
 		scenarioStatements.clear();
 
-		scenarioStatements.add(connection.prepareStatement("sparql " + String.format(templates.resolve(queryScenario), graphId)));
+		switch (queryScenario) {
+		case SCHEMA_CHANGE_MIGRATE_RDF_TYPE:
+			for (int part = 1; part <= 4; part++)
+				scenarioStatements.add(connection.prepareStatement("sparql " + String.format(templates.resolve(queryScenario + "_part" + part), graphId)));
+			break;
+		default:
+			scenarioStatements.add(connection.prepareStatement("sparql " + String.format(templates.resolve(queryScenario), graphId)));
+		}
+
 		this.queryScenario = queryScenario;
 	}
 
