@@ -55,7 +55,7 @@ public class Virtuoso implements Database {
 
 	@Override
 	public String getVersion() {
-		return "7.2.1 / Virtuoso JDBC 4.1";
+		return "07.20.3214 / Virtuoso JDBC 4.1";
 	}
 
 	@Override
