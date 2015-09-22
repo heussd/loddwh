@@ -1,7 +1,6 @@
 package main;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -10,12 +9,11 @@ import org.apache.commons.io.FileUtils;
 import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
 
-import report.Reports;
 import database.Database;
-import database.PostgreSQL;
 import database.SQLite4Java;
 import database.SQLiteXerial;
 import database.Virtuoso;
+import report.Reports;
 import util.Config;
 import util.Dataset;
 import util.QueryResult;
