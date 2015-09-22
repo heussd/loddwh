@@ -33,8 +33,6 @@ public class Virtuoso implements Database {
 
 	}
 
-	// TODO graphId irrelevant, immer denselben Graphen l�schen und neu
-	// aufbauen, �berall anpassen, in query und den templates
 	private String graphId, vAD, vADRtVE;
 	private Connection connection;
 	private Statement stmt;

@@ -18,6 +18,7 @@ import database.SQLiteXerial;
 import database.Virtuoso;
 import util.Config;
 import util.Dataset;
+import util.QueryResult;
 import util.QueryScenario;
 
 public class Benchmark {
@@ -66,13 +67,15 @@ public class Benchmark {
 							prepareEnd = System.nanoTime();
 	
 							queryStart = System.nanoTime();
-							db.query(queryScenario);
+							QueryResult result = db.query(queryScenario);
 							queryEnd = System.nanoTime();
 	
 							clearStart = System.nanoTime();
 							db.clear(queryScenario);
 							clearEnd = System.nanoTime();
 							
+							// TODO executions sind hierbei egal, da immer dasselbe ergebnis kommen muss
+							benchmarkObject.getQueryResults().put(queryScenario, result);
 							
 							setResultInResultset(execution, queryScenario, nanoExecutionTimeInMilliseconds(prepareStart, prepareEnd), benchmarkObject.getPrepareQueryScenarioResults());
 							setResultInResultset(execution, queryScenario, nanoExecutionTimeInMilliseconds(queryStart, queryEnd), benchmarkObject.getQueryQueryScenarioResults());
@@ -133,6 +136,8 @@ public class Benchmark {
 		}
 		
 		sb.append(reports.MakeBenchmarkReport(benchmarkObjects));
+		
+		sb.append(reports.MakeVerifyResultsReport(benchmarkObjects));
 		
 		FileUtils.writeStringToFile(new File(Config.WHERE_THE_RESULTS_AT + "results.md"), sb.toString());
 		

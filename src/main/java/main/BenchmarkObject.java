@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import util.Dataset;
+import util.QueryResult;
 import util.QueryScenario;
 import database.Database;
 
@@ -19,6 +20,8 @@ public class BenchmarkObject {
 	private Hashtable<Integer, Hashtable<QueryScenario, Long>> prepareQueryScenarioResults, queryQueryScenarioResults, clearQueryScenarioResults;
 	private long setUpTime, loadTime;
 	
+	private Hashtable<QueryScenario, QueryResult> queryResults;
+	
 	public BenchmarkObject(Database database, Dataset loadDataset) {
 		super();
 		this.title = database.getName() + " " + loadDataset.datasetName;
@@ -28,6 +31,8 @@ public class BenchmarkObject {
 		prepareQueryScenarioResults = new Hashtable<Integer, Hashtable<QueryScenario, Long>>();
 		queryQueryScenarioResults = new Hashtable<Integer, Hashtable<QueryScenario, Long>>();
 		clearQueryScenarioResults = new Hashtable<Integer, Hashtable<QueryScenario, Long>>();
+		
+		queryResults = new Hashtable<QueryScenario, QueryResult>();
 	}
 
 	public long getSetUpTime() {
@@ -57,6 +62,10 @@ public class BenchmarkObject {
 	public Dataset getLoadDataset() {
 		return loadDataset;
 	}
+	
+	public Hashtable<QueryScenario, QueryResult> getQueryResults(){
+		return queryResults;
+	}
 
 	public Hashtable<Integer, Hashtable<QueryScenario, Long>> getPrepareQueryScenarioResults() {
 		return prepareQueryScenarioResults;
@@ -69,21 +78,24 @@ public class BenchmarkObject {
 	public Hashtable<Integer, Hashtable<QueryScenario, Long>> getClearQueryScenarioResults() {
 		return clearQueryScenarioResults;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "BenchmarkObject [title=" + title + ", database=" + database
-				+ ", loadDataset=" + loadDataset + ", setUpTime=" + setUpTime
-				+ ", loadTime=" + loadTime + ", prepareQueryScenarioResults="
+				+ ", loadDataset=" + loadDataset
+				+ ", prepareQueryScenarioResults="
 				+ prepareQueryScenarioResults + ", queryQueryScenarioResults="
 				+ queryQueryScenarioResults + ", clearQueryScenarioResults="
-				+ clearQueryScenarioResults + "]";
+				+ clearQueryScenarioResults + ", setUpTime=" + setUpTime
+				+ ", loadTime=" + loadTime + ", queryResults=" + "Way to much for print"
+				+ "]";
 	}
 
 	public void InvalidateQueryScenarioResults(QueryScenario queryScenario){
 		InvalidateQueryScenarioResultsForAllExecutions(queryScenario, prepareQueryScenarioResults);
 		InvalidateQueryScenarioResultsForAllExecutions(queryScenario, queryQueryScenarioResults);
 		InvalidateQueryScenarioResultsForAllExecutions(queryScenario, clearQueryScenarioResults);
+		queryResults.remove(queryScenario);
 	}
 	private void InvalidateQueryScenarioResultsForAllExecutions(QueryScenario queryScenario, Hashtable<Integer, Hashtable<QueryScenario, Long>> executionsResults){
 		Iterator<Entry<Integer, Hashtable<QueryScenario, Long>>> iterator = executionsResults.entrySet().iterator();
@@ -92,7 +104,7 @@ public class BenchmarkObject {
 			entry.getValue().put(queryScenario, (long)-1);
 		}
 	}
-	
+
 	public void InvalidateBenchmarkResults(){
 		setUpTime = -1;
 		loadTime = -1;

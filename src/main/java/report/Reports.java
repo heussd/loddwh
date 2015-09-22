@@ -15,6 +15,7 @@ import freemarker.template.MalformedTemplateNameException;
 import freemarker.template.SimpleCollection;
 import freemarker.template.SimpleSequence;
 import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 import freemarker.template.TemplateNotFoundException;
 
@@ -60,6 +61,20 @@ public class Reports {
 		root.put("entrys", new SimpleCollection(viewModel.entrys));
 		
 		Template tmp = cfg.getTemplate("SumUp.ftl");
+		StringWriter stringWriter = new StringWriter();
+		tmp.process(root, stringWriter);
+		
+		return stringWriter.toString();
+	}
+	
+	public String MakeVerifyResultsReport(List<BenchmarkObject> benchmarkObjects) throws Exception{
+		VerifyResultsReportModel viewModel = new VerifyResultsReportModel(benchmarkObjects);
+		
+		Map<String, Object> root = new HashMap<>();
+		root.put("databases", new SimpleCollection(viewModel.databases));
+		root.put("entrys", new SimpleCollection(viewModel.entrys));
+		
+		Template tmp = cfg.getTemplate("VerifyResults.ftl");
 		StringWriter stringWriter = new StringWriter();
 		tmp.process(root, stringWriter);
 		
