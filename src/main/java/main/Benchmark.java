@@ -10,6 +10,7 @@ import org.apache.commons.io.FileUtils;
 import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
 
+import report.Reports;
 import database.Database;
 import database.PostgreSQL;
 import database.SQLite4Java;
@@ -21,13 +22,13 @@ import util.QueryScenario;
 
 public class Benchmark {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 
 		List<BenchmarkObject> benchmarkObjects = new ArrayList<BenchmarkObject>();
 
 	// OBJECTS
 		// POSTGRESQL
-		benchmarkObjects.add(new BenchmarkObject(new PostgreSQL(), Dataset.hebis_1000_records));
+		//benchmarkObjects.add(new BenchmarkObject(new PostgreSQL(), Dataset.hebis_1000_records));
 
 		// SQLite (Xerial)
 		benchmarkObjects.add(new BenchmarkObject(new SQLite4Java(), Dataset.hebis_1000_records));
@@ -37,7 +38,7 @@ public class Benchmark {
 
 		// VIRTUOSO
 		benchmarkObjects.add(new BenchmarkObject(new Virtuoso(), Dataset.hebis_1000_records));
-//		benchmarkObjects.add(new BenchmarkObject(new Virtuoso("hebis_10000_test"), Dataset.hebis_10000_records));
+		benchmarkObjects.add(new BenchmarkObject(new Virtuoso(), Dataset.hebis_10000_records));
 		//benchmarkObjects.add(new BenchmarkObject(new Virtuoso("hebis_100000_test"), Dataset.hebis_medium_rdf));
 	// OBJECTS
 		
@@ -55,31 +56,33 @@ public class Benchmark {
 				db.load(benchmarkObject.getLoadDataset());
 				loadEnd = System.nanoTime();
 
-				for (QueryScenario queryScenario : QueryScenario.values()) {
-					long prepareStart, prepareEnd, queryStart, queryEnd, clearStart, clearEnd;
-
+				for (QueryScenario queryScenario : QueryScenario.values()) {					
 					try {
-						prepareStart = System.nanoTime();
-						db.prepare(queryScenario);
-						prepareEnd = System.nanoTime();
-
-						queryStart = System.nanoTime();
-						db.query(queryScenario);
-						queryEnd = System.nanoTime();
-
-						clearStart = System.nanoTime();
-						db.clear(queryScenario);
-						clearEnd = System.nanoTime();
-
-						benchmarkObject.getPrepareQueryScenarioResults().put(queryScenario, nanoExecutionTimeInMilliseconds(prepareStart, prepareEnd));
-						benchmarkObject.getQueryQueryScenarioResults().put(queryScenario, nanoExecutionTimeInMilliseconds(queryStart, queryEnd));
-						benchmarkObject.getClearQueryScenarioResults().put(queryScenario, nanoExecutionTimeInMilliseconds(clearStart, clearEnd));
-
-					} catch (Exception e) { // TODO genauer spezifizieren?
+						int executions = queryScenario.isReadOnly ? Config.QUERYSCENARIO_EXECUTIONS : 1;
+						for(int execution = 1; execution <= executions; execution++){
+							long prepareStart, prepareEnd, queryStart, queryEnd, clearStart, clearEnd;
+							
+							prepareStart = System.nanoTime();
+							db.prepare(queryScenario);
+							prepareEnd = System.nanoTime();
+	
+							queryStart = System.nanoTime();
+							db.query(queryScenario);
+							queryEnd = System.nanoTime();
+	
+							clearStart = System.nanoTime();
+							db.clear(queryScenario);
+							clearEnd = System.nanoTime();
+							
+							
+							setResultInResultset(execution, queryScenario, nanoExecutionTimeInMilliseconds(prepareStart, prepareEnd), benchmarkObject.getPrepareQueryScenarioResults());
+							setResultInResultset(execution, queryScenario, nanoExecutionTimeInMilliseconds(queryStart, queryEnd), benchmarkObject.getQueryQueryScenarioResults());
+							setResultInResultset(execution, queryScenario, nanoExecutionTimeInMilliseconds(clearStart, clearEnd), benchmarkObject.getClearQueryScenarioResults());
+						}
+					} catch (Exception e) {
 						// Abort only current QueryScenario
 						benchmarkObject.InvalidateQueryScenarioResults(queryScenario);
 
-						// TODO log or something
 						System.err.println("Fehler bei " + benchmarkObject.getTitle() + ", " + queryScenario);
 						e.printStackTrace(System.err);
 
@@ -90,11 +93,10 @@ public class Benchmark {
 				benchmarkObject.setSetUpTime(nanoExecutionTimeInMilliseconds(setUpStart, setUpEnd));
 				benchmarkObject.setLoadTime(nanoExecutionTimeInMilliseconds(loadStart, loadEnd));
 
-			} catch (Exception e) { // TODO genauer spezifizieren?
+			} catch (Exception e) {
 				// Abort only current BenchmarkObject
 				benchmarkObject.InvalidateBenchmarkResults();
 
-				// TODO log or something
 				System.err.println("Fehler bei " + benchmarkObject.getTitle());
 				e.printStackTrace(System.err);
 
@@ -102,60 +104,36 @@ public class Benchmark {
 			}
 
 			// TODO _persist_ current BenchmarkObject (Results) instant
-			System.out.println(benchmarkObject);
+			System.out.println("Done with " + benchmarkObject);
 		}
 
-		makeReports(benchmarkObjects);		
+		makeReports(benchmarkObjects);
+	}
+	
+	private static void setResultInResultset(int execution, QueryScenario queryScenario, long result, Hashtable<Integer, Hashtable<QueryScenario, Long>> resultSet){
+		if(resultSet.containsKey(execution)){
+			Hashtable<QueryScenario, Long> r = resultSet.get(execution);
+			r.put(queryScenario, result);
+		}else{
+			Hashtable<QueryScenario, Long> r = new Hashtable<QueryScenario, Long>();
+			r.put(queryScenario, result);
+			resultSet.put(execution, r);
+		}
 	}
 	
 	private static long nanoExecutionTimeInMilliseconds(long start, long end){
 		return (end-start) / 1000000;		
 	}
 
-	private static void makeReports(List<BenchmarkObject> benchmarkObjects) throws IOException {
-		int rows = QueryScenario.values().length + 2 + 1, columns = benchmarkObjects.size() + 1;
-		Hashtable<QueryScenario, Integer> qsreportrowmapping = new Hashtable<QueryScenario, Integer>();
-		int temp = 3;
-		for (QueryScenario qs : QueryScenario.values()) {
-			qsreportrowmapping.put(qs, temp);
-			temp++;
-		}
-		String[][] reportmatrix = new String[rows][columns];
-		reportmatrix[0][0] = "TESTCASE";
-		reportmatrix[1][0] = "SETUP";
-		reportmatrix[2][0] = "LOAD";		
-		for (QueryScenario qs : QueryScenario.values()) {
-			reportmatrix[qsreportrowmapping.get(qs)][0] = qs.toString();
-		}
-		
-		int curcol = 1;
-		for (BenchmarkObject bmo : benchmarkObjects) {
-			reportmatrix[0][curcol] = bmo.getTitle();
-			reportmatrix[1][curcol] = Long.toString(bmo.getSetUpTime());
-			reportmatrix[2][curcol] = Long.toString(bmo.getLoadTime());
-			for (QueryScenario qs : QueryScenario.values()) {
-				reportmatrix[qsreportrowmapping.get(qs)][curcol] = Long.toString(bmo.getPrepareQueryScenarioResults().get(qs) + bmo.getQueryQueryScenarioResults().get(qs) + bmo.getClearQueryScenarioResults().get(qs)); 
-			}
-			
-			curcol++;
-		}
-		
+	private static void makeReports(List<BenchmarkObject> benchmarkObjects) throws Exception {		
+		Reports reports = new Reports();
 		StringBuilder sb = new StringBuilder();
-		sb.append("|");
-		for(int c=0;c<columns;c++)
-			sb.append(" " + reportmatrix[0][c] + " |");
-		sb.append(System.lineSeparator());
-		sb.append("| :- | :-: | :-: |" + System.lineSeparator());
-		for(int i=1;i<rows;i++){
-			sb.append("|");
-			for(int j=0;j<columns;j++) {
-				String val = reportmatrix[i][j];
-				if(j>0) val += " ms";
-				sb.append(" " + val + " |");
-			}
-			if(i+1<rows) sb.append(System.lineSeparator());
+		
+		for (BenchmarkObject benchmarkObject : benchmarkObjects) {
+			sb.append(reports.MakeBenchmarkObjectReport(benchmarkObject));
 		}
-		//sb.append(System.lineSeparator() + "[Prototype table][reference_table]");
+		
+		sb.append(reports.MakeBenchmarkReport(benchmarkObjects));
 		
 		FileUtils.writeStringToFile(new File(Config.WHERE_THE_RESULTS_AT + "results.md"), sb.toString());
 		
