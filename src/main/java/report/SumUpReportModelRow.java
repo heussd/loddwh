@@ -52,14 +52,14 @@ public class SumUpReportModelRow implements TemplateHashModel {
 	private Long GetLowestAvgValue(){
 		Long lowest = null;
 		for (Long long1 : AvgValues) {
-			if(long1 != null){
+			if(long1 != null && long1 >= 0){
 				lowest = long1;
 				break;
 			}
 		}
 		if(lowest == null) return null;		
 		for(int i = 0; i < AvgValues.size(); i++)
-			if(AvgValues.get(i) != null && AvgValues.get(i) < lowest)
+			if(AvgValues.get(i) != null && AvgValues.get(i) >= 0 && AvgValues.get(i) < lowest)
 				lowest = AvgValues.get(i);
 		return lowest;
 	}

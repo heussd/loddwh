@@ -38,8 +38,7 @@ public class Benchmark {
 
 		// VIRTUOSO
 		benchmarkObjects.add(new BenchmarkObject(new Virtuoso(), Dataset.hebis_1000_records));
-		benchmarkObjects.add(new BenchmarkObject(new Virtuoso(), Dataset.hebis_10000_records));
-		//benchmarkObjects.add(new BenchmarkObject(new Virtuoso("hebis_100000_test"), Dataset.hebis_medium_rdf));
+		//benchmarkObjects.add(new BenchmarkObject(new Virtuoso(), Dataset.hebis_10000_records));
 	// OBJECTS
 		
 		

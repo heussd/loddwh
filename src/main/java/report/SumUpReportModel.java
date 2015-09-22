@@ -48,7 +48,7 @@ public class SumUpReportModel {
 				BenchmarkObjectReportModel report = findFirstByName(benchmarkObjectReportModels, db);
 				List<BenchmarkObjectReportModelRow> target = queryScenario.isReadOnly ? report.readOnly : report.notReadOnly;
 				if(target.stream().noneMatch(s -> s.QueryScenario.equals(queryScenario.toString()) && s.Phase.equals("Prepare"))){
-					prepVals.add((long)-1); // TODO
+					prepVals.add(null); // TODO
 					continue;
 				}
 				if(queryScenario.isReadOnly)
@@ -65,7 +65,7 @@ public class SumUpReportModel {
 				BenchmarkObjectReportModel report = findFirstByName(benchmarkObjectReportModels, db);
 				List<BenchmarkObjectReportModelRow> target = queryScenario.isReadOnly ? report.readOnly : report.notReadOnly;
 				if(target.stream().noneMatch(s -> s.QueryScenario.equals(queryScenario.toString()) && s.Phase.equals("Query"))){
-					queryVals.add((long)-1); // TODO
+					queryVals.add(null); // TODO
 					continue;
 				}
 				if(queryScenario.isReadOnly)
