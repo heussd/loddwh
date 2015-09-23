@@ -3,7 +3,9 @@ package util.dumper;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
@@ -100,15 +102,20 @@ public abstract class Helpers {
 		return ids;
 	}
 
-	public static void readRdf(Dataset dumps, Consumer<DataObject> dataObjectConsumer) {
+	public static void readRdf(Dataset dumps, Consumer<DataObject> dataObjectConsumer) throws Exception {
 		readRdf(dumps, dataObjectConsumer, null);
 	}
 
-	public static void readRdf(Dataset dumps, Consumer<DataObject> dataObjectConsumer, Consumer<Integer> intConsumer) {
+	public static void readRdf(Dataset dumps, Consumer<DataObject> dataObjectConsumer, Consumer<Integer> intConsumer) throws Exception {
+		readRdf(new GZIPInputStream(new FileInputStream(dumps.file)), dataObjectConsumer, intConsumer);
+	}
+
+	public static void readRdf(InputStream inputStream, Consumer<DataObject> dataObjectConsumer, Consumer<Integer> intConsumer) {
 
 		try {
 
-			InputStream inputStream = new GZIPInputStream(new FileInputStream(dumps.file));
+			// InputStream inputStream = new GZIPInputStream(new
+			// FileInputStream(dumps.file));
 			/*
 			 * Skips "Content-Type: application/rdf+xml; charset=UTF-8
 			 * 

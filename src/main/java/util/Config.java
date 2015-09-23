@@ -11,7 +11,7 @@ public class Config extends DefaultObjectWrapper {
 
 	public final static Integer QUERYSCENARIO_EXECUTIONS = 3;
 	
-	public final static String USER = "bench";
+	public final static String USER = "th";
 	public static final String PASSWORD = "";
 	public final static String DATABASE = "loddwhbench";
 

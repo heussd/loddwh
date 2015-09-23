@@ -25,7 +25,7 @@ public class TestRdfRead extends Helpers {
 		testRdfRead.doit();
 	}
 
-	public void doit() {
+	public void doit() throws Exception {
 		Dataset dumps = Dataset.hebis_1000_records;
 
 		TestRdfRead testRdfRead = new TestRdfRead();
