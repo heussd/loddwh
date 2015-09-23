@@ -15,7 +15,6 @@ import util.Config;
 import util.DataObject;
 import util.Dataset;
 import util.QueryResult;
-import util.QueryResult.Type;
 import util.QueryScenario;
 import util.Templates;
 
