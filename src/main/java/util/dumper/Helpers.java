@@ -32,6 +32,11 @@ public abstract class Helpers {
 	public static String DoubleToString3Digits(double value){
 		return new DecimalFormat("0.000").format(value);
 	}
+	
+	public static boolean isNumeric(String str)
+	{
+	  return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
+	}
 
 	public static void compare(String name1, ArrayList<String> dump1, String name2, ArrayList<String> dump2) throws Exception {
 		System.out.println(name1 + " :" + dump1.size());

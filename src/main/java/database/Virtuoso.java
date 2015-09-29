@@ -191,13 +191,14 @@ public class Virtuoso implements Database {
 				throw new RuntimeException("Cannot insert DataObject:\n" + dataObject, e);
 			}
 		} , counter -> {
-			if (counter % 1000000 == 0)
+			if (counter % 50000 == 0){
 				System.out.println(counter + " records so far... (Virtuoso Load())");
 				try {
 					connection.commit();
 				} catch (Exception e) {
 					throw new RuntimeException("Commit gone wrong");
 				}
+			}
 		});
 		connection.commit();
 		connection.setAutoCommit(autoCommitBackup);

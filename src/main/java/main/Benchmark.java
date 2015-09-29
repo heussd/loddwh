@@ -11,6 +11,7 @@ import org.pegdown.PegDownProcessor;
 
 import database.Database;
 import database.Fuseki;
+import database.MongoDB;
 import database.PostgreSQL;
 import database.SQLite4Java;
 import database.SQLiteXerial;
@@ -45,6 +46,10 @@ public class Benchmark {
 		benchmarkObjects.add(new BenchmarkObject(new Virtuoso(), Dataset.hebis_1000_records));
 		// benchmarkObjects.add(new BenchmarkObject(new Virtuoso(),
 		// Dataset.hebis_10000_records));
+		
+		// MongoDB
+		benchmarkObjects.add(new BenchmarkObject(new MongoDB(), Dataset.hebis_1000_records));
+		
 		// OBJECTS
 
 		for (BenchmarkObject benchmarkObject : benchmarkObjects) {
