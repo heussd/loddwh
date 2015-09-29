@@ -118,19 +118,20 @@ public class Benchmark {
 		makeReports(benchmarkObjects);
 	}
 
-	private static void setResultInResultset(int execution, QueryScenario queryScenario, long result, Hashtable<Integer, Hashtable<QueryScenario, Long>> resultSet) {
+	private static void setResultInResultset(int execution, QueryScenario queryScenario, double result, Hashtable<Integer, Hashtable<QueryScenario, Double>> resultSet) {
 		if (resultSet.containsKey(execution)) {
-			Hashtable<QueryScenario, Long> r = resultSet.get(execution);
+			Hashtable<QueryScenario, Double> r = resultSet.get(execution);
 			r.put(queryScenario, result);
 		} else {
-			Hashtable<QueryScenario, Long> r = new Hashtable<QueryScenario, Long>();
+			Hashtable<QueryScenario, Double> r = new Hashtable<QueryScenario, Double>();
 			r.put(queryScenario, result);
 			resultSet.put(execution, r);
 		}
 	}
 
-	private static long nanoExecutionTimeInMilliseconds(long start, long end) {
-		return (end - start) / 1000000;
+	private static double nanoExecutionTimeInMilliseconds(long start, long end) {
+		double result = (double)(end - start) / (double)1000000;
+		return result;
 	}
 
 	private static void makeReports(List<BenchmarkObject> benchmarkObjects) throws Exception {

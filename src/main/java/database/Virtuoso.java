@@ -8,7 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
+
 
 import util.Codes;
 import util.Config;
@@ -17,6 +19,7 @@ import util.Dataset;
 import util.QueryResult;
 import util.QueryScenario;
 import util.Templates;
+import util.dumper.Helpers;
 
 public class Virtuoso implements Database {
 
@@ -59,31 +62,145 @@ public class Virtuoso implements Database {
 
 	@Override
 	public void setUp() throws Exception {
-		connection = DriverManager.getConnection("jdbc:virtuoso://127.0.0.1", "dba", "dba");
+		connection = DriverManager.getConnection("jdbc:virtuoso://127.0.0.1/CHARSET=UTF-8", "dba", "dba");
 		stmt = connection.createStatement();
 
 		// Drop auf evtl. alten Identifier
 		stmt.execute(String.format("SPARQL CLEAR GRAPH <%s>", graphId));
 	}
+	
+	private String GetInsertStatement(){
+		String insertStatement = "sparql\n";
+		insertStatement += "PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n";
+		insertStatement += "PREFIX picaplus:<http://lod.hebis.uni-frankfurt.de/daten/terms/>\n";
+		insertStatement += "PREFIX dbpedia:<http://localhost:8080/resource/>\n";
+		insertStatement += "PREFIX skos:<http://www.w3.org/2004/02/skos/core#>\n";
+		insertStatement += "PREFIX rel:<http://opendata.hbz-nrw.de/rel/1.0/>\n";
+		insertStatement += "PREFIX geonames:<http://www.geonames.org/ontology#>\n";
+		insertStatement += "PREFIX yago:<http://localhost:8080/class/yago/>\n";
+		insertStatement += "PREFIX units:<http://dbpedia.org/units/>\n";
+		insertStatement += "PREFIX p:<http://localhost:8080/property/>\n";
+		insertStatement += "PREFIX auth:<http://opendata.hbz-nrw.de/auth/1.0/>\n";
+		insertStatement += "PREFIX prvTypes:<http://purl.org/net/provenance/types#>\n";
+		insertStatement += "PREFIX bibo:<http://purl.org/ontology/bibo/>\n";
+		insertStatement += "PREFIX foaf:<http://xmlns.com/foaf/0.1/>\n";
+		insertStatement += "PREFIX j.0:<http://spinrdf.org/sp#>\n";
+		insertStatement += "PREFIX frbr:<http://purl.org/vocab/frbr/core#>\n";
+		insertStatement += "PREFIX owl:<http://www.w3.org/2002/07/owl#>\n";
+		insertStatement += "PREFIX dcterms:<http://purl.org/dc/terms/>\n";
+		insertStatement += "PREFIX meta:<http://example.org/metadata#>\n";
+		insertStatement += "PREFIX xsd:<http://www.w3.org/2001/XMLSchema#>\n";
+		insertStatement += "PREFIX j.1:<http://www.w3.org/2004/03/trix/rdfg-1/>\n";
+		insertStatement += "PREFIX wdrs:<http://www.w3.org/2007/05/powder-s#>\n";
+		insertStatement += "PREFIX prv:<http://purl.org/net/provenance/ns#>\n";
+		insertStatement += "PREFIX isbd:<http://iflastandards.info/ns/isbd/elements/>\n";
+		insertStatement += "PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\n";
+		insertStatement += "PREFIX geo:<http://www.w3.org/2003/01/geo/wgs84_pos#>\n";
+		insertStatement += "PREFIX rda:<http://RDVocab.info/Elements/>\n";
+		//insertStatement += String.format("INSERT DATA { GRAPH <%s> {%s %s %s} }", /*graphId*/"MYINSERTTESTS");
+		insertStatement += "INSERT DATA { GRAPH <%s> {<%s> %s %s} }";
+		return insertStatement;
+	}
 
 	@Override
 	public void load(Dataset dataset) throws Exception {
-		// 1. UnGzip to virtuosoAccessibleDir
-		// 2. Load Data into Graph
-
-		// 1.
-		byte[] buffer = new byte[1024];
-		GZIPInputStream gzis = new GZIPInputStream(new FileInputStream(dataset.string));
-		FileOutputStream out = new FileOutputStream(String.format("%s//%s", vAD, graphId));
-		int len;
-		while ((len = gzis.read(buffer)) > 0) {
-			out.write(buffer, 0, len);
+		
+		// DIE KLEINEN DATEIEN
+		if(dataset == Dataset.hebis_1000_records || dataset == Dataset.hebis_10000_records || dataset == Dataset.hebis_100000_records){
+			// 1. UnGzip to virtuosoAccessibleDir
+			// 2. Load Data into Graph
+			// 1.
+			byte[] buffer = new byte[1024];
+			GZIPInputStream gzis = new GZIPInputStream(new FileInputStream(dataset.string));
+			FileOutputStream out = new FileOutputStream(String.format("%s//%s", vAD, graphId));
+			int len;
+			while ((len = gzis.read(buffer)) > 0) {
+				out.write(buffer, 0, len);
+			}
+			gzis.close();
+			out.close();
+			// 2.
+			stmt.executeQuery(String.format("DB.DBA.RDF_LOAD_RDFXML_MT (file_to_string_output ('%s/%s'), '', '%s')", vADRtVE, graphId, graphId));
+			
+			return;
 		}
-		gzis.close();
-		out.close();
-
-		// 2.
-		stmt.executeQuery(String.format("DB.DBA.RDF_LOAD_RDFXML_MT (file_to_string_output ('%s/%s'), '', '%s')", vADRtVE, graphId, graphId));
+		
+		
+		// DIE GROßEN DATEIEN
+		
+		//PreparedStatement pstmt = connection.prepareStatement(insertStatement);
+		Statement statement = connection.createStatement();
+		
+		// Load DataObjects
+		boolean autoCommitBackup = connection.getAutoCommit();
+		connection.setAutoCommit(false);
+		Helpers.readRdf(dataset, dataObject -> {
+			try {
+				for (int i = 0; i < Codes.values().length; i++) {
+										
+					Codes code = Codes.values()[i];
+					if (code != Codes.RDF_ABOUT && dataObject.get(code) != null) {
+						String subject = dataObject.get(Codes.RDF_ABOUT).toString(), predicate, object;
+						
+						
+						if(code.rdfProperty.contains(" "))
+							predicate = code.rdfProperty.substring(0, code.rdfProperty.indexOf(" ")); // "wdrs:describedby rdf:resource" => "wdrs:describedby"
+						else
+							predicate = code.rdfProperty;
+						
+						
+						if(code.IS_MULTIPLE){
+							List<String> entries = (ArrayList<String>) dataObject.get(code);
+							for (String string : entries) {
+								String achehrlich = string;
+								
+								// Ach, ehrlich ...
+								achehrlich = achehrlich.replace('"', '\'');
+								achehrlich = achehrlich.replace('\\', '-');
+								
+								String objectVal = code.attributeValue ? "<%s>" : "\"%s\"";
+								object = String.format(objectVal, achehrlich);
+								String insertStatement = GetInsertStatement();
+								String update = String.format(insertStatement, graphId, subject, predicate, object);
+								statement.executeUpdate(update);
+							}
+						}else{
+							String achehrlich = dataObject.get(code).toString();
+							
+							// Ach, ehrlich ...
+							achehrlich = achehrlich.replace('"', '\'');
+							achehrlich = achehrlich.replace('\\', '-');
+							
+							String objectVal = code.attributeValue ? "<%s>" : "\"%s\"";
+							object = String.format(objectVal, achehrlich);
+							String insertStatement = GetInsertStatement();
+							String update = String.format(insertStatement, graphId, subject, predicate, object);
+							statement.executeUpdate(update);
+						}
+						
+//						pstmt.setString(1, subject);
+//						pstmt.setString(2, predicate);
+//						pstmt.setString(3, object);
+//						//System.out.println(dataObject);
+//						
+//						pstmt.execute();
+//						pstmt.clearParameters();
+					}
+				}
+			} catch (Exception e) {
+				throw new RuntimeException("Cannot insert DataObject:\n" + dataObject, e);
+			}
+		} , counter -> {
+			if (counter % 1000000 == 0)
+				System.out.println(counter + " records so far... (Virtuoso Load())");
+				try {
+					connection.commit();
+				} catch (Exception e) {
+					throw new RuntimeException("Commit gone wrong");
+				}
+		});
+		connection.commit();
+		connection.setAutoCommit(autoCommitBackup);
 	}
 
 	@Override

@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.util.zip.GZIPInputStream;
@@ -27,6 +28,10 @@ import util.DataObject;
 import util.Dataset;
 
 public abstract class Helpers {
+	
+	public static String DoubleToString3Digits(double value){
+		return new DecimalFormat("0.000").format(value);
+	}
 
 	public static void compare(String name1, ArrayList<String> dump1, String name2, ArrayList<String> dump2) throws Exception {
 		System.out.println(name1 + " :" + dump1.size());

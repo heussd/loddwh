@@ -23,7 +23,7 @@ public class SumUpReportModel {
 		}
 		
 		// Setup
-		List<Long> setUpVals = new ArrayList<Long>();
+		List<Double> setUpVals = new ArrayList<Double>();
 		//databases.forEach(db -> benchmarkObjectReportModels.stream().filter(bmo -> bmo.Name.equals(db)).findFirst().get().initialize.stream().);
 		for (String db : databases) {
 			BenchmarkObjectReportModel report = findFirstByName(benchmarkObjectReportModels, db);
@@ -32,7 +32,7 @@ public class SumUpReportModel {
 		entrys.add(new SumUpReportModelRow("Set up", null, setUpVals, 0));
 		
 		// Load
-		List<Long> loadVals = new ArrayList<Long>();
+		List<Double> loadVals = new ArrayList<Double>();
 		for (String db : databases) {
 			BenchmarkObjectReportModel report = findFirstByName(benchmarkObjectReportModels, db);
 			loadVals.add(report.initialize.stream().filter(s -> s.QueryScenario.equals("Load")).findFirst().get().FirstOrOne);
@@ -43,7 +43,7 @@ public class SumUpReportModel {
 		int sort = 2;
 		for (QueryScenario queryScenario : QueryScenario.values()) {
 			// Prepare
-			List<Long> prepVals = new ArrayList<Long>();
+			List<Double> prepVals = new ArrayList<Double>();
 			for (String db : databases) {
 				BenchmarkObjectReportModel report = findFirstByName(benchmarkObjectReportModels, db);
 				List<BenchmarkObjectReportModelRow> target = queryScenario.isReadOnly ? report.readOnly : report.notReadOnly;
@@ -60,7 +60,7 @@ public class SumUpReportModel {
 			sort++;
 			
 			// Query
-			List<Long> queryVals = new ArrayList<Long>();
+			List<Double> queryVals = new ArrayList<Double>();
 			for (String db : databases) {
 				BenchmarkObjectReportModel report = findFirstByName(benchmarkObjectReportModels, db);
 				List<BenchmarkObjectReportModelRow> target = queryScenario.isReadOnly ? report.readOnly : report.notReadOnly;

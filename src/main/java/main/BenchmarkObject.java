@@ -17,8 +17,8 @@ public class BenchmarkObject {
 	
 	private Dataset loadDataset;
 	
-	private Hashtable<Integer, Hashtable<QueryScenario, Long>> prepareQueryScenarioResults, queryQueryScenarioResults, clearQueryScenarioResults;
-	private long setUpTime, loadTime;
+	private Hashtable<Integer, Hashtable<QueryScenario, Double>> prepareQueryScenarioResults, queryQueryScenarioResults, clearQueryScenarioResults;
+	private double setUpTime, loadTime;
 	
 	private Hashtable<QueryScenario, QueryResult> queryResults;
 	
@@ -28,26 +28,26 @@ public class BenchmarkObject {
 		this.database = database;
 		this.loadDataset = loadDataset;
 		
-		prepareQueryScenarioResults = new Hashtable<Integer, Hashtable<QueryScenario, Long>>();
-		queryQueryScenarioResults = new Hashtable<Integer, Hashtable<QueryScenario, Long>>();
-		clearQueryScenarioResults = new Hashtable<Integer, Hashtable<QueryScenario, Long>>();
+		prepareQueryScenarioResults = new Hashtable<Integer, Hashtable<QueryScenario, Double>>();
+		queryQueryScenarioResults = new Hashtable<Integer, Hashtable<QueryScenario, Double>>();
+		clearQueryScenarioResults = new Hashtable<Integer, Hashtable<QueryScenario, Double>>();
 		
 		queryResults = new Hashtable<QueryScenario, QueryResult>();
 	}
 
-	public long getSetUpTime() {
+	public double getSetUpTime() {
 		return setUpTime;
 	}
 
-	public void setSetUpTime(long setUpTime) {
+	public void setSetUpTime(double setUpTime) {
 		this.setUpTime = setUpTime;
 	}
 
-	public long getLoadTime() {
+	public double getLoadTime() {
 		return loadTime;
 	}
 
-	public void setLoadTime(long loadTime) {
+	public void setLoadTime(double loadTime) {
 		this.loadTime = loadTime;
 	}
 
@@ -67,15 +67,15 @@ public class BenchmarkObject {
 		return queryResults;
 	}
 
-	public Hashtable<Integer, Hashtable<QueryScenario, Long>> getPrepareQueryScenarioResults() {
+	public Hashtable<Integer, Hashtable<QueryScenario, Double>> getPrepareQueryScenarioResults() {
 		return prepareQueryScenarioResults;
 	}
 
-	public Hashtable<Integer, Hashtable<QueryScenario, Long>> getQueryQueryScenarioResults() {
+	public Hashtable<Integer, Hashtable<QueryScenario, Double>> getQueryQueryScenarioResults() {
 		return queryQueryScenarioResults;
 	}
 
-	public Hashtable<Integer, Hashtable<QueryScenario, Long>> getClearQueryScenarioResults() {
+	public Hashtable<Integer, Hashtable<QueryScenario, Double>> getClearQueryScenarioResults() {
 		return clearQueryScenarioResults;
 	}
 
@@ -97,11 +97,11 @@ public class BenchmarkObject {
 		InvalidateQueryScenarioResultsForAllExecutions(queryScenario, clearQueryScenarioResults);
 		queryResults.remove(queryScenario);
 	}
-	private void InvalidateQueryScenarioResultsForAllExecutions(QueryScenario queryScenario, Hashtable<Integer, Hashtable<QueryScenario, Long>> executionsResults){
-		Iterator<Entry<Integer, Hashtable<QueryScenario, Long>>> iterator = executionsResults.entrySet().iterator();
+	private void InvalidateQueryScenarioResultsForAllExecutions(QueryScenario queryScenario, Hashtable<Integer, Hashtable<QueryScenario, Double>> executionsResults){
+		Iterator<Entry<Integer, Hashtable<QueryScenario, Double>>> iterator = executionsResults.entrySet().iterator();
 		while(iterator.hasNext()){
-			Entry<Integer, Hashtable<QueryScenario, Long>> entry = iterator.next();
-			entry.getValue().put(queryScenario, (long)-1);
+			Entry<Integer, Hashtable<QueryScenario, Double>> entry = iterator.next();
+			entry.getValue().put(queryScenario, (double)-1);
 		}
 	}
 

@@ -28,7 +28,7 @@ public class BenchmarkObjectReportModel {
 		
 		int sort = 2;
 		for (QueryScenario queryScenario : QueryScenario.values()) {
-			long max,min,avg,firstOrOne;
+			double max,min,avg,firstOrOne;
 			
 			// Prepare
 			max = GetMax(queryScenario, benchmarkObject.getPrepareQueryScenarioResults());
@@ -54,16 +54,16 @@ public class BenchmarkObjectReportModel {
 		}
 	}
 	
-	private long GetFirstOrOne(QueryScenario queryScenario,	Hashtable<Integer, Hashtable<QueryScenario, Long>> scenarioResults) {
+	private double GetFirstOrOne(QueryScenario queryScenario,	Hashtable<Integer, Hashtable<QueryScenario, Double>> scenarioResults) {
 		return scenarioResults.get(1).get(queryScenario);
 	}
 
-	private long GetMax(QueryScenario queryScenario, Hashtable<Integer, Hashtable<QueryScenario, Long>> scenarioResults){
-		long val = scenarioResults.get(1).get(queryScenario);
-		 Enumeration<Hashtable<QueryScenario, Long>> e = scenarioResults.elements();
+	private double GetMax(QueryScenario queryScenario, Hashtable<Integer, Hashtable<QueryScenario, Double>> scenarioResults){
+		double val = scenarioResults.get(1).get(queryScenario);
+		 Enumeration<Hashtable<QueryScenario, Double>> e = scenarioResults.elements();
 		 if(e.hasMoreElements()) e.nextElement(); // Skip 1
 		 while(e.hasMoreElements()){
-			 Hashtable<QueryScenario, Long> cur = e.nextElement();
+			 Hashtable<QueryScenario, Double> cur = e.nextElement();
 			 if(!cur.containsKey(queryScenario)) continue;
 			 if(cur.get(queryScenario) > val)
 				 val = cur.get(queryScenario);
@@ -71,12 +71,12 @@ public class BenchmarkObjectReportModel {
 		return val;
 	}
 	
-	private long GetMin(QueryScenario queryScenario, Hashtable<Integer, Hashtable<QueryScenario, Long>> scenarioResults){
-		long val = scenarioResults.get(1).get(queryScenario);
-		 Enumeration<Hashtable<QueryScenario, Long>> e = scenarioResults.elements();
+	private double GetMin(QueryScenario queryScenario, Hashtable<Integer, Hashtable<QueryScenario, Double>> scenarioResults){
+		double val = scenarioResults.get(1).get(queryScenario);
+		 Enumeration<Hashtable<QueryScenario, Double>> e = scenarioResults.elements();
 		 if(e.hasMoreElements()) e.nextElement(); // Skip 1
 		 while(e.hasMoreElements()){
-			 Hashtable<QueryScenario, Long> cur = e.nextElement();
+			 Hashtable<QueryScenario, Double> cur = e.nextElement();
 			 if(!cur.containsKey(queryScenario)) continue;
 			 if(cur.get(queryScenario) < val)
 				 val = cur.get(queryScenario);
@@ -84,15 +84,15 @@ public class BenchmarkObjectReportModel {
 		return val;
 	}
 	
-	private long GetAvg(QueryScenario queryScenario, Hashtable<Integer, Hashtable<QueryScenario, Long>> scenarioResults){
-		long val = 0; 
-		 Enumeration<Hashtable<QueryScenario, Long>> e = scenarioResults.elements();
+	private double GetAvg(QueryScenario queryScenario, Hashtable<Integer, Hashtable<QueryScenario, Double>> scenarioResults){
+		double val = 0; 
+		 Enumeration<Hashtable<QueryScenario, Double>> e = scenarioResults.elements();
 		 while(e.hasMoreElements()){
-			 Hashtable<QueryScenario, Long> cur = e.nextElement();
+			 Hashtable<QueryScenario, Double> cur = e.nextElement();
 			 if(!cur.containsKey(queryScenario)) continue;
 			 val += cur.get(queryScenario);
 		 }		 
-		return val / scenarioResults.size(); // TODO size() immer sicher in diesem Kontext?
+		return val / (double)scenarioResults.size(); // TODO size() immer sicher in diesem Kontext?
 	}
 }
 

@@ -3,6 +3,7 @@ package report;
 import java.util.ArrayList;
 import java.util.List;
 
+import util.dumper.Helpers;
 import freemarker.template.SimpleCollection;
 import freemarker.template.SimpleScalar;
 import freemarker.template.TemplateHashModel;
@@ -12,11 +13,11 @@ import freemarker.template.TemplateModelException;
 public class SumUpReportModelRow implements TemplateHashModel {
 
 	private String QueryScenario, Phase;
-	private List<Long> AvgValues;
+	private List<Double> AvgValues;
 	private int Sort;
 
 	public SumUpReportModelRow(String queryScenario, String phase,
-			List<Long> avgValues, int sort) {
+			List<Double> avgValues, int sort) {
 		super();
 		QueryScenario = queryScenario;
 		Phase = phase;
@@ -33,13 +34,13 @@ public class SumUpReportModelRow implements TemplateHashModel {
 			return new SimpleScalar(Phase);
 		case "avgvalues":
 			List<String> ret = new ArrayList<String>();
-			for (Long l : AvgValues) {
-				if(l == null) ret.add(""); else ret.add(l.toString());
+			for (Double l : AvgValues) {
+				if(l == null || l == -1) ret.add("Error"); else ret.add(Helpers.DoubleToString3Digits(l) + " ms");
 			}
 			return new SimpleCollection(ret);
 		case "lowest":
-			Long lowest = GetLowestAvgValue();
-			return new SimpleScalar(lowest == null ? "" : lowest.toString());			
+			Double lowest = GetLowestAvgValue();
+			return new SimpleScalar(lowest == null ? "" : Helpers.DoubleToString3Digits(lowest) + " ms");
 		}
 		return new SimpleScalar("Error");
 	}
@@ -49,9 +50,9 @@ public class SumUpReportModelRow implements TemplateHashModel {
 		return false;
 	}
 	
-	private Long GetLowestAvgValue(){
-		Long lowest = null;
-		for (Long long1 : AvgValues) {
+	private Double GetLowestAvgValue(){
+		Double lowest = null;
+		for (Double long1 : AvgValues) {
 			if(long1 != null && long1 >= 0){
 				lowest = long1;
 				break;

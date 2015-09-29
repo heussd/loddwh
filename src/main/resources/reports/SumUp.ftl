@@ -5,5 +5,5 @@
 | QueryScenario | Phase |<#list databases as db> ${db} |</#list>
 | :-- | :-- |<#list databases as db> --: |</#list>
 <#list entrys as entry>
-| ${entry.queryscenario} | ${entry.phase} |<#list entry.avgvalues as dings><#if dings==entry.lowest> **${dings} ms** |</#if><#if dings!=entry.lowest> ${dings} ms |</#if></#list>
+| ${entry.queryscenario} | ${entry.phase} |<#list entry.avgvalues as dings><#if dings==entry.lowest> **${dings}** |</#if><#if dings!=entry.lowest> ${dings} |</#if></#list>
 </#list>
