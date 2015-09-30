@@ -85,14 +85,17 @@ public class BenchmarkObjectReportModel {
 	}
 	
 	private double GetAvg(QueryScenario queryScenario, Hashtable<Integer, Hashtable<QueryScenario, Double>> scenarioResults){
-		double val = 0; 
+		double val = 0;
+		int teiler = 0;
 		 Enumeration<Hashtable<QueryScenario, Double>> e = scenarioResults.elements();
 		 while(e.hasMoreElements()){
 			 Hashtable<QueryScenario, Double> cur = e.nextElement();
 			 if(!cur.containsKey(queryScenario)) continue;
+			 teiler++;
 			 val += cur.get(queryScenario);
-		 }		 
-		return val / (double)scenarioResults.size(); // TODO size() immer sicher in diesem Kontext?
+		 }
+		if(teiler == 0) return -1; // TODO Praxis?
+		return val / teiler;
 	}
 }
 

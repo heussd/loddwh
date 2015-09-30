@@ -10,6 +10,7 @@ import com.mongodb.Block;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.util.JSON;
@@ -30,8 +31,7 @@ public class MongoDB implements Database {
 		 mongoDb.setUp();
 		 mongoDb.load(Dataset.hebis_1000_records);
 		 
-		 //mongoDb.query(QueryScenario.AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL);
-		 //mongoDb.query(QueryScenario.AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100);
+		 mongoDb.query(QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES);
 	}
 	
 	MongoClient mongoClient;
@@ -151,10 +151,71 @@ public class MongoDB implements Database {
 			case COMPLETE_ENTITIES:
 				switch(queryScenario){
 					case CONDITIONAL_TABLE_SCAN_ALL_STUDIES:
-						// {"DCTERMS_TITLE":/.*stud(ie|y).*/}
+						FindIterable<Document> results4 = collection.find(new Document("DCTERMS_TITLE", new Document("$regex", ".*stud(ie|y).*").append("$options", "i")));
+						results4.forEach(new Block<Document>(){
+							@Override
+							public void apply(Document arg0) {
+								
+							}
+						});
+						return queryResult;
+					case CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES:
+						FindIterable<Document> results5 = collection.find(new Document("RDF_TYPE", "http://purl.org/dc/terms/BibliographicResource"));
+						results5.forEach(new Block<Document>(){
+							@Override
+							public void apply(Document arg0) {
+								
+							}
+						});
+						return queryResult;
+					case CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES:
+						FindIterable<Document> results6 = collection.find(new Document("RDF_TYPE", "http://purl.org/dc/terms/BibliographicResource").append("DCTERMS_TITLE", new Document("$regex", ".*stud(ie|y).*").append("$options", "i")));
+						results6.forEach(new Block<Document>(){
+							@Override
+							public void apply(Document arg0) {
+								
+							}
+						});
+						return queryResult;
+						
+						
+						
+						// TODO Wie soll ich auf Subject sortieren? Das ist ein Array. Nach dem ersten Eintrag?
+						// TODO Aufsteigend sortieren spült die ganzen nulls nach oben... Aber das ist dann halt hier so? Aber vll nicht dasselbe Objekt wie bei den anderen deswegen. Vielleicht ja aber doch, die müssen damit ja auch irgendwie umgehen. Leer ist ja meist oben.
+					case ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY:
+						FindIterable<Document> results7 = collection.find().sort(new Document("DCTERMS_MEDIUM", 1).append("ISBD_P1008", 1).append("DCTERM_CONTRIBUTOR", 1).append("DCTERMS_SUBJECT", 1)).limit(1);
+						results7.forEach(new Block<Document>(){
+							@Override
+							public void apply(Document arg0) {
+								//System.out.println(String.format("%s - %s - %s - %s", arg0.getString("DCTERMS_MEDIUM"), arg0.getString("ISBD_P1008"), arg0.getString("DCTERM_CONTRIBUTOR"), arg0.get("DCTERMS_SUBJECT")));
+								//System.out.println(arg0);
+							}
+						});
+						return queryResult;
+					case ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES:
+						FindIterable<Document> results8 = collection.find().sort(new Document("DCTERMS_MEDIUM", 1).append("ISBD_P1008", 1).append("DCTERM_CONTRIBUTOR", 1).append("DCTERMS_SUBJECT", 1)).limit(10);
+						results8.forEach(new Block<Document>(){
+							@Override
+							public void apply(Document arg0) {
+								//System.out.println(String.format("%s - %s - %s - %s", arg0.getString("DCTERMS_MEDIUM"), arg0.getString("ISBD_P1008"), arg0.getString("DCTERM_CONTRIBUTOR"), arg0.get("DCTERMS_SUBJECT")));
+								//System.out.println(arg0);
+							}
+						});
+						return queryResult;
+					case ENTITY_RETRIEVAL_BY_ID_100_ENTITIES:
+						FindIterable<Document> results9 = collection.find().sort(new Document("DCTERMS_MEDIUM", 1).append("ISBD_P1008", 1).append("DCTERM_CONTRIBUTOR", 1).append("DCTERMS_SUBJECT", 1)).limit(100);
+						results9.forEach(new Block<Document>(){
+							@Override
+							public void apply(Document arg0) {
+								//System.out.println(String.format("%s - %s - %s - %s", arg0.getString("DCTERMS_MEDIUM"), arg0.getString("ISBD_P1008"), arg0.getString("DCTERM_CONTRIBUTOR"), arg0.get("DCTERMS_SUBJECT")));
+								//System.out.println(arg0);
+							}
+						});
 						return queryResult;
 				}
 				break;
+				
+				
 			case GRAPH:
 				break;
 			case NONE:
@@ -162,8 +223,8 @@ public class MongoDB implements Database {
 		}
 		
 		
-		return new QueryResult(Type.NONE);
-		//throw new RuntimeException("Something happened");
+		//return new QueryResult(Type.NONE);
+		throw new RuntimeException("Something happened");
 		
 	}
 
