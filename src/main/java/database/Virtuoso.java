@@ -1,5 +1,6 @@
 package database;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.sql.Connection;
@@ -10,7 +11,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
-
 
 import util.Codes;
 import util.Config;
@@ -26,9 +26,13 @@ public class Virtuoso implements Database {
 	public static void main(String[] args) throws Throwable {
 		Virtuoso testVirtuoso = new Virtuoso();
 		testVirtuoso.setUp();
-		testVirtuoso.load(Dataset.hebis_1000_records);
+		// testVirtuoso.load(Dataset.hebis_10147116_13050073_rdf_gz);
+		testVirtuoso.load(Dataset.hebis_10000_records);
 
-		QueryScenario queryScenario = QueryScenario.SCHEMA_CHANGE_MIGRATE_RDF_TYPE;
+		// testVirtuoso.buildRdfLoaderCommand(Dataset.hebis_1000_records);
+
+		QueryScenario queryScenario = QueryScenario.AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL;
+//		QueryScenario queryScenario = QueryScenario.AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10;
 		testVirtuoso.prepare(queryScenario);
 		QueryResult queryResult = testVirtuoso.query(queryScenario);
 		System.out.println(queryResult);
@@ -67,9 +71,16 @@ public class Virtuoso implements Database {
 
 		// Drop auf evtl. alten Identifier
 		stmt.execute(String.format("SPARQL CLEAR GRAPH <%s>", graphId));
+
+		// Load RDF Loader - this might fail
+		try {
+			stmt.executeQuery("LOAD " + new File(this.getClass().getResource("/queries/virtuoso/rdfloader.sql").getFile()).getAbsolutePath() + ";");
+		} catch (Exception e) {
+
+		}
 	}
-	
-	private String GetInsertStatement(){
+
+	private String GetInsertStatement() {
 		String insertStatement = "sparql\n";
 		insertStatement += "PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n";
 		insertStatement += "PREFIX picaplus:<http://lod.hebis.uni-frankfurt.de/daten/terms/>\n";
@@ -97,16 +108,28 @@ public class Virtuoso implements Database {
 		insertStatement += "PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\n";
 		insertStatement += "PREFIX geo:<http://www.w3.org/2003/01/geo/wgs84_pos#>\n";
 		insertStatement += "PREFIX rda:<http://RDVocab.info/Elements/>\n";
-		//insertStatement += String.format("INSERT DATA { GRAPH <%s> {%s %s %s} }", /*graphId*/"MYINSERTTESTS");
+		// insertStatement += String.format("INSERT DATA { GRAPH <%s> {%s %s %s}
+		// }", /*graphId*/"MYINSERTTESTS");
 		insertStatement += "INSERT DATA { GRAPH <%s> {<%s> %s %s} }";
 		return insertStatement;
 	}
 
 	@Override
 	public void load(Dataset dataset) throws Exception {
-		
+		PreparedStatement rdfDumpLoadInstruction = connection.prepareStatement("ld_dir(?, ?, ?)");
+		rdfDumpLoadInstruction.setString(1, dataset.file.getParentFile().getAbsolutePath());
+		rdfDumpLoadInstruction.setString(2, dataset.file.getName());
+		rdfDumpLoadInstruction.setString(3, Config.DATABASE);
+
+		rdfDumpLoadInstruction.executeQuery();
+		connection.createStatement().executeQuery("rdf_loader_run()");
+	}
+
+	public void theoldload(Dataset dataset) throws Exception {
+
 		// DIE KLEINEN DATEIEN
-		if(dataset == Dataset.hebis_1000_records || dataset == Dataset.hebis_10000_records || dataset == Dataset.hebis_100000_records){
+		if (dataset == Dataset.hebis_10147116_13050073_rdf_gz || dataset == Dataset.hebis_1000_records || dataset == Dataset.hebis_10000_records
+				|| dataset == Dataset.hebis_100000_records) {
 			// 1. UnGzip to virtuosoAccessibleDir
 			// 2. Load Data into Graph
 			// 1.
@@ -121,77 +144,78 @@ public class Virtuoso implements Database {
 			out.close();
 			// 2.
 			stmt.executeQuery(String.format("DB.DBA.RDF_LOAD_RDFXML_MT (file_to_string_output ('%s/%s'), '', '%s')", vADRtVE, graphId, graphId));
-			
+
 			return;
 		}
-		
-		
-		// DIE GROßEN DATEIEN
-		
-		//PreparedStatement pstmt = connection.prepareStatement(insertStatement);
+
+		// DIE GROï¿½EN DATEIEN
+
+		// PreparedStatement pstmt =
+		// connection.prepareStatement(insertStatement);
 		Statement statement = connection.createStatement();
-		
+
 		// Load DataObjects
 		boolean autoCommitBackup = connection.getAutoCommit();
 		connection.setAutoCommit(false);
 		Helpers.readRdf(dataset, dataObject -> {
 			try {
 				for (int i = 0; i < Codes.values().length; i++) {
-										
+
 					Codes code = Codes.values()[i];
 					if (code != Codes.RDF_ABOUT && dataObject.get(code) != null) {
 						String subject = dataObject.get(Codes.RDF_ABOUT).toString(), predicate, object;
-						
-						
-						if(code.rdfProperty.contains(" "))
-							predicate = code.rdfProperty.substring(0, code.rdfProperty.indexOf(" ")); // "wdrs:describedby rdf:resource" => "wdrs:describedby"
+
+						if (code.rdfProperty.contains(" "))
+							predicate = code.rdfProperty.substring(0, code.rdfProperty.indexOf(" ")); // "wdrs:describedby
+																										// rdf:resource"
+																										// =>
+																										// "wdrs:describedby"
 						else
 							predicate = code.rdfProperty;
-						
-						
-						if(code.IS_MULTIPLE){
+
+						if (code.IS_MULTIPLE) {
 							List<String> entries = (ArrayList<String>) dataObject.get(code);
 							for (String string : entries) {
 								String achehrlich = string;
-								
+
 								// Ach, ehrlich ...
 								achehrlich = achehrlich.replace('"', '\'');
 								achehrlich = achehrlich.replace('\\', '-');
-								
+
 								String objectVal = code.attributeValue ? "<%s>" : "\"%s\"";
 								object = String.format(objectVal, achehrlich);
 								String insertStatement = GetInsertStatement();
 								String update = String.format(insertStatement, graphId, subject, predicate, object);
 								statement.executeUpdate(update);
 							}
-						}else{
+						} else {
 							String achehrlich = dataObject.get(code).toString();
-							
+
 							// Ach, ehrlich ...
 							achehrlich = achehrlich.replace('"', '\'');
 							achehrlich = achehrlich.replace('\\', '-');
-							
+
 							String objectVal = code.attributeValue ? "<%s>" : "\"%s\"";
 							object = String.format(objectVal, achehrlich);
 							String insertStatement = GetInsertStatement();
 							String update = String.format(insertStatement, graphId, subject, predicate, object);
 							statement.executeUpdate(update);
 						}
-						
-//						pstmt.setString(1, subject);
-//						pstmt.setString(2, predicate);
-//						pstmt.setString(3, object);
-//						//System.out.println(dataObject);
-//						
-//						pstmt.execute();
-//						pstmt.clearParameters();
+
+						// pstmt.setString(1, subject);
+						// pstmt.setString(2, predicate);
+						// pstmt.setString(3, object);
+						// //System.out.println(dataObject);
+						//
+						// pstmt.execute();
+						// pstmt.clearParameters();
 					}
 				}
 			} catch (Exception e) {
 				throw new RuntimeException("Cannot insert DataObject:\n" + dataObject, e);
 			}
 		} , counter -> {
-			if (counter % 50000 == 0){
+			if (counter % 50000 == 0) {
 				System.out.println(counter + " records so far... (Virtuoso Load())");
 				try {
 					connection.commit();
