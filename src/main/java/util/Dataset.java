@@ -15,12 +15,9 @@ public enum Dataset {
 	hebis_26887668_29873805_rdf_gz(Config.WHERE_THE_FILES_AT, "hebis-26887668-29873805.rdf.gz"),
 	hebis_21257740_26887667_rdf_gz(Config.WHERE_THE_FILES_AT, "hebis-21257740-26887667.rdf.gz"),
 	hebis_13050073_21257739_rdf_gz(Config.WHERE_THE_FILES_AT, "hebis-13050073-21257739.rdf.gz"),
-	hebis_1000_records("hebis_1000_rdf.gz"),
-	hebis_tiny_marc("hebis_1000_marc.gz"),
-	hebis_10000_records("hebis_10000_rdf.gz"),
-	hebis_small_marc("hebis_10000_marc.gz"),
-	hebis_100000_records("hebis_100000_rdf.gz"),
-	hebis_medium_marc("hebis_100000_marc.gz");
+	hebis_1000_records("hebis_1000.rdf.gz"),
+	hebis_10000_records("hebis_10000.rdf.gz"),
+	hebis_100000_records("hebis_100000.rdf.gz");
 
 	private Dataset(String filename) {
 		this.file = new File(this.getClass().getResource("/" + filename).getFile());
