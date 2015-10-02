@@ -29,6 +29,7 @@ public class SQLite4Java extends Helpers implements Database {
 	private QueryScenario queryScenario;
 	private Templates templates;
 	private SQLiteQueue queue;
+	private Dataset lastLoadedDataset;
 
 	public SQLite4Java() {
 		// Produce some queries based on Config / Codes enums - do not prepare
@@ -37,7 +38,7 @@ public class SQLite4Java extends Helpers implements Database {
 		genericInsertStatement = "insert into " + Config.TABLE + " (";
 		for (int i = 0; i < Codes.values().length; i++) {
 			Codes code = Codes.values()[i];
-			createQuery += " " + code.toString() + " " + (code.IS_MULTIPLE ? "text ARRAY" : "text");
+			createQuery += " " + code.toString() + " text";
 			genericInsertStatement += code.toString();
 			// Last one?
 			createQuery += (Codes.values().length - 1 == i ? "\n)" : ",\n");
@@ -47,6 +48,23 @@ public class SQLite4Java extends Helpers implements Database {
 		for (int i = 0; i < Codes.values().length; i++) {
 			genericInsertStatement += "?" + (Codes.values().length - 1 == i ? ")" : ",");
 		}
+	}
+
+	private SQLiteStatement makeInsertStatement(DataObject dataObject) throws Exception {
+		SQLiteStatement insertStatement = connection.prepare(genericInsertStatement);
+
+		for (int i = 0; i < Codes.values().length; i++) {
+			Codes code = Codes.values()[i];
+			if (dataObject.get(code) != null) {
+				Object value = dataObject.get(code);
+
+				if (code.IS_MULTIPLE) {
+					value = new JSONArray((ArrayList) value).toString();
+				}
+				insertStatement.bind(i + 1, (String) value);
+			}
+		}
+		return insertStatement;
 	}
 
 	@Override
@@ -79,21 +97,7 @@ public class SQLite4Java extends Helpers implements Database {
 
 		readRdf(dataset, dataObject -> {
 			try {
-				SQLiteStatement insertStatement = connection.prepare(genericInsertStatement);
-
-				for (int i = 0; i < Codes.values().length; i++) {
-					Codes code = Codes.values()[i];
-					if (dataObject.get(code) != null) {
-						Object value = dataObject.get(code);
-
-						if (code.IS_MULTIPLE) {
-							value = new JSONArray((ArrayList) value).toString();
-						}
-						insertStatement.bind(i + 1, (String) value);
-					}
-				}
-				// insertStatement.execute();
-				//
+				SQLiteStatement insertStatement = makeInsertStatement(dataObject);
 				insertStatement.step();
 				insertStatement.clearBindings();
 			} catch (Exception e) {
@@ -101,6 +105,8 @@ public class SQLite4Java extends Helpers implements Database {
 			}
 		});
 		connection.exec("COMMIT");
+
+		this.lastLoadedDataset = dataset;
 	}
 
 	private void reopenConnection(boolean readonly) {
@@ -151,8 +157,29 @@ public class SQLite4Java extends Helpers implements Database {
 		switch (queryScenario) {
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP:
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS:
-			System.out.println("Not implemented: " + queryScenario);
-			return;
+			connection.exec("drop table if exists subjects");
+			connection.exec("create table subjects (id text, subject text)");
+
+			connection.exec("BEGIN");
+
+			// Resolve multiple dcterms_subject in a new table
+			readRdf(lastLoadedDataset, dataObject -> {
+				try {
+					if (dataObject.get(Codes.DCTERMS_SUBJECT) != null) {
+						for (String oneSubject : (ArrayList<String>) dataObject.get(Codes.DCTERMS_SUBJECT)) {
+							connection.exec("insert into subjects values ('" + dataObject.getId() + "','" + oneSubject + "')");
+						}
+					}
+				} catch (Exception e) {
+					throw new RuntimeException("Cannot insert", e);
+				}
+
+			});
+
+			connection.exec("create index if not exists idxid on subjects (id)");
+			connection.exec("create index if not exists idxsubjects on subjects (subject)");
+			connection.exec("COMMIT");
+			break;
 		case SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY:
 		case SCHEMA_CHANGE_REMOVE_RDF_TYPE:
 			break;
@@ -197,7 +224,15 @@ public class SQLite4Java extends Helpers implements Database {
 		switch (queryScenario) {
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP:
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS:
-			System.out.println("WARNING: " + queryScenario + " not yet implemented");
+			for (SQLiteStatement preparedStatement : scenarioStatements) {
+				while (preparedStatement.step()) {
+					if (queryScenario == QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP)
+						queryResult.push(preparedStatement.columnString(0), preparedStatement.columnString(1), preparedStatement.columnString(2));
+					else
+						queryResult.push(preparedStatement.columnString(0), preparedStatement.columnString(1), preparedStatement.columnString(2), preparedStatement.columnString(3),
+								preparedStatement.columnString(4));
+				}
+			}
 			break;
 		default:
 
@@ -254,15 +289,19 @@ public class SQLite4Java extends Helpers implements Database {
 
 		SQLite4Java sqLiteXerial = new SQLite4Java();
 		sqLiteXerial.setUp();
-		sqLiteXerial.load(Dataset.hebis_1000_records);
+		sqLiteXerial.load(Dataset.hebis_10000_records);
 
-		QueryScenario queryScenario = QueryScenario.AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100;
-		sqLiteXerial.prepare(queryScenario);
-		System.out.println(sqLiteXerial.query(queryScenario));
+		QueryScenario queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP;
 
-		queryScenario = QueryScenario.AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10;
 		sqLiteXerial.prepare(queryScenario);
-		System.out.println(sqLiteXerial.query(queryScenario));
+		QueryResult queryResult = (sqLiteXerial.query(queryScenario));
+
+		System.out.println("ERE: " + queryResult);
+		//
+		// queryScenario =
+		// QueryScenario.AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10;
+		// sqLiteXerial.prepare(queryScenario);
+		// System.out.println(sqLiteXerial.query(queryScenario));
 
 	}
 
