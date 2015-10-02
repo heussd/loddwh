@@ -27,6 +27,7 @@ public class SQLiteXerial extends Helpers implements Database {
 	private ArrayList<PreparedStatement> scenarioStatements;
 	private QueryScenario queryScenario;
 	private Templates templates;
+	private Dataset lastLoadedDataset;
 
 	public SQLiteXerial() {
 		// Produce some queries based on Config / Codes enums - do not prepare
@@ -102,6 +103,7 @@ public class SQLiteXerial extends Helpers implements Database {
 			}
 		});
 		connection.commit();
+		this.lastLoadedDataset = dataset;
 	}
 
 	private void reopenConnection(boolean readonly) {
@@ -138,8 +140,27 @@ public class SQLiteXerial extends Helpers implements Database {
 		switch (queryScenario) {
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP:
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS:
-			System.out.println("Not implemented: " + queryScenario);
-			return;
+			connection.createStatement().executeUpdate("drop table if exists subjects");
+			connection.createStatement().executeUpdate("create table subjects (id text, subject text)");
+
+
+			// Resolve multiple dcterms_subject in a new table
+			readRdf(lastLoadedDataset, dataObject -> {
+				try {
+					if (dataObject.get(Codes.DCTERMS_SUBJECT) != null) {
+						for (String oneSubject : (ArrayList<String>) dataObject.get(Codes.DCTERMS_SUBJECT)) {
+							connection.createStatement().executeUpdate("insert into subjects values ('" + dataObject.getId() + "','" + oneSubject + "')");
+						}
+					}
+				} catch (Exception e) {
+					throw new RuntimeException("Cannot insert", e);
+				}
+
+			});
+
+			connection.createStatement().executeUpdate("create index if not exists idxid on subjects (id)");
+			connection.createStatement().executeUpdate("create index if not exists idxsubjects on subjects (subject)");
+			break;
 		case SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY:
 		case SCHEMA_CHANGE_REMOVE_RDF_TYPE:
 			break;
@@ -232,13 +253,13 @@ public class SQLiteXerial extends Helpers implements Database {
 
 		SQLiteXerial sqLiteXerial = new SQLiteXerial();
 		sqLiteXerial.setUp();
-		sqLiteXerial.load(Dataset.hebis_1000_records);
+		sqLiteXerial.load(Dataset.hebis_10000_records);
 
-		QueryScenario queryScenario = QueryScenario.AGGREGATE_ISSUES_PER_DECADE_TOP100;
+		QueryScenario queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP;
 		sqLiteXerial.prepare(queryScenario);
 		System.out.println(sqLiteXerial.query(queryScenario));
 
-		queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY;
+		queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS;
 		sqLiteXerial.prepare(queryScenario);
 		System.out.println(sqLiteXerial.query(queryScenario));
 
