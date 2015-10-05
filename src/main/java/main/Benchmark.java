@@ -141,6 +141,8 @@ public class Benchmark {
 	private static void makeReports(List<BenchmarkObject> benchmarkObjects) throws Exception {
 		Reports reports = new Reports();
 		StringBuilder sb = new StringBuilder();
+		
+		sb.append("<style style=\"text/css\">tr:hover{background: #FFFF00;}</style>\n\n");
 
 		for (BenchmarkObject benchmarkObject : benchmarkObjects) {
 			sb.append(reports.MakeBenchmarkObjectReport(benchmarkObject));
