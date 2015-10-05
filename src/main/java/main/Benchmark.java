@@ -67,38 +67,38 @@ public class Benchmark {
 
 				for (QueryScenario queryScenario : QueryScenario.values()) {
 					try {
+						long prepareStart, prepareEnd, clearStart, clearEnd;
+
+						prepareStart = System.nanoTime();
+						db.prepare(queryScenario);
+						prepareEnd = System.nanoTime();
+
 						int executions = queryScenario.isReadOnly ? Config.QUERYSCENARIO_EXECUTIONS : 1;
+						QueryResult result = null;
 						for (int execution = 1; execution <= executions; execution++) {
-							long prepareStart, prepareEnd, queryStart, queryEnd, clearStart, clearEnd;
-
-							prepareStart = System.nanoTime();
-							db.prepare(queryScenario);
-							prepareEnd = System.nanoTime();
-
+							long queryStart, queryEnd;
 							queryStart = System.nanoTime();
-							QueryResult result = db.query(queryScenario);
+							result = db.query(queryScenario);
 							queryEnd = System.nanoTime();
-
-							clearStart = System.nanoTime();
-							db.clear(queryScenario);
-							clearEnd = System.nanoTime();
-
-							// TODO executions sind hierbei egal, da immer
-							// dasselbe ergebnis kommen muss
-							benchmarkObject.getQueryResults().put(queryScenario, result);
-
-							setResultInResultset(execution, queryScenario, nanoExecutionTimeInMilliseconds(prepareStart, prepareEnd),
-									benchmarkObject.getPrepareQueryScenarioResults());
 							setResultInResultset(execution, queryScenario, nanoExecutionTimeInMilliseconds(queryStart, queryEnd), benchmarkObject.getQueryQueryScenarioResults());
-							setResultInResultset(execution, queryScenario, nanoExecutionTimeInMilliseconds(clearStart, clearEnd), benchmarkObject.getClearQueryScenarioResults());
 						}
+						
+						clearStart = System.nanoTime();
+						db.clear(queryScenario);
+						clearEnd = System.nanoTime();
+						
+						
+						benchmarkObject.getQueryResults().put(queryScenario, result);
+
+						setResultInResultset(1, queryScenario, nanoExecutionTimeInMilliseconds(prepareStart, prepareEnd), benchmarkObject.getPrepareQueryScenarioResults());
+						setResultInResultset(1, queryScenario, nanoExecutionTimeInMilliseconds(clearStart, clearEnd), benchmarkObject.getClearQueryScenarioResults());
 					} catch (Exception e) {
 						// Abort only current QueryScenario
 						benchmarkObject.InvalidateQueryScenarioResults(queryScenario);
-
+						
 						System.err.println("Fehler bei " + benchmarkObject.getTitle() + ", " + queryScenario);
 						e.printStackTrace(System.err);
-
+						
 						continue;
 					}
 				}
@@ -116,7 +116,6 @@ public class Benchmark {
 				continue;
 			}
 
-			// TODO _persist_ current BenchmarkObject (Results) instant
 			System.out.println("Done with " + benchmarkObject);
 		}
 

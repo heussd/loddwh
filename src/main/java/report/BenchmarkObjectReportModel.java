@@ -54,7 +54,7 @@ public class BenchmarkObjectReportModel {
 		}
 	}
 	
-	private double GetFirstOrOne(QueryScenario queryScenario,	Hashtable<Integer, Hashtable<QueryScenario, Double>> scenarioResults) {
+	private double GetFirstOrOne(QueryScenario queryScenario, Hashtable<Integer, Hashtable<QueryScenario, Double>> scenarioResults) {
 		return scenarioResults.get(1).get(queryScenario);
 	}
 

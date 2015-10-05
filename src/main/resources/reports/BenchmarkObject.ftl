@@ -12,7 +12,7 @@
 | QueryScenario | Phase | First time | Average time | Min time | Max time |
 | :-- | :-- | --: | --: | --: | --: |
 <#list readOnly as ro>
-| ${ro.queryscenario} | ${ro.phase} | ${ro.firstorone} | ${ro.avg} | ${ro.min} | ${ro.max} |
+| ${ro.queryscenario} | ${ro.phase} | ${ro.firstorone} | <#if ro.phase!="Prepare">${ro.avg}</#if> | <#if ro.phase!="Prepare">${ro.min}</#if> | <#if ro.phase!="Prepare">${ro.max}</#if> |
 </#list>
 
 ### Data-changing
