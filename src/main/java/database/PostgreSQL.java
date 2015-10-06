@@ -26,7 +26,6 @@ public class PostgreSQL extends Helpers implements Database {
 	private ArrayList<PreparedStatement> scenarioStatements;
 	private QueryScenario queryScenario;
 	private Templates templates;
-	private int i;
 
 	@Override
 	public String getName() {
@@ -45,14 +44,14 @@ public class PostgreSQL extends Helpers implements Database {
 		System.out.println(postgreSQL.getName() + " " + postgreSQL.getVersion());
 		Dataset dataset = Dataset.hebis_1000_records;
 
-		// QueryScenario queryScenario =
-		// QueryScenario.CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES;
+		QueryScenario queryScenario = QueryScenario.CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES;
 
 		postgreSQL.setUp();
 		postgreSQL.load(dataset);
+		postgreSQL.load(Dataset.hebis_10000_records);
 		// postgreSQL.clear(queryScenario);
-		// postgreSQL.prepare(queryScenario);
-		// QueryResult queryResult = postgreSQL.query(queryScenario);
+		postgreSQL.prepare(queryScenario);
+		QueryResult queryResult = postgreSQL.query(queryScenario);
 		// System.out.println(queryResult);
 	}
 
@@ -90,43 +89,39 @@ public class PostgreSQL extends Helpers implements Database {
 		} catch (Exception e) {
 			// Will drop its own connection - ignore
 		}
-		Connection connection = DriverManager.getConnection("jdbc:postgresql://" + Config.HOST_POSTGRES + "/postgres", props);
+		Connection maintenanceConnection = DriverManager.getConnection("jdbc:postgresql://" + Config.HOST_POSTGRES + "/postgres", props);
 		// connection.setAutoCommit(false);
 
 		// Aggressively drop possibly open connections
 		// https://stackoverflow.com/questions/7073773/drop-postgresql-database-through-command-line
-		PreparedStatement preparedStatement = connection.prepareStatement("select pg_terminate_backend(pid) from pg_stat_activity where datname='" + Config.DATABASE + "';");
+		PreparedStatement preparedStatement = maintenanceConnection
+				.prepareStatement("select pg_terminate_backend(pid) from pg_stat_activity where datname='" + Config.DATABASE + "';");
 		preparedStatement.execute();
 
-		preparedStatement = connection.prepareStatement("DROP DATABASE IF EXISTS " + Config.DATABASE);
-		// try {
-		preparedStatement.execute();
-		// } catch (Exception e) {
-		// }
+		preparedStatement = maintenanceConnection.prepareStatement("DROP DATABASE IF EXISTS " + Config.DATABASE);
+		try {
+			preparedStatement.execute();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-		preparedStatement = connection.prepareStatement("CREATE DATABASE " + Config.DATABASE);
+		preparedStatement = maintenanceConnection.prepareStatement("CREATE DATABASE " + Config.DATABASE);
 		preparedStatement.execute();
 
 		templates = new Templates("postgres", ".sql");
 
 		preparedStatement.close();
 		// connection.commit();
-		connection.close();
+		maintenanceConnection.close();
 
-		// clear(null);
+		reopenConnection(false);
+		this.connection.createStatement().executeUpdate("DROP TABLE IF EXISTS " + Config.TABLE);
+		this.connection.createStatement().executeUpdate(createQuery);
 	}
 
 	@Override
 	public void clear(QueryScenario queryScenario) throws Exception {
 		reopenConnection(false);
-
-		// dropTable = connection.prepareStatement("DROP TABLE " +
-		// Config.TABLE);
-		//
-		// try {
-		// dropTable.execute();
-		// } catch (Exception e) { // Ignore if dropping fails.
-		// }
 		connection.createStatement().executeUpdate("alter table " + Config.TABLE + " drop column if exists manifestation");
 	}
 
@@ -134,9 +129,6 @@ public class PostgreSQL extends Helpers implements Database {
 	public void load(Dataset dataset) throws Exception {
 		reopenConnection(false);
 		connection.setAutoCommit(false);
-
-		PreparedStatement createTable = connection.prepareStatement(createQuery);
-		createTable.execute();
 
 		PreparedStatement insertStatement = connection.prepareStatement(genericInsertStatement);
 
@@ -173,7 +165,6 @@ public class PostgreSQL extends Helpers implements Database {
 		});
 
 		connection.commit();
-
 	}
 
 	@Override
