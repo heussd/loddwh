@@ -35,16 +35,15 @@ public class Fuseki extends Helpers implements Database {
 
 	public static void main(String[] args) throws Exception {
 		Database database = new Fuseki();
-		Dataset dataset = Dataset.hebis_1000_records;
 
-		database.load(dataset);
-		// System.out.println(dataset.file);
-		// database.load(dataset);
-		QueryScenario queryScenario = QueryScenario.SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY;
-		//
+		database.setUp();
+		// database.load(Dataset.hebis_21257740_26887667_rdf_gz);
+		database.load(Dataset.hebis_10000_records);
+
+		QueryScenario queryScenario = QueryScenario.AGGREGATE_ISSUES_PER_DECADE_ALL;
+
 		database.prepare(queryScenario);
 		QueryResult queryResult = database.query(queryScenario);
-		//
 		System.out.println(queryResult);
 	}
 
@@ -70,29 +69,20 @@ public class Fuseki extends Helpers implements Database {
 
 	@Override
 	public void load(Dataset dataset) throws Exception {
-		File file = dataset.file;
-
 		// Sadly, Fuseki does seem to support loading gz-compressed files when
 		// loading via command line - strangely, in contrast to the HTTP-GUI...
 
-		ProcessBuilder gunzipProcess = new ProcessBuilder("gunzip", "-k", file.getAbsolutePath());
+		ProcessBuilder gunzipProcess = new ProcessBuilder("gunzip", "-k", dataset.file.getAbsolutePath());
 
-		String extractedFileString;
-		switch (dataset) {
-		case hebis_1000_records:
-			extractedFileString = "hebis_1000.rdf";
-			break;
-		default:
-			throw new RuntimeException("What's the extracted file name of " + dataset + "?");
-		}
+		String extractedFileString = dataset.file.getName();
+		extractedFileString = extractedFileString.substring(0, extractedFileString.length() - 3);
 
-		File extractedFile = new File(file.getParentFile() + File.separator + extractedFileString);
+		File extractedFile = new File(dataset.file.getParentFile() + File.separator + extractedFileString);
 		if (extractedFile.exists()) {
 			extractedFile.delete();
 		}
 
 		Process p = gunzipProcess.start();
-
 		int errorlevel = p.waitFor();
 		if (errorlevel != 0)
 			throw new RuntimeException("gunzip returned " + errorlevel);
@@ -106,10 +96,6 @@ public class Fuseki extends Helpers implements Database {
 
 		if (errorlevel != 0)
 			throw new RuntimeException("curl returned " + errorlevel);
-
-		// if (!extractedFile.delete())
-		// throw new RuntimeException("Cannot delete extracted file " +
-		// extractedFile);
 	}
 
 	@Override
