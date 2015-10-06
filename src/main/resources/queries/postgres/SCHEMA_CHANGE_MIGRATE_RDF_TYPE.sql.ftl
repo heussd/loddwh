@@ -6,5 +6,3 @@ update justatable set bibliographicresource = true where 'http://purl.org/dc/ter
 
 alter table justatable add column book boolean default false;
 update justatable set book = true where 'http://purl.org/ontology/bibo/Book' = ANY(RDF_TYPE);
-
-alter table justatable drop column RDF_TYPE;
