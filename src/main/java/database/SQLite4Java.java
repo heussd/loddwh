@@ -29,7 +29,7 @@ public class SQLite4Java extends Helpers implements Database {
 	private QueryScenario queryScenario;
 	private Templates templates;
 	private SQLiteQueue queue;
-	private Dataset lastLoadedDataset;
+	private ArrayList<Dataset> lastLoadedDatasets;
 
 	public SQLite4Java() {
 		// Produce some queries based on Config / Codes enums - do not prepare
@@ -83,17 +83,20 @@ public class SQLite4Java extends Helpers implements Database {
 
 		connection.exec("drop table if exists " + Config.TABLE);
 		templates = new Templates("sqlite", ".sql");
+
+		connection.exec(createQuery);
 	}
 
 	@Override
 	public void load(Dataset dataset) throws Exception {
-		// reopenConnection(false);
+		if (lastLoadedDatasets == null) {
+			this.lastLoadedDatasets = new ArrayList<>();
+		}
+		lastLoadedDatasets.clear();
 
 		// Auto commit setting:
 		// https://stackoverflow.com/questions/4998630/how-to-disable-autocommit-in-sqlite4java#5005785
 		connection.exec("BEGIN");
-
-		connection.exec(createQuery);
 
 		readRdf(dataset, dataObject -> {
 			try {
@@ -106,7 +109,7 @@ public class SQLite4Java extends Helpers implements Database {
 		});
 		connection.exec("COMMIT");
 
-		this.lastLoadedDataset = dataset;
+		this.lastLoadedDatasets.add(dataset);
 	}
 
 	private void reopenConnection(boolean readonly) {
@@ -163,18 +166,20 @@ public class SQLite4Java extends Helpers implements Database {
 			connection.exec("BEGIN");
 
 			// Resolve multiple dcterms_subject in a new table
-			readRdf(lastLoadedDataset, dataObject -> {
-				try {
-					if (dataObject.get(Codes.DCTERMS_SUBJECT) != null) {
-						for (String oneSubject : (ArrayList<String>) dataObject.get(Codes.DCTERMS_SUBJECT)) {
-							connection.exec("insert into subjects values ('" + dataObject.getId() + "','" + oneSubject + "')");
+			for (Dataset lastLoadedDataset : lastLoadedDatasets) {
+				readRdf(lastLoadedDataset, dataObject -> {
+					try {
+						if (dataObject.get(Codes.DCTERMS_SUBJECT) != null) {
+							for (String oneSubject : (ArrayList<String>) dataObject.get(Codes.DCTERMS_SUBJECT)) {
+								connection.exec("insert into subjects values ('" + dataObject.getId() + "','" + oneSubject + "')");
+							}
 						}
+					} catch (Exception e) {
+						throw new RuntimeException("Cannot insert", e);
 					}
-				} catch (Exception e) {
-					throw new RuntimeException("Cannot insert", e);
-				}
 
-			});
+				});
+			}
 
 			connection.exec("create index if not exists idxid on subjects (id)");
 			connection.exec("create index if not exists idxsubjects on subjects (subject)");
@@ -290,13 +295,14 @@ public class SQLite4Java extends Helpers implements Database {
 		SQLite4Java sqLiteXerial = new SQLite4Java();
 		sqLiteXerial.setUp();
 		sqLiteXerial.load(Dataset.hebis_10000_records);
+		sqLiteXerial.load(Dataset.hebis_1000_records);
 
-		QueryScenario queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP;
+		QueryScenario queryScenario = QueryScenario.AGGREGATE_ISSUES_PER_DECADE_TOP100;
 
 		sqLiteXerial.prepare(queryScenario);
 		QueryResult queryResult = (sqLiteXerial.query(queryScenario));
 
-		System.out.println("ERE: " + queryResult);
+		System.out.println(queryResult);
 		//
 		// queryScenario =
 		// QueryScenario.AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10;
