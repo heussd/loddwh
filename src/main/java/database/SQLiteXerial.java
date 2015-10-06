@@ -1,5 +1,6 @@
 package database;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.sqlite.SQLiteConfig;
 
@@ -21,6 +23,7 @@ import util.dumper.Helpers;
 
 public class SQLiteXerial extends Helpers implements Database {
 
+	private static final Integer COMMIT_EVERY_N_RECORDS = 100000;
 	private Connection connection;
 	private String createQuery;
 	private String genericInsertStatement;
@@ -62,6 +65,7 @@ public class SQLiteXerial extends Helpers implements Database {
 
 	@Override
 	public void setUp() throws Exception {
+		clean();
 		reopenConnection(false);
 
 		PreparedStatement createTable = connection.prepareStatement(createQuery);
@@ -102,6 +106,12 @@ public class SQLiteXerial extends Helpers implements Database {
 			} catch (Exception e) {
 				throw new RuntimeException("Cannot insert DataObject: " + dataObject, e);
 			}
+		} , counter -> {
+			if (counter % COMMIT_EVERY_N_RECORDS == 0)
+				try {
+					connection.commit();
+				} catch (Exception e) {
+				}
 		});
 		connection.commit();
 		this.lastLoadedDatasets.add(dataset);
@@ -157,6 +167,12 @@ public class SQLiteXerial extends Helpers implements Database {
 						throw new RuntimeException("Cannot insert", e);
 					}
 
+				}, counter -> {
+					if (counter % COMMIT_EVERY_N_RECORDS == 0)
+						try {
+							connection.commit();
+						} catch (Exception e) {
+						}
 				});
 			}
 
@@ -263,8 +279,10 @@ public class SQLiteXerial extends Helpers implements Database {
 
 	@Override
 	public void clean() throws Exception {
-		reopenConnection(false);
-		connection.prepareStatement("drop table if exists " + Config.TABLE).executeUpdate();
+		FileUtils.deleteQuietly(new File("sqlitexerial.db"));
+		// reopenConnection(false);
+		// connection.prepareStatement("drop table if exists " +
+		// Config.TABLE).executeUpdate();
 	}
 
 }

@@ -3,6 +3,7 @@ package database;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 
 import com.almworks.sqlite4java.SQLiteConnection;
@@ -21,6 +22,7 @@ import util.dumper.Helpers;
 
 public class SQLite4Java extends Helpers implements Database {
 
+	private static final int COMMIT_EVERY_N_RECORDS = 100000;
 	private static final File DATABASE_FILE = new File("sqlite4java.db");
 	private SQLiteConnection connection;
 	private String createQuery;
@@ -80,7 +82,9 @@ public class SQLite4Java extends Helpers implements Database {
 
 	@Override
 	public void setUp() throws Exception {
+		clean();
 		reopenConnection(false);
+
 		connection.exec(createQuery);
 		lastLoadedDatasets.clear();
 	}
@@ -99,9 +103,17 @@ public class SQLite4Java extends Helpers implements Database {
 			} catch (Exception e) {
 				throw new RuntimeException("Cannot insert DataObject: " + dataObject, e);
 			}
+		} , counter -> {
+			if (counter % COMMIT_EVERY_N_RECORDS == 0) {
+				try {
+					connection.exec("COMMIT");
+					connection.exec("BEGIN");
+				} catch (Exception e) {
+				}
+			}
 		});
-		connection.exec("COMMIT");
 
+		connection.exec("COMMIT");
 		this.lastLoadedDatasets.add(dataset);
 	}
 
@@ -155,7 +167,9 @@ public class SQLite4Java extends Helpers implements Database {
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS:
 			connection.exec("drop table if exists subjects");
 			connection.exec("create table subjects (id text, subject text)");
-
+			connection.exec("create index if not exists idxid on subjects (id)");
+			connection.exec("create index if not exists idxsubjects on subjects (subject)");
+			
 			connection.exec("BEGIN");
 
 			// Resolve multiple dcterms_subject in a new table
@@ -171,11 +185,16 @@ public class SQLite4Java extends Helpers implements Database {
 						throw new RuntimeException("Cannot insert", e);
 					}
 
+				} , counter -> {
+					if (counter % COMMIT_EVERY_N_RECORDS == 0) {
+						try {
+							connection.exec("COMMIT");
+							connection.exec("BEGIN");
+						} catch (Exception e) {
+						}
+					}
 				});
 			}
-
-			connection.exec("create index if not exists idxid on subjects (id)");
-			connection.exec("create index if not exists idxsubjects on subjects (subject)");
 			connection.exec("COMMIT");
 			break;
 		case SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY:
@@ -281,8 +300,7 @@ public class SQLite4Java extends Helpers implements Database {
 
 		SQLite4Java sqLiteXerial = new SQLite4Java();
 		sqLiteXerial.setUp();
-		sqLiteXerial.load(Dataset.hebis_10000_records);
-		sqLiteXerial.load(Dataset.hebis_1000_records);
+		sqLiteXerial.load(Dataset.hebis_100000_records);
 
 		QueryScenario queryScenario = QueryScenario.AGGREGATE_ISSUES_PER_DECADE_TOP100;
 
@@ -300,8 +318,9 @@ public class SQLite4Java extends Helpers implements Database {
 
 	@Override
 	public void clean() throws Exception {
-		reopenConnection(false);
-		connection.exec("drop table if exists " + Config.TABLE);
+		// reopenConnection(false);
+		// connection.exec("drop table if exists " + Config.TABLE);
+		FileUtils.deleteQuietly(DATABASE_FILE);
 	}
 
 }
