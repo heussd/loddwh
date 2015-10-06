@@ -98,13 +98,6 @@ public class PostgreSQL extends Helpers implements Database {
 				.prepareStatement("select pg_terminate_backend(pid) from pg_stat_activity where datname='" + Config.DATABASE + "';");
 		preparedStatement.execute();
 
-		preparedStatement = maintenanceConnection.prepareStatement("DROP DATABASE IF EXISTS " + Config.DATABASE);
-		try {
-			preparedStatement.execute();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
 		preparedStatement = maintenanceConnection.prepareStatement("CREATE DATABASE " + Config.DATABASE);
 		preparedStatement.execute();
 
@@ -115,16 +108,10 @@ public class PostgreSQL extends Helpers implements Database {
 		maintenanceConnection.close();
 
 		reopenConnection(false);
-		this.connection.createStatement().executeUpdate("DROP TABLE IF EXISTS " + Config.TABLE);
+//		this.connection.createStatement().executeUpdate("DROP TABLE IF EXISTS " + Config.TABLE);
 		this.connection.createStatement().executeUpdate(createQuery);
 	}
-
-	@Override
-	public void clear(QueryScenario queryScenario) throws Exception {
-		reopenConnection(false);
-		connection.createStatement().executeUpdate("alter table " + Config.TABLE + " drop column if exists manifestation");
-	}
-
+	
 	@Override
 	public void load(Dataset dataset) throws Exception {
 		reopenConnection(false);
@@ -276,6 +263,31 @@ public class PostgreSQL extends Helpers implements Database {
 	@Override
 	public String toString() {
 		return "PostgreSQL [getName()=" + getName() + ", getVersion()=" + getVersion() + "]";
+	}
+
+	@Override
+	public void clean() throws Exception {
+		try {
+			reopenConnection(false);
+			dropConnections();
+		} catch (Exception e) {
+			// Will drop its own connection - ignore
+		}
+		Connection maintenanceConnection = DriverManager.getConnection("jdbc:postgresql://" + Config.HOST_POSTGRES + "/postgres", props);
+		// connection.setAutoCommit(false);
+
+		// Aggressively drop possibly open connections
+		// https://stackoverflow.com/questions/7073773/drop-postgresql-database-through-command-line
+		PreparedStatement preparedStatement = maintenanceConnection
+				.prepareStatement("select pg_terminate_backend(pid) from pg_stat_activity where datname='" + Config.DATABASE + "';");
+		preparedStatement.execute();
+
+		preparedStatement = maintenanceConnection.prepareStatement("DROP DATABASE IF EXISTS " + Config.DATABASE);
+		try {
+			preparedStatement.execute();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -32,7 +32,8 @@ public class Virtuoso implements Database {
 		// testVirtuoso.buildRdfLoaderCommand(Dataset.hebis_1000_records);
 
 		QueryScenario queryScenario = QueryScenario.AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL;
-//		QueryScenario queryScenario = QueryScenario.AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10;
+		// QueryScenario queryScenario =
+		// QueryScenario.AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10;
 		testVirtuoso.prepare(queryScenario);
 		QueryResult queryResult = testVirtuoso.query(queryScenario);
 		System.out.println(queryResult);
@@ -68,10 +69,6 @@ public class Virtuoso implements Database {
 	public void setUp() throws Exception {
 		connection = DriverManager.getConnection("jdbc:virtuoso://127.0.0.1/CHARSET=UTF-8", "dba", "dba");
 		stmt = connection.createStatement();
-
-		// Drop auf evtl. alten Identifier
-		stmt.execute(String.format("SPARQL CLEAR GRAPH <%s>", graphId));
-
 		// Load RDF Loader - this might fail
 		try {
 			stmt.executeQuery("LOAD " + new File(this.getClass().getResource("/queries/virtuoso/rdfloader.sql").getFile()).getAbsolutePath() + ";");
@@ -323,13 +320,15 @@ public class Virtuoso implements Database {
 	}
 
 	@Override
-	public void clear(QueryScenario queryScenario) throws Exception {
-		// not needed any more ... ?
+	public String toString() {
+		return "Virtuoso [getName()=" + getName() + ", getVersion()=" + getVersion() + "]";
 	}
 
 	@Override
-	public String toString() {
-		return "Virtuoso [getName()=" + getName() + ", getVersion()=" + getVersion() + "]";
+	public void clean() throws Exception {
+		stmt = connection.createStatement();
+		// Drop auf evtl. alten Identifier
+		stmt.execute(String.format("SPARQL CLEAR GRAPH <%s>", graphId));
 	}
 
 }
