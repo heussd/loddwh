@@ -32,6 +32,9 @@ public interface Database {
 	 * Full version information, including connection drivers etc.
 	 */
 	public String getVersion();
+	
+	
+	public void clean();
 
 	/**
 	 * Sets up the environment of the given database, e.g. makes sure it is
