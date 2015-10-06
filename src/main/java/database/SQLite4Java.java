@@ -29,7 +29,7 @@ public class SQLite4Java extends Helpers implements Database {
 	private QueryScenario queryScenario;
 	private Templates templates;
 	private SQLiteQueue queue;
-	private ArrayList<Dataset> lastLoadedDatasets;
+	private ArrayList<Dataset> lastLoadedDatasets = new ArrayList<>();
 
 	public SQLite4Java() {
 		// Produce some queries based on Config / Codes enums - do not prepare
@@ -85,15 +85,11 @@ public class SQLite4Java extends Helpers implements Database {
 		templates = new Templates("sqlite", ".sql");
 
 		connection.exec(createQuery);
+		lastLoadedDatasets.clear();
 	}
 
 	@Override
 	public void load(Dataset dataset) throws Exception {
-		if (lastLoadedDatasets == null) {
-			this.lastLoadedDatasets = new ArrayList<>();
-		}
-		lastLoadedDatasets.clear();
-
 		// Auto commit setting:
 		// https://stackoverflow.com/questions/4998630/how-to-disable-autocommit-in-sqlite4java#5005785
 		connection.exec("BEGIN");
@@ -308,6 +304,14 @@ public class SQLite4Java extends Helpers implements Database {
 		// QueryScenario.AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10;
 		// sqLiteXerial.prepare(queryScenario);
 		// System.out.println(sqLiteXerial.query(queryScenario));
+
+	}
+
+	@Override
+	public void clean() {
+		reopenConnection(false);
+
+		connection.exec("drop table if exists " + Config.TABLE);
 
 	}
 

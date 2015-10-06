@@ -37,7 +37,7 @@ public interface Database {
 	 * Deletes possible old structures in the database. Query times are not
 	 * measured.
 	 */
-	public void clean();
+	public void clean() throws Exception;
 
 	/**
 	 * Sets up the environment of the given database, e.g. makes sure it is
