@@ -1,6 +1,6 @@
 -----
 
-# Report for ${name}
+## Report for ${name}
 
 | Task | Time |
 | :-- | --: |

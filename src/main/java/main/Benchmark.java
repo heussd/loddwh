@@ -21,105 +21,112 @@ import util.Config;
 import util.Dataset;
 import util.QueryResult;
 import util.QueryScenario;
+import util.TestSeries;
 
 public class Benchmark {
 
 	public static void main(String[] args) throws Exception {
-
-		List<BenchmarkObject> benchmarkObjects = new ArrayList<BenchmarkObject>();
-
-		// OBJECTS
-
-		// SQLite (Xerial)
-		benchmarkObjects.add(new BenchmarkObject(new SQLite4Java(), Dataset.hebis_1000_records));
-
-		// SQLite (Xerial)
-		benchmarkObjects.add(new BenchmarkObject(new SQLiteXerial(), Dataset.hebis_1000_records));
-
-		// POSTGRESQL
-		benchmarkObjects.add(new BenchmarkObject(new PostgreSQL(), Dataset.hebis_1000_records));
-
-		// Fuseki
-		benchmarkObjects.add(new BenchmarkObject(new Fuseki(), Dataset.hebis_1000_records));
-
-		// VIRTUOSO
-		benchmarkObjects.add(new BenchmarkObject(new Virtuoso(), Dataset.hebis_1000_records));
-		// benchmarkObjects.add(new BenchmarkObject(new Virtuoso(),
-		// Dataset.hebis_10000_records));
 		
-		// MongoDB
-		benchmarkObjects.add(new BenchmarkObject(new MongoDB(), Dataset.hebis_1000_records));
+		List<TestSeries> testSeries = new ArrayList<>();
+		testSeries.add(TestSeries.TINY);
+//		testSeries.add(TestSeries.SMALL);
+//		testSeries.add(TestSeries.MEDIUM);
+//		testSeries.add(TestSeries.LARGE);
 		
-		// OBJECTS
-
-		for (BenchmarkObject benchmarkObject : benchmarkObjects) {
-			Database db = benchmarkObject.getDatabase();
-			long setUpStart, setUpEnd, loadStart, loadEnd;
-
-			try {
-				setUpStart = System.nanoTime();
-				db.setUp();
-				setUpEnd = System.nanoTime();
-
-				loadStart = System.nanoTime();
-				db.load(benchmarkObject.getLoadDataset());
-				loadEnd = System.nanoTime();
-
-				for (QueryScenario queryScenario : QueryScenario.values()) {
-					try {
-						long prepareStart, prepareEnd, clearStart, clearEnd;
-
-						prepareStart = System.nanoTime();
-						db.prepare(queryScenario);
-						prepareEnd = System.nanoTime();
-
-						int executions = queryScenario.isReadOnly ? Config.QUERYSCENARIO_EXECUTIONS : 1;
-						QueryResult result = null;
-						for (int execution = 1; execution <= executions; execution++) {
-							long queryStart, queryEnd;
-							queryStart = System.nanoTime();
-							result = db.query(queryScenario);
-							queryEnd = System.nanoTime();
-							setResultInResultset(execution, queryScenario, nanoExecutionTimeInMilliseconds(queryStart, queryEnd), benchmarkObject.getQueryQueryScenarioResults());
-						}
-						
-						clearStart = System.nanoTime();
-						db.clear(queryScenario);
-						clearEnd = System.nanoTime();
-						
-						
-						benchmarkObject.getQueryResults().put(queryScenario, result);
-
-						setResultInResultset(1, queryScenario, nanoExecutionTimeInMilliseconds(prepareStart, prepareEnd), benchmarkObject.getPrepareQueryScenarioResults());
-						setResultInResultset(1, queryScenario, nanoExecutionTimeInMilliseconds(clearStart, clearEnd), benchmarkObject.getClearQueryScenarioResults());
-					} catch (Exception e) {
-						// Abort only current QueryScenario
-						benchmarkObject.InvalidateQueryScenarioResults(queryScenario);
-						
-						System.err.println("Fehler bei " + benchmarkObject.getTitle() + ", " + queryScenario);
-						e.printStackTrace(System.err);
-						
-						continue;
+		for (TestSeries testSerie : testSeries) {
+			List<BenchmarkObject> benchmarkObjects = new ArrayList<BenchmarkObject>();
+			
+			// SQLite (Xerial)
+			benchmarkObjects.add(new BenchmarkObject(new SQLite4Java()));
+	
+			// SQLite (Xerial)
+			benchmarkObjects.add(new BenchmarkObject(new SQLiteXerial()));
+	
+			// POSTGRESQL
+			//benchmarkObjects.add(new BenchmarkObject(new PostgreSQL()));
+	
+			// Fuseki
+			//benchmarkObjects.add(new BenchmarkObject(new Fuseki()));
+	
+			// Virtuoso
+			//benchmarkObjects.add(new BenchmarkObject(new Virtuoso()));
+			
+			// MongoDB
+			benchmarkObjects.add(new BenchmarkObject(new MongoDB()));
+			
+	
+			for (BenchmarkObject benchmarkObject : benchmarkObjects) {
+				Database db = benchmarkObject.getDatabase();
+				long setUpStart, setUpEnd, loadStart, loadEnd;
+				
+				try {
+					setUpStart = System.nanoTime();
+					db.setUp();
+					setUpEnd = System.nanoTime();
+					
+					loadStart = System.nanoTime();
+					for (Dataset dataset : testSerie.datasets) {
+						db.load(dataset);
 					}
+					loadEnd = System.nanoTime();					
+					
+					for (QueryScenario queryScenario : QueryScenario.values()) {
+						try {
+							long prepareStart, prepareEnd, clearStart, clearEnd;
+	
+							prepareStart = System.nanoTime();
+							db.prepare(queryScenario);
+							prepareEnd = System.nanoTime();
+	
+							int executions = queryScenario.isReadOnly ? Config.QUERYSCENARIO_EXECUTIONS : 1;
+							QueryResult result = null;
+							for (int execution = 1; execution <= executions; execution++) {
+								long queryStart, queryEnd;
+								queryStart = System.nanoTime();
+								result = db.query(queryScenario);
+								queryEnd = System.nanoTime();
+								setResultInResultset(execution, queryScenario, nanoExecutionTimeInMilliseconds(queryStart, queryEnd), benchmarkObject.getQueryQueryScenarioResults());
+							}
+							
+							clearStart = System.nanoTime();
+							db.clear(queryScenario);
+							clearEnd = System.nanoTime();
+							
+							
+							benchmarkObject.getQueryResults().put(queryScenario, result);
+	
+							setResultInResultset(1, queryScenario, nanoExecutionTimeInMilliseconds(prepareStart, prepareEnd), benchmarkObject.getPrepareQueryScenarioResults());
+							setResultInResultset(1, queryScenario, nanoExecutionTimeInMilliseconds(clearStart, clearEnd), benchmarkObject.getClearQueryScenarioResults());
+							
+						} catch (Exception e) {
+							// Abort only current QueryScenario
+							benchmarkObject.InvalidateQueryScenarioResults(queryScenario);
+							
+							System.err.println("Fehler bei " + benchmarkObject.getTitle() + ", " + queryScenario);
+							e.printStackTrace(System.err);
+							
+							continue;
+						}
+					}
+					
+					benchmarkObject.setSetUpTime(nanoExecutionTimeInMilliseconds(setUpStart, setUpEnd));
+					benchmarkObject.setLoadTime(nanoExecutionTimeInMilliseconds(loadStart, loadEnd));
+	
+				} catch (Exception e) {
+					// Abort only current BenchmarkObject
+					benchmarkObject.InvalidateBenchmarkResults();
+	
+					System.err.println("Fehler bei " + benchmarkObject.getTitle());
+					e.printStackTrace(System.err);
+	
+					continue;
 				}
-
-				benchmarkObject.setSetUpTime(nanoExecutionTimeInMilliseconds(setUpStart, setUpEnd));
-				benchmarkObject.setLoadTime(nanoExecutionTimeInMilliseconds(loadStart, loadEnd));
-
-			} catch (Exception e) {
-				// Abort only current BenchmarkObject
-				benchmarkObject.InvalidateBenchmarkResults();
-
-				System.err.println("Fehler bei " + benchmarkObject.getTitle());
-				e.printStackTrace(System.err);
-
-				continue;
+	
+				System.out.println("Done with " + benchmarkObject);
 			}
-
-			System.out.println("Done with " + benchmarkObject);
+	
+			makeReports(testSerie, benchmarkObjects);
 		}
-
-		makeReports(benchmarkObjects);
 	}
 
 	private static void setResultInResultset(int execution, QueryScenario queryScenario, double result, Hashtable<Integer, Hashtable<QueryScenario, Double>> resultSet) {
@@ -138,11 +145,12 @@ public class Benchmark {
 		return result;
 	}
 
-	private static void makeReports(List<BenchmarkObject> benchmarkObjects) throws Exception {
+	private static void makeReports(TestSeries testSerie, List<BenchmarkObject> benchmarkObjects) throws Exception {
 		Reports reports = new Reports();
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("<style style=\"text/css\">tr:hover{background: #FFFF00;}</style>\n\n");
+		sb.append(String.format("# Report for Testserie \"%s\"\n\n", testSerie.toString()));
 
 		for (BenchmarkObject benchmarkObject : benchmarkObjects) {
 			sb.append(reports.MakeBenchmarkObjectReport(benchmarkObject));
@@ -152,11 +160,14 @@ public class Benchmark {
 
 		sb.append(reports.MakeVerifyResultsReport(benchmarkObjects));
 
-		FileUtils.writeStringToFile(new File(Config.WHERE_THE_RESULTS_AT + "results.md"), sb.toString());
+		String filename = String.format("Results-Testserie_%s", testSerie.toString());
+		FileUtils.writeStringToFile(new File(Config.WHERE_THE_RESULTS_AT + filename + ".md"), sb.toString());
 
 		PegDownProcessor pdp = new PegDownProcessor(Extensions.ALL);
 		String htmlResult = pdp.markdownToHtml(sb.toString());
-		FileUtils.writeStringToFile(new File(Config.WHERE_THE_RESULTS_AT + "results.html"), htmlResult);
+		FileUtils.writeStringToFile(new File(Config.WHERE_THE_RESULTS_AT + filename + ".html"), htmlResult);
+		
+		System.out.println("Wrote Report for Testserie " + testSerie.toString());
 	}
 
 }

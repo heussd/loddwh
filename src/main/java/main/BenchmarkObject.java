@@ -12,21 +12,17 @@ import database.Database;
 
 public class BenchmarkObject {
 	
-	private String title;
 	private Database database;
-	
-	private Dataset loadDataset;
 	
 	private Hashtable<Integer, Hashtable<QueryScenario, Double>> prepareQueryScenarioResults, queryQueryScenarioResults, clearQueryScenarioResults;
 	private double setUpTime, loadTime;
 	
 	private Hashtable<QueryScenario, QueryResult> queryResults;
 	
-	public BenchmarkObject(Database database, Dataset loadDataset) {
+	public BenchmarkObject(Database database) {
 		super();
-		this.title = database.getName() + " " + loadDataset.datasetName;
+		
 		this.database = database;
-		this.loadDataset = loadDataset;
 		
 		prepareQueryScenarioResults = new Hashtable<Integer, Hashtable<QueryScenario, Double>>();
 		queryQueryScenarioResults = new Hashtable<Integer, Hashtable<QueryScenario, Double>>();
@@ -52,15 +48,11 @@ public class BenchmarkObject {
 	}
 
 	public String getTitle() {
-		return title;
+		return database.getName();
 	}
 
 	public Database getDatabase() {
 		return database;
-	}
-
-	public Dataset getLoadDataset() {
-		return loadDataset;
 	}
 	
 	public Hashtable<QueryScenario, QueryResult> getQueryResults(){
@@ -81,8 +73,7 @@ public class BenchmarkObject {
 
 	@Override
 	public String toString() {
-		return "BenchmarkObject [title=" + title + ", database=" + database
-				+ ", loadDataset=" + loadDataset
+		return "BenchmarkObject [database=" + database
 				+ ", prepareQueryScenarioResults="
 				+ prepareQueryScenarioResults + ", queryQueryScenarioResults="
 				+ queryQueryScenarioResults + ", clearQueryScenarioResults="

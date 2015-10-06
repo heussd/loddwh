@@ -7,7 +7,7 @@ import freemarker.template.DefaultObjectWrapper;
  */
 public class Config extends DefaultObjectWrapper {
 	public final static String WHERE_THE_FILES_AT = System.getProperty("os.name").contains("OS X") ? "/Users/th/Ph.D./hebisdumps/noHeader/" : "C:\\RDSTUDIES\\hebis_roh\\";
-	public final static String WHERE_THE_RESULTS_AT = "";
+	public final static String WHERE_THE_RESULTS_AT = "results/";
 
 	public final static Integer QUERYSCENARIO_EXECUTIONS = 3;
 	

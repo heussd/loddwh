@@ -1,6 +1,6 @@
 -----
 
-# Verify results
+## Verify results
 
 | QueryScenario |<#list databases as db> ${db} |</#list>
 | :-- |<#list databases as db> --: |</#list>

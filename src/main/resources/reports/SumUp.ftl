@@ -1,6 +1,6 @@
 -----
 
-# Sum up Report for Benchmark
+## Sum up Report for Benchmark
 
 | QueryScenario | Phase |<#list databases as db> ${db} |</#list>
 | :-- | :-- |<#list databases as db> --: |</#list>
