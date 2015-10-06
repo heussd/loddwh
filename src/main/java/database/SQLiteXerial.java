@@ -27,7 +27,7 @@ public class SQLiteXerial extends Helpers implements Database {
 	private ArrayList<PreparedStatement> scenarioStatements;
 	private QueryScenario queryScenario;
 	private Templates templates;
-	private ArrayList<Dataset> lastLoadedDatasets;
+	private ArrayList<Dataset> lastLoadedDatasets = new ArrayList<>();
 
 	public SQLiteXerial() {
 		// Produce some queries based on Config / Codes enums - do not prepare
@@ -46,6 +46,8 @@ public class SQLiteXerial extends Helpers implements Database {
 		for (int i = 0; i < Codes.values().length; i++) {
 			genericInsertStatement += "?" + (Codes.values().length - 1 == i ? ")" : ",");
 		}
+
+		templates = new Templates("sqlite", ".sql");
 	}
 
 	@Override
@@ -61,21 +63,14 @@ public class SQLiteXerial extends Helpers implements Database {
 	@Override
 	public void setUp() throws Exception {
 		reopenConnection(false);
-		connection.prepareStatement("drop table if exists " + Config.TABLE).executeUpdate();
-
-		templates = new Templates("sqlite", ".sql");
 
 		PreparedStatement createTable = connection.prepareStatement(createQuery);
 		createTable.execute();
+		lastLoadedDatasets.clear();
 	}
 
 	@Override
 	public void load(Dataset dataset) throws Exception {
-		if (lastLoadedDatasets == null) {
-			this.lastLoadedDatasets = new ArrayList<>();
-		}
-		lastLoadedDatasets.clear();
-
 		connection.setAutoCommit(false);
 
 		PreparedStatement insertStatement = connection.prepareStatement(genericInsertStatement);
@@ -250,12 +245,6 @@ public class SQLiteXerial extends Helpers implements Database {
 		return queryResult;
 	}
 
-	@Override
-	public void clear(QueryScenario queryScenario) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
 	public static void main(String[] args) throws Exception {
 
 		SQLiteXerial sqLiteXerial = new SQLiteXerial();
@@ -270,6 +259,12 @@ public class SQLiteXerial extends Helpers implements Database {
 		queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS;
 		sqLiteXerial.prepare(queryScenario);
 		System.out.println(sqLiteXerial.query(queryScenario));
+	}
+
+	@Override
+	public void clean() throws Exception {
+		reopenConnection(false);
+		connection.prepareStatement("drop table if exists " + Config.TABLE).executeUpdate();
 	}
 
 }

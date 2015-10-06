@@ -48,6 +48,7 @@ public class SQLite4Java extends Helpers implements Database {
 		for (int i = 0; i < Codes.values().length; i++) {
 			genericInsertStatement += "?" + (Codes.values().length - 1 == i ? ")" : ",");
 		}
+		templates = new Templates("sqlite", ".sql");
 	}
 
 	private SQLiteStatement makeInsertStatement(DataObject dataObject) throws Exception {
@@ -80,10 +81,6 @@ public class SQLite4Java extends Helpers implements Database {
 	@Override
 	public void setUp() throws Exception {
 		reopenConnection(false);
-
-		connection.exec("drop table if exists " + Config.TABLE);
-		templates = new Templates("sqlite", ".sql");
-
 		connection.exec(createQuery);
 		lastLoadedDatasets.clear();
 	}
@@ -279,7 +276,6 @@ public class SQLite4Java extends Helpers implements Database {
 		connection.exec("COMMIT");
 		return queryResult;
 	}
-
 
 	public static void main(String[] args) throws Exception {
 
