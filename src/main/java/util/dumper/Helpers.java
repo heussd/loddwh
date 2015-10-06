@@ -3,9 +3,7 @@ package util.dumper;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
@@ -136,14 +134,15 @@ public abstract class Helpers {
 			// PrintWriter printWriter = new PrintWriter(new File(target));
 
 			boolean headerWrittenYet = false;
-			int counter = 0, writes = 0;
+			int counter = 0;//, writes = 0;
 			String inline = "", record = "";
 			while ((inline = inputReader.readLine()) != null) {
-				if (inline.contains("<dcterms:identifier>")) {
-					if (++counter % 100000 == 0) {
-						System.out.println(counter + " RDF records so far, " + writes + " writes...");
-					}
-				}
+				++counter;
+//				if (inline.contains("<dcterms:identifier>")) {
+//					if (++counter % 100000 == 0) {
+//						System.out.println(counter + " RDF records so far, " + writes + " writes...");
+//					}
+//				}
 				if (!headerWrittenYet && inline.contains("<rdf:Description")) {
 					record = "";
 					headerWrittenYet = true;
@@ -245,6 +244,7 @@ public abstract class Helpers {
 		}
 
 		System.out.println("\nWrote " + counter + " records, " + errors + " errors.");
+		inputReader.close();
 	}
 
 	public static void writeMarcExtract(ArrayList<String> wantedIds, String target) throws Exception {
