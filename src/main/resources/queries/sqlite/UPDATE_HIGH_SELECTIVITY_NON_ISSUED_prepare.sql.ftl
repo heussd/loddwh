@@ -1,1 +1,2 @@
-update justatable set dcterms_issued = '0' where dcterms_issued is null
+drop index if exists issued_idx;
+CREATE INDEX issued_idx ON justatable (dcterms_issued);

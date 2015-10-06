@@ -1,1 +1,1 @@
-delete from justatable where DCTERMS_MEDIUM = 'paper'
+delete from justatable where DCTERMS_MEDIUM = 'recycled trees'
