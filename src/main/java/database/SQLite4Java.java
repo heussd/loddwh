@@ -280,11 +280,6 @@ public class SQLite4Java extends Helpers implements Database {
 		return queryResult;
 	}
 
-	@Override
-	public void clear(QueryScenario queryScenario) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
 
 	public static void main(String[] args) throws Exception {
 
@@ -308,11 +303,9 @@ public class SQLite4Java extends Helpers implements Database {
 	}
 
 	@Override
-	public void clean() {
+	public void clean() throws Exception {
 		reopenConnection(false);
-
 		connection.exec("drop table if exists " + Config.TABLE);
-
 	}
 
 }
