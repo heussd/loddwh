@@ -32,8 +32,11 @@ public interface Database {
 	 * Full version information, including connection drivers etc.
 	 */
 	public String getVersion();
-	
-	
+
+	/**
+	 * Deletes possible old structures in the database. Query times are not
+	 * measured.
+	 */
 	public void clean();
 
 	/**
@@ -60,13 +63,5 @@ public interface Database {
 	 * Execute the given {@link QueryScenario}.
 	 */
 	public QueryResult query(QueryScenario queryScenario) throws Exception;
-
-	/**
-	 * Reinitiates the database and resets it to an empty state aka
-	 * "the state after setUp()". Designed to be called execution of a
-	 * {@link QueryScenario}. After this, the database is ready to load entities
-	 * or to be queried (even though it should be empty).
-	 */
-	public void clear(QueryScenario queryScenario) throws Exception;
 
 }
