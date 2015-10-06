@@ -29,7 +29,7 @@ public class Fuseki extends Helpers implements Database {
 	public final String SPARQL_SERVICE_URL = "http://localhost:3030/DB/sparql";
 	public final String UPDATE_SERVICE_URL = "http://localhost:3030/DB/update";
 
-	private QueryExecution queryExecution;
+	private String queryExecutionString;
 	private Templates templates;
 	private List<UpdateProcessor> updateProcessors;
 
@@ -44,6 +44,14 @@ public class Fuseki extends Helpers implements Database {
 
 		database.prepare(queryScenario);
 		QueryResult queryResult = database.query(queryScenario);
+		database.query(queryScenario);
+		database.query(queryScenario);
+		System.out.println(queryResult);
+
+		queryScenario = QueryScenario.CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES;
+
+		database.prepare(queryScenario);
+		queryResult = database.query(queryScenario);
 		System.out.println(queryResult);
 	}
 
@@ -63,8 +71,6 @@ public class Fuseki extends Helpers implements Database {
 
 	@Override
 	public void setUp() throws Exception {
-		UpdateRequest request = UpdateFactory.create("drop all");
-		UpdateExecutionFactory.createRemote(request, UPDATE_SERVICE_URL).execute();
 	}
 
 	@Override
@@ -101,7 +107,7 @@ public class Fuseki extends Helpers implements Database {
 	@Override
 	public void prepare(QueryScenario queryScenario) throws Exception {
 		if (queryScenario.isReadOnly)
-			this.queryExecution = QueryExecutionFactory.sparqlService(SPARQL_SERVICE_URL, templates.resolve(queryScenario));
+			this.queryExecutionString = templates.resolve(queryScenario);
 		else {
 			if (updateProcessors == null) {
 				this.updateProcessors = new ArrayList<UpdateProcessor>();
@@ -127,7 +133,7 @@ public class Fuseki extends Helpers implements Database {
 		ResultSet resultSet;
 		switch (queryScenario.queryResultType) {
 		case GRAPH:
-			resultSet = queryExecution.execSelect();
+			resultSet = QueryExecutionFactory.sparqlService(SPARQL_SERVICE_URL, queryExecutionString).execSelect();
 			while (resultSet.hasNext()) {
 				QuerySolution querySolution = resultSet.nextSolution();
 				switch (resultSet.getResultVars().size()) {
@@ -146,14 +152,14 @@ public class Fuseki extends Helpers implements Database {
 			}
 			break;
 		case TWO_COLUMNS:
-			resultSet = queryExecution.execSelect();
+			resultSet = QueryExecutionFactory.sparqlService(SPARQL_SERVICE_URL, queryExecutionString).execSelect();
 			while (resultSet.hasNext()) {
 				QuerySolution querySolution = resultSet.nextSolution();
 				queryResult.push(querySolution.getLiteral(resultSet.getResultVars().get(0)).getString(), querySolution.getLiteral(resultSet.getResultVars().get(1)).getString());
 			}
 			break;
 		case COMPLETE_ENTITIES:
-			Model model = queryExecution.execDescribe();
+			Model model = QueryExecutionFactory.sparqlService(SPARQL_SERVICE_URL, queryExecutionString).execDescribe();
 			StringWriter stringWriter = new StringWriter();
 			model.write(stringWriter);
 
@@ -174,9 +180,9 @@ public class Fuseki extends Helpers implements Database {
 	}
 
 	@Override
-	public void clear(QueryScenario queryScenario) throws Exception {
-		// TODO Auto-generated method stub
-
+	public void clean() throws Exception {
+		UpdateRequest request = UpdateFactory.create("drop all");
+		UpdateExecutionFactory.createRemote(request, UPDATE_SERVICE_URL).execute();
 	}
 
 }
