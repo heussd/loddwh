@@ -118,7 +118,7 @@ public enum QueryScenario {
 
 	/**
 	 * Create a boolean field for every single RDF_TYPE, each indicating if a
-	 * record is of this type. After that, remove RDF_TYPE from every record.
+	 * record is of this type.
 	 */
 	SCHEMA_CHANGE_MIGRATE_RDF_TYPE(false),
 
@@ -140,13 +140,13 @@ public enum QueryScenario {
 	UPDATE_HIGH_SELECTIVITY_NON_ISSUED(false),
 
 	/**
-	 * Remove records having DCTERMS_MEDIUM == "paper". This affects about 90%
-	 * of the records.
+	 * Remove records having DCTERMS_MEDIUM == "recycled trees". This affects
+	 * about 90% of the records.
 	 */
 	DELETE_LOW_SELECTIVITY_PAPER_MEDIUM(false),
 
 	/**
-	 * Remove records that have no value for DCTERMS_ISSUED. This affects about
+	 * Remove records that have "0" as value for DCTERMS_ISSUED. This affects about
 	 * 2% of the records.
 	 */
 	DELETE_HIGH_SELECTIVIY_NON_ISSUED(false);
