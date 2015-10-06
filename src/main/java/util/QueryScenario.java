@@ -50,22 +50,22 @@ public enum QueryScenario {
 	AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL(QueryResult.Type.TWO_COLUMNS),
 
 	/**
-	 * Count the publications per issued century and order by this count
-	 * descending. Return two columns (century + the respective count). Show the
+	 * Count the publications per issued decade and order by this count
+	 * descending. Return two columns (decade + the respective count). Show the
 	 * 10 highest counts.
 	 */
 	AGGREGATE_ISSUES_PER_DECADE_TOP10(QueryResult.Type.TWO_COLUMNS),
 
 	/**
-	 * Count the publications per issued century and order by this count
-	 * descending. Return two columns (century + the respective count). Show the
+	 * Count the publications per issued decade and order by this count
+	 * descending. Return two columns (decade + the respective count). Show the
 	 * 100 highest counts.
 	 */
 	AGGREGATE_ISSUES_PER_DECADE_TOP100(QueryResult.Type.TWO_COLUMNS),
 
 	/**
-	 * Count the publications per issued century and order by this count
-	 * descending. Return two columns (century + the respective count). Show all
+	 * Count the publications per issued decade and order by this count
+	 * descending. Return two columns (decade + the respective count). Show all
 	 * results.
 	 */
 	AGGREGATE_ISSUES_PER_DECADE_ALL(QueryResult.Type.TWO_COLUMNS),

@@ -17,6 +17,7 @@ import com.mongodb.util.JSON;
 
 import util.Codes;
 import util.Config;
+import util.DataObject;
 import util.Dataset;
 import util.QueryResult;
 import util.QueryResult.Type;
@@ -31,7 +32,7 @@ public class MongoDB implements Database {
 		 mongoDb.setUp();
 		 mongoDb.load(Dataset.hebis_1000_records);
 		 
-		 mongoDb.query(QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES);
+		 mongoDb.query(QueryScenario.SCHEMA_CHANGE_INTRODUCE_STRING_OP);
 	}
 	
 	MongoClient mongoClient;
@@ -104,6 +105,29 @@ public class MongoDB implements Database {
 	@Override
 	public void prepare(QueryScenario queryScenario) throws Exception {
 	}
+	
+	private DataObject BuildDataObjectFromDocument(Document document){
+		DataObject dataObject = new DataObject();
+		
+		for (Codes code : Codes.values()) {
+			if(!document.containsKey(code.toString())){
+				dataObject.set(code, null);
+				continue;
+			}
+			
+			// TODO wirft unerwartete Fehler
+//			if(code.IS_MULTIPLE){
+//				for(String value : (String[]) document.get(code.toString())){
+//					dataObject.putMultiple(code, value);
+//				}
+//			}else{
+//				Object obj = document.get(code.toString());
+//				dataObject.set(code, obj.toString());
+//			}
+		}
+		
+		return dataObject;
+	}
 
 	@Override
 	public QueryResult query(QueryScenario queryScenario) throws Exception {
@@ -143,6 +167,37 @@ public class MongoDB implements Database {
 							}
 						});
 						return queryResult;
+						
+					case AGGREGATE_ISSUES_PER_DECADE_ALL:
+						AggregateIterable<Document> ispdec1 = collection.aggregate(asList(new Document("$match", new Document("DCTERMS_ISSUED", new Document("$exists", true))), new Document("$group", new Document("_id", new Document("$substr", asList("$DCTERMS_ISSUED", 0, 3))).append("count", new Document("$sum", 1))), new Document("$sort", new Document("count", -1))));
+						ispdec1.forEach(new Block<Document>(){
+							@Override
+							public void apply(Document arg0) {
+								//System.out.println(arg0.getString("_id") + " ==> " + arg0.getInteger("count").toString());
+								queryResult.push(arg0.getString("_id"), arg0.getInteger("count").toString());
+							}
+						});
+						return queryResult;
+					case AGGREGATE_ISSUES_PER_DECADE_TOP10:
+						AggregateIterable<Document> ispdec2 = collection.aggregate(asList(new Document("$match", new Document("DCTERMS_ISSUED", new Document("$exists", true))), new Document("$group", new Document("_id", new Document("$substr", asList("$DCTERMS_ISSUED", 0, 3))).append("count", new Document("$sum", 1))), new Document("$sort", new Document("count", -1)), new Document("$limit", 10)));
+						ispdec2.forEach(new Block<Document>(){
+							@Override
+							public void apply(Document arg0) {
+								//System.out.println(arg0.getString("_id") + " ==> " + arg0.getInteger("count").toString());
+								queryResult.push(arg0.getString("_id"), arg0.getInteger("count").toString());
+							}
+						});
+						return queryResult;
+					case AGGREGATE_ISSUES_PER_DECADE_TOP100:
+						AggregateIterable<Document> ispdec3 = collection.aggregate(asList(new Document("$match", new Document("DCTERMS_ISSUED", new Document("$exists", true))), new Document("$group", new Document("_id", new Document("$substr", asList("$DCTERMS_ISSUED", 0, 3))).append("count", new Document("$sum", 1))), new Document("$sort", new Document("count", -1)), new Document("$limit", 100)));
+						ispdec3.forEach(new Block<Document>(){
+							@Override
+							public void apply(Document arg0) {
+								//System.out.println(arg0.getString("_id") + " ==> " + arg0.getInteger("count").toString());
+								queryResult.push(arg0.getString("_id"), arg0.getInteger("count").toString());
+							}
+						});
+						return queryResult;
 				}
 				break;
 				
@@ -155,7 +210,7 @@ public class MongoDB implements Database {
 						results4.forEach(new Block<Document>(){
 							@Override
 							public void apply(Document arg0) {
-								
+								queryResult.push(BuildDataObjectFromDocument(arg0));
 							}
 						});
 						return queryResult;
@@ -164,7 +219,7 @@ public class MongoDB implements Database {
 						results5.forEach(new Block<Document>(){
 							@Override
 							public void apply(Document arg0) {
-								
+								queryResult.push(BuildDataObjectFromDocument(arg0));
 							}
 						});
 						return queryResult;
@@ -173,15 +228,11 @@ public class MongoDB implements Database {
 						results6.forEach(new Block<Document>(){
 							@Override
 							public void apply(Document arg0) {
-								
+								queryResult.push(BuildDataObjectFromDocument(arg0));
 							}
 						});
 						return queryResult;
 						
-						
-						
-						// TODO Wie soll ich auf Subject sortieren? Das ist ein Array. Nach dem ersten Eintrag?
-						// TODO Aufsteigend sortieren spült die ganzen nulls nach oben... Aber das ist dann halt hier so? Aber vll nicht dasselbe Objekt wie bei den anderen deswegen. Vielleicht ja aber doch, die müssen damit ja auch irgendwie umgehen. Leer ist ja meist oben.
 					case ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY:
 						FindIterable<Document> results7 = collection.find().sort(new Document("DCTERMS_MEDIUM", 1).append("ISBD_P1008", 1).append("DCTERM_CONTRIBUTOR", 1).append("DCTERMS_SUBJECT", 1)).limit(1);
 						results7.forEach(new Block<Document>(){
@@ -189,6 +240,7 @@ public class MongoDB implements Database {
 							public void apply(Document arg0) {
 								//System.out.println(String.format("%s - %s - %s - %s", arg0.getString("DCTERMS_MEDIUM"), arg0.getString("ISBD_P1008"), arg0.getString("DCTERM_CONTRIBUTOR"), arg0.get("DCTERMS_SUBJECT")));
 								//System.out.println(arg0);
+								queryResult.push(BuildDataObjectFromDocument(arg0));
 							}
 						});
 						return queryResult;
@@ -199,6 +251,7 @@ public class MongoDB implements Database {
 							public void apply(Document arg0) {
 								//System.out.println(String.format("%s - %s - %s - %s", arg0.getString("DCTERMS_MEDIUM"), arg0.getString("ISBD_P1008"), arg0.getString("DCTERM_CONTRIBUTOR"), arg0.get("DCTERMS_SUBJECT")));
 								//System.out.println(arg0);
+								queryResult.push(BuildDataObjectFromDocument(arg0));
 							}
 						});
 						return queryResult;
@@ -209,6 +262,7 @@ public class MongoDB implements Database {
 							public void apply(Document arg0) {
 								//System.out.println(String.format("%s - %s - %s - %s", arg0.getString("DCTERMS_MEDIUM"), arg0.getString("ISBD_P1008"), arg0.getString("DCTERM_CONTRIBUTOR"), arg0.get("DCTERMS_SUBJECT")));
 								//System.out.println(arg0);
+								queryResult.push(BuildDataObjectFromDocument(arg0));
 							}
 						});
 						return queryResult;
@@ -217,15 +271,83 @@ public class MongoDB implements Database {
 				
 				
 			case GRAPH:
+//				switch(queryScenario){
+//					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP:
+//						FindIterable<Document> findIter1 = collection.find(asList(new Document("DCTERMS_SUBJECT", new Document("$exists", true)), new Document("DCTERMS_IDENTIFIER", 1).append("DCTERMS_SUBJECT", 1).append("_id", 0)));
+//						findIter1.forEach(new Block<Document>(){
+//							@Override
+//							public void apply(Document arg0) {
+//								// Hier für jeden neue Abfrage mit Filter auf übereinstimmende Subjects bei nicht übereinstimmender ID.
+//								// Auch über die iterieren und dann jeweils alles ins queryResult legen
+//								// TODO klären mit DCTERMS_SUBJECT und MULTIPLE ob das so gedacht war. MongoDb dürfte sich an Arrays aber nicht stören.
+//							}
+//						});
+//						return queryResult;
+//						
+//					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS:
+//				}
 				break;
+				
+				
 			case NONE:
+				switch (queryScenario) {
+					case SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY:
+						collection.updateMany(new Document(), new Document("$set", new Document("newfield", "cheesecake")));
+						return queryResult;
+						
+					case SCHEMA_CHANGE_INTRODUCE_STRING_OP:
+						//collection.updateMany(new Document(), new Document("$set", new Document("idSuffix", new Document("$substr", asList("$RDF_ABOUT", 29, -1)))));
+						//collection.updateMany(new Document(), new Document("$set", new Document("idSuffix", "$RDF_ABOUT")));
+						FindIterable<Document> stringOps = collection.find();
+						stringOps.forEach(new Block<Document>(){
+							@Override
+							public void apply(Document arg0) {
+								String suffix = arg0.getString("RDF_ABOUT").substring(29);
+								collection.updateOne(new Document("_id", arg0.getObjectId("_id")), new Document("$set", new Document("idSuffix", suffix)));
+							}
+						});
+						return queryResult;
+						
+					case SCHEMA_CHANGE_MIGRATE_RDF_TYPE:
+						// 1. Add fields to every document, false
+						// 2. Update fields for every RDF_TYPE, set true if exists
+						// 3. Remove RDF_TYPE
+						collection.updateMany(new Document(), new Document("$set", new Document("manifestation", false).append("bibresource", false).append("book", false)));
+						collection.updateMany(new Document("RDF_TYPE", "http://purl.org/vocab/frbr/core#Manifestation"), new Document("$set", new Document("manifestation", true)));
+						collection.updateMany(new Document("RDF_TYPE", "http://purl.org/dc/terms/BibliographicResource"), new Document("$set", new Document("bibresource", true)));
+						collection.updateMany(new Document("RDF_TYPE", "http://purl.org/ontology/bibo/Book"), new Document("$set", new Document("book", true)));
+						collection.updateMany(new Document(), new Document("$unset", new Document("RDF_TYPE", "")));
+						return queryResult;
+					
+					// TODO Mhh? Doppelte Entfernung? Selbes Problem
+					case SCHEMA_CHANGE_REMOVE_RDF_TYPE:
+						collection.updateMany(new Document(), new Document("$unset", new Document("RDF_TYPE", "")));
+						return queryResult;						
+						
+					case UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM:
+						collection.updateMany(new Document("DCTERMS_MEDIUM", "paper"), new Document("$set", new Document("DCTERMS_MEDIUM", "recycled trees")));
+						return queryResult;
+						
+					case UPDATE_HIGH_SELECTIVITY_NON_ISSUED:
+						collection.updateMany(new Document("DCTERMS_ISSUED", new Document("$exists", false)), new Document("$set", new Document("DCTERMS_ISSUED", 0)));
+						return queryResult;
+						
+					// TODO Löschen etwas ungünstig nachdem alle mit paper auf "recycled trees" gesetzt wurden?
+					// Also für die Aussage er hätte so viel so schnell gelöscht. Diese Aussage stimmt dann einfach bei allen Datenbanken hier nicht, wenn vorher das Update läuft.
+					// Umgekehrt hat halt sonst das Update eigentlich keine Aussagekraft.
+					case DELETE_LOW_SELECTIVITY_PAPER_MEDIUM:
+						collection.deleteMany(new Document("DCTERMS_MEDIUM", "paper"));
+						return queryResult;
+						
+					// TODO Selbes Problem
+					case DELETE_HIGH_SELECTIVIY_NON_ISSUED:
+						collection.deleteMany(new Document("DCTERMS_ISSUED", new Document("$exists", false)));
+						return queryResult;
+				}
 				break;
 		}
 		
-		
-		//return new QueryResult(Type.NONE);
 		throw new RuntimeException("Something happened");
-		
 	}
 
 	@Override
