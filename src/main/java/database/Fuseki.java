@@ -76,22 +76,26 @@ public class Fuseki extends Helpers implements Database {
 		// loading via command line - strangely, in contrast to the HTTP-GUI...
 
 		ProcessBuilder gunzipProcess = new ProcessBuilder("gunzip", "-k", file.getAbsolutePath());
-		Process p = gunzipProcess.start();
-
-		int errorlevel = p.waitFor();
-		if (errorlevel != 0)
-			throw new RuntimeException("gunzip returned " + errorlevel);
 
 		String extractedFileString;
 		switch (dataset) {
 		case hebis_1000_records:
-			extractedFileString = "hebis_1000_rdf";
+			extractedFileString = "hebis_1000.rdf";
 			break;
 		default:
 			throw new RuntimeException("What's the extracted file name of " + dataset + "?");
 		}
 
 		File extractedFile = new File(file.getParentFile() + File.separator + extractedFileString);
+		if (extractedFile.exists()) {
+			extractedFile.delete();
+		}
+
+		Process p = gunzipProcess.start();
+
+		int errorlevel = p.waitFor();
+		if (errorlevel != 0)
+			throw new RuntimeException("gunzip returned " + errorlevel);
 
 		// Upload extracted dump via curl
 		ProcessBuilder curlProcess = new ProcessBuilder("curl", "-v", "-XPOST", "--data-binary", "@" + extractedFile.getAbsolutePath(), "--header",
@@ -103,8 +107,9 @@ public class Fuseki extends Helpers implements Database {
 		if (errorlevel != 0)
 			throw new RuntimeException("curl returned " + errorlevel);
 
-		if (!extractedFile.delete())
-			throw new RuntimeException("Cannot delete extracted file " + extractedFile);
+		// if (!extractedFile.delete())
+		// throw new RuntimeException("Cannot delete extracted file " +
+		// extractedFile);
 	}
 
 	@Override
