@@ -6,5 +6,5 @@ DELETE
 WHERE 
 	{ 
 		?s ?p ?o ; 
-			<http://purl.org/dc/terms/medium> 'paper' 
+			<http://purl.org/dc/terms/medium> 'recycled trees' 
 	}
