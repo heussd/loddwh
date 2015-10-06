@@ -27,7 +27,7 @@ public class SQLiteXerial extends Helpers implements Database {
 	private ArrayList<PreparedStatement> scenarioStatements;
 	private QueryScenario queryScenario;
 	private Templates templates;
-	private Dataset lastLoadedDataset;
+	private ArrayList<Dataset> lastLoadedDatasets;
 
 	public SQLiteXerial() {
 		// Produce some queries based on Config / Codes enums - do not prepare
@@ -64,13 +64,19 @@ public class SQLiteXerial extends Helpers implements Database {
 		connection.prepareStatement("drop table if exists " + Config.TABLE).executeUpdate();
 
 		templates = new Templates("sqlite", ".sql");
+
+		PreparedStatement createTable = connection.prepareStatement(createQuery);
+		createTable.execute();
 	}
 
 	@Override
 	public void load(Dataset dataset) throws Exception {
+		if (lastLoadedDatasets == null) {
+			this.lastLoadedDatasets = new ArrayList<>();
+		}
+		lastLoadedDatasets.clear();
+
 		connection.setAutoCommit(false);
-		PreparedStatement createTable = connection.prepareStatement(createQuery);
-		createTable.execute();
 
 		PreparedStatement insertStatement = connection.prepareStatement(genericInsertStatement);
 
@@ -103,7 +109,7 @@ public class SQLiteXerial extends Helpers implements Database {
 			}
 		});
 		connection.commit();
-		this.lastLoadedDataset = dataset;
+		this.lastLoadedDatasets.add(dataset);
 	}
 
 	private void reopenConnection(boolean readonly) {
@@ -143,20 +149,21 @@ public class SQLiteXerial extends Helpers implements Database {
 			connection.createStatement().executeUpdate("drop table if exists subjects");
 			connection.createStatement().executeUpdate("create table subjects (id text, subject text)");
 
-
-			// Resolve multiple dcterms_subject in a new table
-			readRdf(lastLoadedDataset, dataObject -> {
-				try {
-					if (dataObject.get(Codes.DCTERMS_SUBJECT) != null) {
-						for (String oneSubject : (ArrayList<String>) dataObject.get(Codes.DCTERMS_SUBJECT)) {
-							connection.createStatement().executeUpdate("insert into subjects values ('" + dataObject.getId() + "','" + oneSubject + "')");
+			for (Dataset lastLoadedDataset : lastLoadedDatasets) {
+				// Resolve multiple dcterms_subject in a new table
+				readRdf(lastLoadedDataset, dataObject -> {
+					try {
+						if (dataObject.get(Codes.DCTERMS_SUBJECT) != null) {
+							for (String oneSubject : (ArrayList<String>) dataObject.get(Codes.DCTERMS_SUBJECT)) {
+								connection.createStatement().executeUpdate("insert into subjects values ('" + dataObject.getId() + "','" + oneSubject + "')");
+							}
 						}
+					} catch (Exception e) {
+						throw new RuntimeException("Cannot insert", e);
 					}
-				} catch (Exception e) {
-					throw new RuntimeException("Cannot insert", e);
-				}
 
-			});
+				});
+			}
 
 			connection.createStatement().executeUpdate("create index if not exists idxid on subjects (id)");
 			connection.createStatement().executeUpdate("create index if not exists idxsubjects on subjects (subject)");
@@ -254,6 +261,7 @@ public class SQLiteXerial extends Helpers implements Database {
 		SQLiteXerial sqLiteXerial = new SQLiteXerial();
 		sqLiteXerial.setUp();
 		sqLiteXerial.load(Dataset.hebis_10000_records);
+		sqLiteXerial.load(Dataset.hebis_1000_records);
 
 		QueryScenario queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP;
 		sqLiteXerial.prepare(queryScenario);
@@ -262,41 +270,6 @@ public class SQLiteXerial extends Helpers implements Database {
 		queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS;
 		sqLiteXerial.prepare(queryScenario);
 		System.out.println(sqLiteXerial.query(queryScenario));
-
-		// sqLiteXerial.
-
-		// Connection connection = null;
-		// try {
-		// // create a database connection
-		// connection = DriverManager.getConnection("jdbc:sqlite:" +
-		// Config.DATABASE + ".db");
-		// Statement statement = connection.createStatement();
-		// statement.setQueryTimeout(30); // set timeout to 30 sec.
-		//
-		// statement.executeUpdate("drop table if exists person");
-		// statement.executeUpdate("create table person (id integer, name
-		// string)");
-		// statement.executeUpdate("insert into person values(1, 'leo')");
-		// statement.executeUpdate("insert into person values(2, 'yui')");
-		// ResultSet rs = statement.executeQuery("select * from person");
-		// while (rs.next()) {
-		// // read the result set
-		// System.out.println("name = " + rs.getString("name"));
-		// System.out.println("id = " + rs.getInt("id"));
-		// }
-		// } catch (SQLException e) {
-		// // if the error message is "out of memory",
-		// // it probably means no database file is found
-		// System.err.println(e.getMessage());
-		// } finally {
-		// try {
-		// if (connection != null)
-		// connection.close();
-		// } catch (SQLException e) {
-		// // connection close failed.
-		// System.err.println(e);
-		// }
-		// }
 	}
 
 }
