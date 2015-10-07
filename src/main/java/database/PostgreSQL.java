@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import com.google.common.base.Joiner;
+
 import util.Codes;
 import util.Config;
 import util.DataObject;
@@ -42,17 +44,16 @@ public class PostgreSQL extends Helpers implements Database {
 		PostgreSQL postgreSQL = new PostgreSQL();
 
 		System.out.println(postgreSQL.getName() + " " + postgreSQL.getVersion());
-		Dataset dataset = Dataset.hebis_1000_records;
 
-		QueryScenario queryScenario = QueryScenario.CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES;
+		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES;
 
 		postgreSQL.setUp();
-		postgreSQL.load(dataset);
+		// postgreSQL.load(dataset);
 		postgreSQL.load(Dataset.hebis_10000_records);
 		// postgreSQL.clear(queryScenario);
 		postgreSQL.prepare(queryScenario);
 		QueryResult queryResult = postgreSQL.query(queryScenario);
-		// System.out.println(queryResult);
+		System.out.println(queryResult);
 	}
 
 	public PostgreSQL() {
@@ -89,6 +90,7 @@ public class PostgreSQL extends Helpers implements Database {
 		} catch (Exception e) {
 			// Will drop its own connection - ignore
 		}
+		clean();
 		Connection maintenanceConnection = DriverManager.getConnection("jdbc:postgresql://" + Config.HOST_POSTGRES + "/postgres", props);
 		// connection.setAutoCommit(false);
 
@@ -108,10 +110,11 @@ public class PostgreSQL extends Helpers implements Database {
 		maintenanceConnection.close();
 
 		reopenConnection(false);
-//		this.connection.createStatement().executeUpdate("DROP TABLE IF EXISTS " + Config.TABLE);
+		// this.connection.createStatement().executeUpdate("DROP TABLE IF EXISTS
+		// " + Config.TABLE);
 		this.connection.createStatement().executeUpdate(createQuery);
 	}
-	
+
 	@Override
 	public void load(Dataset dataset) throws Exception {
 		reopenConnection(false);
@@ -176,13 +179,40 @@ public class PostgreSQL extends Helpers implements Database {
 		}
 
 		connection.commit();
+
 		reopenConnection(queryScenario.isReadOnly);
 		connection.setAutoCommit(false);
 
 		// Resolves the template associated with this queryScenario
-		scenarioStatements.add(connection.prepareStatement(templates.resolve(queryScenario)));
+		PreparedStatement preparedStatement = connection.prepareStatement(templates.resolve(queryScenario));
 
+		// Prepare IDs for ENTITY_RETRIEVAL scenarios
+		if (queryScenario.equals(QueryScenario.ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY) || queryScenario.equals(QueryScenario.ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES)
+				|| queryScenario.equals(QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES)) {
+			String query = "select DCTERMS_IDENTIFIER from justatable order by dcterms_medium, isbd_p1008, dcterm_contributor, dcterms_issued, dcterms_identifier limit";
+			switch (queryScenario) {
+			case ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY:
+				query += " 1;";
+				break;
+			case ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES:
+				query += " 10;";
+				break;
+			case ENTITY_RETRIEVAL_BY_ID_100_ENTITIES:
+				query += " 100;";
+				break;
+			default:
+			}
+			ResultSet resultSet = connection.createStatement().executeQuery(query);
+			ArrayList<String> ids = new ArrayList<>();
+			while (resultSet.next()) {
+				ids.add(resultSet.getString(1));
+			}
+			preparedStatement.setString(1, Joiner.on(",").join(ids));
+		}
+
+		this.scenarioStatements.add(preparedStatement);
 		this.queryScenario = queryScenario;
+
 	}
 
 	@Override

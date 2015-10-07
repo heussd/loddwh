@@ -1,2 +1,2 @@
-select * from justatable where dcterms_identifier in
-(select dcterms_identifier from justatable order by random() limit 1);
+select * from justatable where dcterms_identifier in (?);
+

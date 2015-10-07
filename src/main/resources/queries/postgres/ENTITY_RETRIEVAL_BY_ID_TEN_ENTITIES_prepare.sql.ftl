@@ -1,2 +1,3 @@
 drop index if exists DCTERMS_IDENTIFIER_idx;
 CREATE INDEX DCTERMS_IDENTIFIER_idx ON justatable (DCTERMS_IDENTIFIER);
+
