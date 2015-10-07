@@ -1,1 +1,1 @@
-delete from justatable where DCTERMS_ISSUED == '0'
+delete from justatable where DCTERMS_ISSUED = '0'
