@@ -277,9 +277,9 @@ public class MongoDB implements Database {
 //						findIter1.forEach(new Block<Document>(){
 //							@Override
 //							public void apply(Document arg0) {
-//								// Hier für jeden neue Abfrage mit Filter auf übereinstimmende Subjects bei nicht übereinstimmender ID.
-//								// Auch über die iterieren und dann jeweils alles ins queryResult legen
-//								// TODO klären mit DCTERMS_SUBJECT und MULTIPLE ob das so gedacht war. MongoDb dürfte sich an Arrays aber nicht stören.
+//								// Hier fï¿½r jeden neue Abfrage mit Filter auf ï¿½bereinstimmende Subjects bei nicht ï¿½bereinstimmender ID.
+//								// Auch ï¿½ber die iterieren und dann jeweils alles ins queryResult legen
+//								// TODO klï¿½ren mit DCTERMS_SUBJECT und MULTIPLE ob das so gedacht war. MongoDb dï¿½rfte sich an Arrays aber nicht stï¿½ren.
 //							}
 //						});
 //						return queryResult;
@@ -332,8 +332,8 @@ public class MongoDB implements Database {
 						collection.updateMany(new Document("DCTERMS_ISSUED", new Document("$exists", false)), new Document("$set", new Document("DCTERMS_ISSUED", 0)));
 						return queryResult;
 						
-					// TODO Löschen etwas ungünstig nachdem alle mit paper auf "recycled trees" gesetzt wurden?
-					// Also für die Aussage er hätte so viel so schnell gelöscht. Diese Aussage stimmt dann einfach bei allen Datenbanken hier nicht, wenn vorher das Update läuft.
+					// TODO Lï¿½schen etwas ungï¿½nstig nachdem alle mit paper auf "recycled trees" gesetzt wurden?
+					// Also fï¿½r die Aussage er hï¿½tte so viel so schnell gelï¿½scht. Diese Aussage stimmt dann einfach bei allen Datenbanken hier nicht, wenn vorher das Update lï¿½uft.
 					// Umgekehrt hat halt sonst das Update eigentlich keine Aussagekraft.
 					case DELETE_LOW_SELECTIVITY_PAPER_MEDIUM:
 						collection.deleteMany(new Document("DCTERMS_MEDIUM", "paper"));
@@ -350,13 +350,16 @@ public class MongoDB implements Database {
 		throw new RuntimeException("Something happened");
 	}
 
-	@Override
-	public void clear(QueryScenario queryScenario) throws Exception {
-	}
 
 	@Override
 	public String toString() {
 		return "MongoDB [getName()=" + getName() + ", getVersion()=" + getVersion() + "]";
+	}
+
+	@Override
+	public void clean() throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

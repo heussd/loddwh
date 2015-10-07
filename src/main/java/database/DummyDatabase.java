@@ -38,14 +38,15 @@ public class DummyDatabase implements Database {
 	}
 
 	@Override
-	public void clear(QueryScenario queryScenario) throws Exception {
-		System.out.println("clear(): " + queryScenario.toString());
-	}
-
-	@Override
 	public String toString() {
 		return "DummyDatabase [getName()=" + getName() + ", getVersion()="
 				+ getVersion() + "]";
+	}
+
+	@Override
+	public void clean() throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 
 	
