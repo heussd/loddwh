@@ -10,6 +10,7 @@ import com.almworks.sqlite4java.SQLiteConnection;
 import com.almworks.sqlite4java.SQLiteJob;
 import com.almworks.sqlite4java.SQLiteQueue;
 import com.almworks.sqlite4java.SQLiteStatement;
+import com.google.common.base.Joiner;
 
 import util.Codes;
 import util.Config;
@@ -22,7 +23,7 @@ import util.dumper.Helpers;
 
 public class SQLite4Java extends Helpers implements Database {
 
-	private static final int COMMIT_EVERY_N_RECORDS = 100000;
+	private static final int COMMIT_EVERY_N_RECORDS = 1000000;
 	private static final File DATABASE_FILE = new File("sqlite4java.db");
 	private SQLiteConnection connection;
 	private String createQuery;
@@ -103,14 +104,6 @@ public class SQLite4Java extends Helpers implements Database {
 			} catch (Exception e) {
 				throw new RuntimeException("Cannot insert DataObject: " + dataObject, e);
 			}
-		} , counter -> {
-			if (counter % COMMIT_EVERY_N_RECORDS == 0) {
-				try {
-					connection.exec("COMMIT");
-					connection.exec("BEGIN");
-				} catch (Exception e) {
-				}
-			}
 		});
 
 		connection.exec("COMMIT");
@@ -169,7 +162,7 @@ public class SQLite4Java extends Helpers implements Database {
 			connection.exec("create table subjects (id text, subject text)");
 			connection.exec("create index if not exists idxid on subjects (id)");
 			connection.exec("create index if not exists idxsubjects on subjects (subject)");
-			
+
 			connection.exec("BEGIN");
 
 			// Resolve multiple dcterms_subject in a new table
@@ -222,9 +215,38 @@ public class SQLite4Java extends Helpers implements Database {
 
 		queue.stop(true).join();
 
-		scenarioStatements.add(connection.prepare(templates.resolve(queryScenario)));
+		SQLiteStatement preparedStatement = connection.prepare(templates.resolve(queryScenario));
+		
+		// Prepare IDs for ENTITY_RETRIEVAL scenarios
+		if (queryScenario.equals(QueryScenario.ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY) || queryScenario.equals(QueryScenario.ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES)
+				|| queryScenario.equals(QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES)) {
+			String query = "select DCTERMS_IDENTIFIER from justatable order by dcterms_medium, isbd_p1008, dcterm_contributor, dcterms_issued, dcterms_identifier limit";
+			switch (queryScenario) {
+			case ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY:
+				query += " 1;";
+				break;
+			case ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES:
+				query += " 10;";
+				break;
+			case ENTITY_RETRIEVAL_BY_ID_100_ENTITIES:
+				query += " 100;";
+				break;
+			default:
+			}
+
+			SQLiteStatement statement = connection.prepare(query);
+			ArrayList<String> ids = new ArrayList<>();
+			while (statement.step()) {
+				ids.add("'" + statement.columnString(0) + "'");
+			}
+
+			// I have no idea why this does not work...
+			// preparedStatement.bind(1, Joiner.on(",").join(ids));
+			preparedStatement = connection.prepare("select * from justatable where dcterms_identifier in (" + Joiner.on(",").join(ids) + ")");
+		}
 
 		this.queryScenario = queryScenario;
+		this.scenarioStatements.add(preparedStatement);
 	}
 
 	@Override
@@ -238,10 +260,9 @@ public class SQLite4Java extends Helpers implements Database {
 		// https://stackoverflow.com/questions/4998630/how-to-disable-autocommit-in-sqlite4java#5005785
 		connection.exec("BEGIN");
 
-		switch (queryScenario) {
-		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP:
-		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS:
-			for (SQLiteStatement preparedStatement : scenarioStatements) {
+		for (SQLiteStatement preparedStatement : scenarioStatements) {
+			switch (queryScenario.queryResultType) {
+			case GRAPH:
 				while (preparedStatement.step()) {
 					if (queryScenario == QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP)
 						queryResult.push(preparedStatement.columnString(0), preparedStatement.columnString(1), preparedStatement.columnString(2));
@@ -249,47 +270,41 @@ public class SQLite4Java extends Helpers implements Database {
 						queryResult.push(preparedStatement.columnString(0), preparedStatement.columnString(1), preparedStatement.columnString(2), preparedStatement.columnString(3),
 								preparedStatement.columnString(4));
 				}
-			}
-			break;
-		default:
-
-			for (SQLiteStatement preparedStatement : scenarioStatements) {
-				switch (queryScenario.queryResultType) {
-				case TWO_COLUMNS:
-					while (preparedStatement.step()) {
-						queryResult.push(preparedStatement.columnString(0), preparedStatement.columnString(1));
-					}
-					break;
-				case COMPLETE_ENTITIES:
-					while (preparedStatement.step()) {
-						DataObject dataObject = new DataObject();
-						for (Codes code : Codes.values()) {
-							if (preparedStatement.columnNull(code.ordinal()))
-								continue;
-							if (code.IS_MULTIPLE) {
-								// https://stackoverflow.com/questions/3395729/convert-json-array-to-normal-java-array
-								JSONArray jsonArray = new JSONArray(preparedStatement.columnString(code.ordinal()));
-								if (jsonArray != null) {
-									int len = jsonArray.length();
-									for (int i = 0; i < len; i++) {
-										dataObject.putMultiple(code, jsonArray.get(i).toString());
-									}
-								}
-							} else {
-								dataObject.set(code, preparedStatement.columnString(code.ordinal()));
-							}
-						}
-						queryResult.push(dataObject);
-					}
-					break;
-
-				case NONE:
-				default:
-					preparedStatement.step();
-					break;
+				break;
+			case TWO_COLUMNS:
+				while (preparedStatement.step()) {
+					queryResult.push(preparedStatement.columnString(0), preparedStatement.columnString(1));
 				}
+				break;
+			case COMPLETE_ENTITIES:
+				while (preparedStatement.step()) {
+					DataObject dataObject = new DataObject();
+					for (Codes code : Codes.values()) {
+						if (preparedStatement.columnNull(code.ordinal()))
+							continue;
+						if (code.IS_MULTIPLE) {
+							// https://stackoverflow.com/questions/3395729/convert-json-array-to-normal-java-array
+							JSONArray jsonArray = new JSONArray(preparedStatement.columnString(code.ordinal()));
+							if (jsonArray != null) {
+								int len = jsonArray.length();
+								for (int i = 0; i < len; i++) {
+									dataObject.putMultiple(code, jsonArray.get(i).toString());
+								}
+							}
+						} else {
+							dataObject.set(code, preparedStatement.columnString(code.ordinal()));
+						}
+					}
+					queryResult.push(dataObject);
+				}
+				break;
 
+			case NONE:
+			default:
+				preparedStatement.step();
+				break;
 			}
+
 		}
 
 		connection.exec("COMMIT");
@@ -300,9 +315,9 @@ public class SQLite4Java extends Helpers implements Database {
 
 		SQLite4Java sqLiteXerial = new SQLite4Java();
 		sqLiteXerial.setUp();
-		sqLiteXerial.load(Dataset.hebis_100000_records);
+		sqLiteXerial.load(Dataset.hebis_1000_records);
 
-		QueryScenario queryScenario = QueryScenario.AGGREGATE_ISSUES_PER_DECADE_TOP100;
+		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES;
 
 		sqLiteXerial.prepare(queryScenario);
 		QueryResult queryResult = (sqLiteXerial.query(queryScenario));

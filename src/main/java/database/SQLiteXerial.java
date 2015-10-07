@@ -12,6 +12,8 @@ import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.sqlite.SQLiteConfig;
 
+import com.google.common.base.Joiner;
+
 import util.Codes;
 import util.Config;
 import util.DataObject;
@@ -167,7 +169,7 @@ public class SQLiteXerial extends Helpers implements Database {
 						throw new RuntimeException("Cannot insert", e);
 					}
 
-				}, counter -> {
+				} , counter -> {
 					if (counter % COMMIT_EVERY_N_RECORDS == 0)
 						try {
 							connection.commit();
@@ -189,10 +191,40 @@ public class SQLiteXerial extends Helpers implements Database {
 
 		reopenConnection(queryScenario.isReadOnly);
 		connection.setAutoCommit(false);
+
 		// Resolves the template associated with this queryScenario
-		scenarioStatements.add(connection.prepareStatement(templates.resolve(queryScenario)));
+		PreparedStatement preparedStatement = connection.prepareStatement(templates.resolve(queryScenario));
+
+		// Prepare IDs for ENTITY_RETRIEVAL scenarios
+		if (queryScenario.equals(QueryScenario.ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY) || queryScenario.equals(QueryScenario.ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES)
+				|| queryScenario.equals(QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES)) {
+			String query = "select DCTERMS_IDENTIFIER from justatable order by dcterms_medium, isbd_p1008, dcterm_contributor, dcterms_issued, dcterms_identifier limit";
+			switch (queryScenario) {
+			case ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY:
+				query += " 1;";
+				break;
+			case ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES:
+				query += " 10;";
+				break;
+			case ENTITY_RETRIEVAL_BY_ID_100_ENTITIES:
+				query += " 100;";
+				break;
+			default:
+			}
+
+			ResultSet resultSet = connection.createStatement().executeQuery(query);
+			ArrayList<String> ids = new ArrayList<>();
+			while (resultSet.next()) {
+				ids.add("'" + resultSet.getString(1) + "'");
+			}
+			
+			// I have no idea why this does not work...
+			// preparedStatement.setString(1, Joiner.on(",").join(ids));
+			preparedStatement = connection.prepareStatement("select * from justatable where dcterms_identifier in (" + Joiner.on(",").join(ids) + ")");
+		}
 
 		this.queryScenario = queryScenario;
+		this.scenarioStatements.add(preparedStatement);
 	}
 
 	@Override
@@ -265,10 +297,10 @@ public class SQLiteXerial extends Helpers implements Database {
 
 		SQLiteXerial sqLiteXerial = new SQLiteXerial();
 		sqLiteXerial.setUp();
-		sqLiteXerial.load(Dataset.hebis_10000_records);
+		// sqLiteXerial.load(Dataset.hebis_10000_records);
 		sqLiteXerial.load(Dataset.hebis_1000_records);
 
-		QueryScenario queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP;
+		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES;
 		sqLiteXerial.prepare(queryScenario);
 		System.out.println(sqLiteXerial.query(queryScenario));
 
