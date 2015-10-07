@@ -6,6 +6,8 @@ import freemarker.template.DefaultObjectWrapper;
  * A collection of magic strings.
  */
 public class Config extends DefaultObjectWrapper {
+	
+	public final static boolean THIS_IS_OSX = System.getProperty("os.name").contains("OS X");
 	public final static String WHERE_THE_FILES_AT = System.getProperty("os.name").contains("OS X") ? "/Users/th/Ph.D./hebisdumps/noHeader/" : "C:\\RDSTUDIES\\hebis_roh\\";
 	public final static String WHERE_THE_RESULTS_AT = "results/";
 

@@ -14,6 +14,7 @@ import java.util.zip.GZIPInputStream;
 
 import com.google.common.base.Joiner;
 
+import arq.cmd.TerminationException;
 import util.Codes;
 import util.Config;
 import util.DataObject;
@@ -69,6 +70,8 @@ public class Virtuoso implements Database {
 
 	@Override
 	public void setUp() throws Exception {
+		Helpers.terminalLaunch("virtuoso.sh", 12);
+		
 		connection = DriverManager.getConnection("jdbc:virtuoso://127.0.0.1/CHARSET=UTF-8", "dba", "dba");
 		stmt = connection.createStatement();
 		// Load RDF Loader - this might fail

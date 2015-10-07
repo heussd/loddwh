@@ -26,14 +26,14 @@ import util.DataObject;
 import util.Dataset;
 
 public abstract class Helpers {
-	
-	public static String DoubleToString3Digits(double value){
+
+	public static String DoubleToString3Digits(double value) {
 		return new DecimalFormat("0.00").format(value);
 	}
-	
-	public static boolean isNumeric(String str)
-	{
-	  return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
+
+	public static boolean isNumeric(String str) {
+		return str.matches("-?\\d+(\\.\\d+)?"); // match a number with optional
+												// '-' and decimal.
 	}
 
 	public static void compare(String name1, ArrayList<String> dump1, String name2, ArrayList<String> dump2) throws Exception {
@@ -134,15 +134,16 @@ public abstract class Helpers {
 			// PrintWriter printWriter = new PrintWriter(new File(target));
 
 			boolean headerWrittenYet = false;
-			int counter = 0;//, writes = 0;
+			int counter = 0;// , writes = 0;
 			String inline = "", record = "";
 			while ((inline = inputReader.readLine()) != null) {
 				++counter;
-//				if (inline.contains("<dcterms:identifier>")) {
-//					if (++counter % 100000 == 0) {
-//						System.out.println(counter + " RDF records so far, " + writes + " writes...");
-//					}
-//				}
+				// if (inline.contains("<dcterms:identifier>")) {
+				// if (++counter % 100000 == 0) {
+				// System.out.println(counter + " RDF records so far, " + writes
+				// + " writes...");
+				// }
+				// }
 				if (!headerWrittenYet && inline.contains("<rdf:Description")) {
 					record = "";
 					headerWrittenYet = true;
@@ -420,5 +421,17 @@ public abstract class Helpers {
 		inputStream.close();
 		printStream.close();
 
+	}
+
+	public static void terminalLaunch(String command, int waitSeconds) {
+		try {
+			command = Helpers.class.getResource("/shell/" + command).getFile();
+			System.out.println(command);
+			ProcessBuilder processBuilder = new ProcessBuilder("open", "-a", "Terminal.app", command);
+			Process process = processBuilder.start();
+			Thread.sleep(waitSeconds * 1000);
+		} catch (Exception e) {
+			throw new RuntimeException("Cannot launch " + command, e);
+		}
 	}
 }
