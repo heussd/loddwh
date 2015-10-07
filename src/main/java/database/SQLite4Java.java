@@ -23,7 +23,7 @@ import util.dumper.Helpers;
 
 public class SQLite4Java extends Helpers implements Database {
 
-	private static final int COMMIT_EVERY_N_RECORDS = 1000000;
+	private static final int COMMIT_EVERY_N_RECORDS = Config.COMMIT_EVERY_N_RECORDS;
 	private static final File DATABASE_FILE = new File("sqlite4java.db");
 	private SQLiteConnection connection;
 	private String createQuery;

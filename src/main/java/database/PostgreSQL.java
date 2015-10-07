@@ -146,9 +146,8 @@ public class PostgreSQL extends Helpers implements Database {
 				throw new RuntimeException("Cannot insert DataObject: " + dataObject, e);
 			}
 		} , counter -> {
-			if (counter % 1000000 == 0)
+			if (counter % Config.COMMIT_EVERY_N_RECORDS == 0)
 				try {
-					System.out.println(counter + " records so far...");
 					connection.commit();
 				} catch (Exception e) {
 				}

@@ -25,4 +25,5 @@ public class Config extends DefaultObjectWrapper {
 			: "C:\\RDSTUDIES\\db\\virtuoso-opensource";
 	public static final String VIRTUOSO_ACCESSIBLE_DIRECTORY_RELATIVE_TO_VIRTUOSO_T_EXE = System.getProperty("os.name").contains("OS X")
 			? "/usr/local/virtuoso-opensource/share/virtuoso/vad/" : "..";
+	public static final Integer COMMIT_EVERY_N_RECORDS = 5000000;
 }

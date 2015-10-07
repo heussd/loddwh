@@ -25,7 +25,7 @@ import util.dumper.Helpers;
 
 public class SQLiteXerial extends Helpers implements Database {
 
-	private static final Integer COMMIT_EVERY_N_RECORDS = 100000;
+	private static final Integer COMMIT_EVERY_N_RECORDS = Config.COMMIT_EVERY_N_RECORDS;
 	private Connection connection;
 	private String createQuery;
 	private String genericInsertStatement;
@@ -298,7 +298,7 @@ public class SQLiteXerial extends Helpers implements Database {
 		SQLiteXerial sqLiteXerial = new SQLiteXerial();
 		sqLiteXerial.setUp();
 		// sqLiteXerial.load(Dataset.hebis_10000_records);
-		sqLiteXerial.load(Dataset.hebis_1000_records);
+		sqLiteXerial.load(Dataset.hebis_100000_records);
 
 		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES;
 		sqLiteXerial.prepare(queryScenario);
