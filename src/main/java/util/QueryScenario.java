@@ -13,20 +13,26 @@ import util.QueryResult.Type;
 public enum QueryScenario {
 
 	/**
-	 * Retrieve the first {@link DataObject} of a list of all data, ordered by
-	 * dcterms_medium, isbd_p1008, dcterm_contributor, and dcterms_subject.
+	 * During prepare: Retrieve the first single RDF_ABOUT-value from a list of
+	 * all entities, ordered by dcterms_medium, isbd_p1008, dcterm_contributor,
+	 * dcterms_issued, dcterms_identifier.<br>
+	 * During query: Return the associated {@link DataObject}.
 	 */
 	ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY(QueryResult.Type.COMPLETE_ENTITIES),
 
 	/**
-	 * Retrieve the first 10 {@link DataObject}s of a list of all data, ordered
-	 * by dcterms_medium, isbd_p1008, dcterm_contributor, and dcterms_subject.
+	 * During prepare: Retrieve the first 10 RDF_ABOUT-values from a list of all
+	 * entities, ordered by dcterms_medium, isbd_p1008, dcterm_contributor,
+	 * dcterms_issued, dcterms_identifier.<br>
+	 * During query: Return the associated {@link DataObject}s.
 	 */
 	ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES(QueryResult.Type.COMPLETE_ENTITIES),
 
 	/**
-	 * Retrieve the first 100 {@link DataObject}s of a list of all data, ordered
-	 * by dcterms_medium, isbd_p1008, dcterm_contributor, and dcterms_subject.
+	 * During prepare: Retrieve the first 100 RDF_ABOUT-values from a list of
+	 * all entities, ordered by dcterms_medium, isbd_p1008, dcterm_contributor,
+	 * dcterms_issued, dcterms_identifier.<br>
+	 * During query: Return the associated {@link DataObject}s.
 	 */
 	ENTITY_RETRIEVAL_BY_ID_100_ENTITIES(QueryResult.Type.COMPLETE_ENTITIES),
 
@@ -146,8 +152,8 @@ public enum QueryScenario {
 	DELETE_LOW_SELECTIVITY_PAPER_MEDIUM(false),
 
 	/**
-	 * Remove records that have "0" as value for DCTERMS_ISSUED. This affects about
-	 * 2% of the records.
+	 * Remove records that have "0" as value for DCTERMS_ISSUED. This affects
+	 * about 2% of the records.
 	 */
 	DELETE_HIGH_SELECTIVIY_NON_ISSUED(false);
 
