@@ -77,51 +77,7 @@ public class QueryResult {
 		this.dataObjects.add(dataObject);
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((dataObjects == null) ? 0 : dataObjects.hashCode());
-		result = prime * result + ((scalarValue == null) ? 0 : scalarValue.hashCode());
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		QueryResult other = (QueryResult) obj;
-
-		if (type != other.type)
-			return false;
-
-		switch (type) {
-		case COMPLETE_ENTITIES:
-			if (dataObjects == null) {
-				if (other.dataObjects != null)
-					return false;
-			} else if (!dataObjects.equals(other.dataObjects))
-				return false;
-		case TWO_COLUMNS:
-		case GRAPH:
-			if (rows == null) {
-				if (other.rows != null)
-					return false;
-			} else if (!rows.equals(other.rows))
-				return false;
-
-			break;
-		default:
-			break;
-		}
-
-		return true;
-	}
+	
 
 	class Row {
 		public String col1;
@@ -216,5 +172,54 @@ public class QueryResult {
 		}
 
 		return out;
+	}
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((dataObjects == null) ? 0 : dataObjects.hashCode());
+		result = prime * result + ((rows == null) ? 0 : rows.hashCode());
+		result = prime * result + ((scalarValue == null) ? 0 : scalarValue.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		QueryResult other = (QueryResult) obj;
+
+		if (type != other.type)
+			return false;
+
+		switch (type) {
+		case COMPLETE_ENTITIES:
+			if (dataObjects == null) {
+				if (other.dataObjects != null)
+					return false;
+			} else if (!dataObjects.equals(other.dataObjects))
+				return false;
+		case TWO_COLUMNS:
+		case GRAPH:
+			if (rows == null) {
+				if (other.rows != null)
+					return false;
+			} else if (!rows.equals(other.rows))
+				return false;
+
+			break;
+		default:
+			break;
+		}
+
+		return true;
 	}
 }
