@@ -13,25 +13,25 @@ import util.QueryResult.Type;
 public enum QueryScenario {
 
 	/**
-	 * During prepare: Retrieve the first single RDF_ABOUT-value from a list of
-	 * all entities, ordered by dcterms_medium, isbd_p1008, dcterm_contributor,
-	 * dcterms_issued, dcterms_identifier.<br>
+	 * During prepare: Retrieve the first single dcterms_identifier-value from a
+	 * list of all entities, ordered by dcterms_medium, isbd_p1008,
+	 * dcterm_contributor, dcterms_issued, dcterms_identifier.<br>
 	 * During query: Return the associated {@link DataObject}.
 	 */
 	ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY(QueryResult.Type.COMPLETE_ENTITIES),
 
 	/**
-	 * During prepare: Retrieve the first 10 RDF_ABOUT-values from a list of all
-	 * entities, ordered by dcterms_medium, isbd_p1008, dcterm_contributor,
-	 * dcterms_issued, dcterms_identifier.<br>
+	 * During prepare: Retrieve the first 10 dcterms_identifier-values from a
+	 * list of all entities, ordered by dcterms_medium, isbd_p1008,
+	 * dcterm_contributor, dcterms_issued, dcterms_identifier.<br>
 	 * During query: Return the associated {@link DataObject}s.
 	 */
 	ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES(QueryResult.Type.COMPLETE_ENTITIES),
 
 	/**
-	 * During prepare: Retrieve the first 100 RDF_ABOUT-values from a list of
-	 * all entities, ordered by dcterms_medium, isbd_p1008, dcterm_contributor,
-	 * dcterms_issued, dcterms_identifier.<br>
+	 * During prepare: Retrieve the first 100 dcterms_identifier-values from a
+	 * list of all entities, ordered by dcterms_medium, isbd_p1008,
+	 * dcterm_contributor, dcterms_issued, dcterms_identifier.<br>
 	 * During query: Return the associated {@link DataObject}s.
 	 */
 	ENTITY_RETRIEVAL_BY_ID_100_ENTITIES(QueryResult.Type.COMPLETE_ENTITIES),
