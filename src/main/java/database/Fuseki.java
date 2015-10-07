@@ -8,7 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hp.hpl.jena.query.QueryExecution;
+import com.google.common.base.Joiner;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
@@ -40,7 +40,7 @@ public class Fuseki extends Helpers implements Database {
 		// database.load(Dataset.hebis_21257740_26887667_rdf_gz);
 		database.load(Dataset.hebis_10000_records);
 
-		QueryScenario queryScenario = QueryScenario.AGGREGATE_ISSUES_PER_DECADE_ALL;
+		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES;
 
 		database.prepare(queryScenario);
 		QueryResult queryResult = database.query(queryScenario);
@@ -106,9 +106,38 @@ public class Fuseki extends Helpers implements Database {
 
 	@Override
 	public void prepare(QueryScenario queryScenario) throws Exception {
-		if (queryScenario.isReadOnly)
-			this.queryExecutionString = templates.resolve(queryScenario);
-		else {
+		if (queryScenario.isReadOnly) {
+
+			// Prepare IDs for ENTITY_RETRIEVAL scenarios
+			if (queryScenario.equals(QueryScenario.ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY) || queryScenario.equals(QueryScenario.ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES)
+					|| queryScenario.equals(QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES)) {
+				String query = templates.resolve("ENTITY_RETRIEVAL_prepare");
+				switch (queryScenario) {
+				case ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY:
+					query += " limit 1";
+					break;
+				case ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES:
+					query += " limit 10";
+					break;
+				case ENTITY_RETRIEVAL_BY_ID_100_ENTITIES:
+					query += " limit 100";
+					break;
+				default:
+				}
+
+				ResultSet resultSet = QueryExecutionFactory.sparqlService(SPARQL_SERVICE_URL, query).execSelect();
+				ArrayList<String> ids = new ArrayList<>();
+				while (resultSet.hasNext()) {
+					QuerySolution querySolution = resultSet.nextSolution();
+					ids.add("\"" + querySolution.getLiteral(resultSet.getResultVars().get(0)).getString() + "\"");
+				}
+
+				this.queryExecutionString = templates.resolve("ENTITY_RETRIEVAL").replaceAll("##ids##", Joiner.on(",").join(ids));
+			} else {
+				this.queryExecutionString = templates.resolve(queryScenario);
+			}
+
+		} else {
 			if (updateProcessors == null) {
 				this.updateProcessors = new ArrayList<UpdateProcessor>();
 			}

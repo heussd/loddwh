@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
+import com.google.common.base.Joiner;
+
 import util.Codes;
 import util.Config;
 import util.DataObject;
@@ -31,7 +33,7 @@ public class Virtuoso implements Database {
 
 		// testVirtuoso.buildRdfLoaderCommand(Dataset.hebis_1000_records);
 
-		QueryScenario queryScenario = QueryScenario.AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL;
+		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES;
 		// QueryScenario queryScenario =
 		// QueryScenario.AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10;
 		testVirtuoso.prepare(queryScenario);
@@ -233,6 +235,30 @@ public class Virtuoso implements Database {
 		scenarioStatements.clear();
 
 		switch (queryScenario) {
+		case ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY:
+		case ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES:
+		case ENTITY_RETRIEVAL_BY_ID_100_ENTITIES:
+			String query = templates.resolve("ENTITY_RETRIEVAL_prepare");
+			switch (queryScenario) {
+			case ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY:
+				query += " limit 1";
+				break;
+			case ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES:
+				query += " limit 10";
+				break;
+			case ENTITY_RETRIEVAL_BY_ID_100_ENTITIES:
+				query += " limit 100";
+				break;
+			default:
+			}
+
+			ResultSet resultSet = connection.createStatement().executeQuery("sparql " + query);
+			ArrayList<String> ids = new ArrayList<>();
+			while (resultSet.next()) {
+				ids.add("\"" + resultSet.getString(1) + "\"");
+			}
+			scenarioStatements.add(connection.prepareStatement("sparql " + templates.resolve("ENTITY_RETRIEVAL").replaceAll("##ids##", Joiner.on(",").join(ids))));
+			break;
 		case SCHEMA_CHANGE_MIGRATE_RDF_TYPE:
 			for (int part = 1; part <= 4; part++)
 				scenarioStatements.add(connection.prepareStatement("sparql " + String.format(templates.resolve(queryScenario + "_part" + part), graphId)));

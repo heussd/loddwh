@@ -26,7 +26,6 @@ where
 	optional { ?s <http://purl.org/ontology/bibo/edition> ?edition . }
 	optional { ?s <http://purl.org/ontology/bibo/oclcnum> ?oclcnum . }
 	optional { ?s <http://purl.org/dc/terms/format> ?format . }
-	optional { ?s <http://purl.org/dc/terms/identifier> ?identifier . }
 	optional { ?s <http://purl.org/dc/terms/issued> ?issued . }
 	optional { ?s <http://purl.org/dc/terms/medium> ?medium . }
 	optional { ?s <http://purl.org/dc/terms/publisher> ?publisher . }
@@ -42,6 +41,7 @@ where
 	optional { ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?type . }
 	optional { ?s <http://www.w3.org/2002/07/owl#sameAs> ?sameAs . }
 	optional { ?s <http://www.w3.org/2007/05/powder-s#describedby> ?describedby . }
+	
+	?s <http://purl.org/dc/terms/identifier> ?identifier .
+	FILTER( ?identifier IN ( ##ids## ))
 }
-order by ?medium ?P1008 ?contributor ?subject ?s
-limit 100
