@@ -217,7 +217,7 @@ public class SQLiteXerial extends Helpers implements Database {
 			while (resultSet.next()) {
 				ids.add("'" + resultSet.getString(1) + "'");
 			}
-			
+
 			// I have no idea why this does not work...
 			// preparedStatement.setString(1, Joiner.on(",").join(ids));
 			preparedStatement = connection.prepareStatement("select * from justatable where dcterms_identifier in (" + Joiner.on(",").join(ids) + ")");
@@ -298,15 +298,19 @@ public class SQLiteXerial extends Helpers implements Database {
 		SQLiteXerial sqLiteXerial = new SQLiteXerial();
 		sqLiteXerial.setUp();
 		// sqLiteXerial.load(Dataset.hebis_10000_records);
-		sqLiteXerial.load(Dataset.hebis_100000_records);
+		sqLiteXerial.load(Dataset.hebis_10000_records);
 
-		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES;
-		sqLiteXerial.prepare(queryScenario);
-		System.out.println(sqLiteXerial.query(queryScenario));
+		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES;
 
-		queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS;
 		sqLiteXerial.prepare(queryScenario);
-		System.out.println(sqLiteXerial.query(queryScenario));
+		QueryResult qR1 = sqLiteXerial.query(queryScenario);
+
+		queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES;
+		sqLiteXerial.prepare(queryScenario);
+		QueryResult qR2 = sqLiteXerial.query(queryScenario);
+
+		System.out.println("R1: " + qR1.hashCode());
+		System.out.println("R2: " + qR2.hashCode());
 	}
 
 	@Override

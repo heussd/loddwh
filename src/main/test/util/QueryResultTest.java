@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import database.SQLite4Java;
 import util.QueryResult.Type;
 
 public class QueryResultTest {
@@ -42,14 +43,70 @@ public class QueryResultTest {
 
 		qR1.push(dataObject);
 		assertFalse(qR1.equals(qR2));
+		System.out.println("R1: " + qR1.hashCode());
+		System.out.println("R2: " + qR2.hashCode());
+		assertFalse(qR1.hashCode() == qR2.hashCode());
 
 		qR2.push(dataObject);
 		assertTrue(qR1.equals(qR2));
+		assertTrue(qR1.hashCode() == qR2.hashCode());
 
 		dataObject.set(Codes.BIBO_OCLCNUM, "something else");
 		qR1.push(dataObject);
 		assertFalse(qR1.equals(qR2));
+	}
 
+	@Test
+	public void testTrickyComparison() {
+		QueryResult qR1 = new QueryResult(Type.COMPLETE_ENTITIES);
+		QueryResult qR2 = new QueryResult(Type.COMPLETE_ENTITIES);
+
+		for (int i = 1; i <= 10; i++) {
+			DataObject dataObject = new DataObject();
+			dataObject.set(Codes.DCTERMS_IDENTIFIER, i + "");
+
+			qR1.push(dataObject);
+
+		}
+
+		assertFalse(qR1.equals(qR2));
+		assertFalse(qR1.hashCode() == qR2.hashCode());
+
+		for (int i = 1; i <= 10; i++) {
+			DataObject dataObject = new DataObject();
+			dataObject.set(Codes.DCTERMS_IDENTIFIER, i + 10 + "");
+
+			qR2.push(dataObject);
+		}
+
+		assertFalse(qR1.equals(qR2));
+		assertFalse(qR1.hashCode() == qR2.hashCode());
+
+		System.out.println(qR1);
+		System.out.println(qR2);
+	}
+
+	@Test
+	public void testInRealAggregation() throws Exception {
+		SQLite4Java sqLite4Java = new SQLite4Java();
+		sqLite4Java.setUp();
+		sqLite4Java.load(Dataset.hebis_1000_records);
+
+		QueryScenario queryScenario = QueryScenario.AGGREGATE_ISSUES_PER_DECADE_TOP10;
+		sqLite4Java.prepare(queryScenario);
+		QueryResult qR1 = sqLite4Java.query(queryScenario);
+
+		queryScenario = QueryScenario.AGGREGATE_ISSUES_PER_DECADE_TOP100;
+		sqLite4Java.prepare(queryScenario);
+		QueryResult qR2 = sqLite4Java.query(queryScenario);
+
+		System.out.println(qR1);
+		System.out.println(qR2);
+		
+		assertFalse(qR1.equals(qR2));
+		assertFalse(qR1.hashCode() == qR2.hashCode());
+
+		
 	}
 
 	@Test
