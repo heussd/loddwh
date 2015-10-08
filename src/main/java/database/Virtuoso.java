@@ -70,8 +70,6 @@ public class Virtuoso implements Database {
 
 	@Override
 	public void setUp() throws Exception {
-		Helpers.terminalLaunch("virtuoso.sh", 12);
-		
 		connection = DriverManager.getConnection("jdbc:virtuoso://127.0.0.1/CHARSET=UTF-8", "dba", "dba");
 		stmt = connection.createStatement();
 		// Load RDF Loader - this might fail
@@ -358,6 +356,17 @@ public class Virtuoso implements Database {
 		stmt = connection.createStatement();
 		// Drop auf evtl. alten Identifier
 		stmt.execute(String.format("SPARQL CLEAR GRAPH <%s>", graphId));
+	}
+
+	@Override
+	public void start() throws Exception {
+		Helpers.terminalLaunch("virtuoso.sh", 12);
+	}
+
+	@Override
+	public void stop() throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

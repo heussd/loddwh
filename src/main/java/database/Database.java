@@ -34,6 +34,18 @@ public interface Database {
 	public String getVersion();
 
 	/**
+	 * Starts the database, if applicable, e.g. via shell script. Implementation
+	 * is not mandatory for all databases. Times are not measured.
+	 */
+	public void start() throws Exception;
+
+	/**
+	 * Stops the database, if applicable, e.g. via shell script. Implementation
+	 * is not mandatory for all databases. Times are not measured.
+	 */
+	public void stop() throws Exception;
+
+	/**
 	 * Deletes possible old structures in the database. Query times are not
 	 * measured.
 	 */

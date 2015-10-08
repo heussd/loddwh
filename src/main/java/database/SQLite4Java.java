@@ -338,4 +338,16 @@ public class SQLite4Java extends Helpers implements Database {
 		FileUtils.deleteQuietly(DATABASE_FILE);
 	}
 
+	@Override
+	public void start() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void stop() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

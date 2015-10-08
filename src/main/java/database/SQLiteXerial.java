@@ -321,4 +321,16 @@ public class SQLiteXerial extends Helpers implements Database {
 		// Config.TABLE).executeUpdate();
 	}
 
+	@Override
+	public void start() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void stop() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

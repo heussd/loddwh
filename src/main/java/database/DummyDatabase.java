@@ -49,5 +49,17 @@ public class DummyDatabase implements Database {
 		
 	}
 
+	@Override
+	public void start() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void stop() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 }

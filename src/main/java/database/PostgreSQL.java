@@ -43,8 +43,6 @@ public class PostgreSQL extends Helpers implements Database {
 
 		PostgreSQL postgreSQL = new PostgreSQL();
 
-		System.out.println(postgreSQL.getName() + " " + postgreSQL.getVersion());
-
 		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES;
 
 		postgreSQL.setUp();
@@ -84,13 +82,13 @@ public class PostgreSQL extends Helpers implements Database {
 	 */
 	@Override
 	public void setUp() throws Exception {
-		try {
-			reopenConnection(false);
-			dropConnections();
-		} catch (Exception e) {
-			// Will drop its own connection - ignore
-		}
-		clean();
+		// try {
+		// reopenConnection(false);
+		// dropConnections();
+		// } catch (Exception e) {
+		// // Will drop its own connection - ignore
+		// }
+		// clean();
 		Connection maintenanceConnection = DriverManager.getConnection("jdbc:postgresql://" + Config.HOST_POSTGRES + "/postgres", props);
 		// connection.setAutoCommit(false);
 
@@ -204,9 +202,13 @@ public class PostgreSQL extends Helpers implements Database {
 			ResultSet resultSet = connection.createStatement().executeQuery(query);
 			ArrayList<String> ids = new ArrayList<>();
 			while (resultSet.next()) {
-				ids.add(resultSet.getString(1));
+				ids.add("'" + resultSet.getString(1) + "'");
 			}
-			preparedStatement.setString(1, Joiner.on(",").join(ids));
+			// preparedStatement.setString(1, Joiner.on(",").join(ids));
+
+			preparedStatement = connection.prepareStatement("select * from justatable where dcterms_identifier in (" + Joiner.on(",").join(ids) + ")");
+
+			// System.out.println(preparedStatement);
 		}
 
 		this.scenarioStatements.add(preparedStatement);
@@ -296,12 +298,12 @@ public class PostgreSQL extends Helpers implements Database {
 
 	@Override
 	public void clean() throws Exception {
-		try {
-			reopenConnection(false);
-			dropConnections();
-		} catch (Exception e) {
-			// Will drop its own connection - ignore
-		}
+		// try {
+		// reopenConnection(false);
+		// dropConnections();
+		// } catch (Exception e) {
+		// // Will drop its own connection - ignore
+		// }
 		Connection maintenanceConnection = DriverManager.getConnection("jdbc:postgresql://" + Config.HOST_POSTGRES + "/postgres", props);
 		// connection.setAutoCommit(false);
 
@@ -317,6 +319,17 @@ public class PostgreSQL extends Helpers implements Database {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void start() throws Exception {
+		terminalLaunch("postgresql.sh", 5);
+	}
+
+	@Override
+	public void stop() throws Exception {
+		// TODO Auto-generated method stub
+
 	}
 
 }

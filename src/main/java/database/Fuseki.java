@@ -71,7 +71,7 @@ public class Fuseki extends Helpers implements Database {
 
 	@Override
 	public void setUp() throws Exception {
-		Helpers.terminalLaunch("fuseki.sh", 7);
+
 	}
 
 	@Override
@@ -213,6 +213,17 @@ public class Fuseki extends Helpers implements Database {
 	public void clean() throws Exception {
 		UpdateRequest request = UpdateFactory.create("drop all");
 		UpdateExecutionFactory.createRemote(request, UPDATE_SERVICE_URL).execute();
+	}
+
+	@Override
+	public void start() throws Exception {
+		Helpers.terminalLaunch("fuseki.sh", 7);
+	}
+
+	@Override
+	public void stop() throws Exception {
+		// TODO Auto-generated method stub
+
 	}
 
 }
