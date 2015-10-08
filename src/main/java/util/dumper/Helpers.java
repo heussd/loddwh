@@ -22,6 +22,7 @@ import org.marc4j.MarcWriter;
 import org.marc4j.marc.Record;
 
 import redis.clients.jedis.Jedis;
+import util.Config;
 import util.DataObject;
 import util.Dataset;
 
@@ -424,6 +425,9 @@ public abstract class Helpers {
 	}
 
 	public static void terminalLaunch(String command, int waitSeconds) {
+		if(!Config.THIS_IS_OSX)
+			return;
+		
 		try {
 			command = Helpers.class.getResource("/shell/" + command).getFile();
 			System.out.println(command);
