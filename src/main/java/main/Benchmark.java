@@ -72,12 +72,12 @@ public class Benchmark {
 					
 					for (QueryScenario queryScenario : QueryScenario.values()) {
 						try {
-							long prepareStart, prepareEnd, clearStart, clearEnd;
+							long prepareStart, prepareEnd;
 	
 							prepareStart = System.nanoTime();
 							db.prepare(queryScenario);
 							prepareEnd = System.nanoTime();
-	
+							
 							int executions = queryScenario.isReadOnly ? Config.QUERYSCENARIO_EXECUTIONS : 1;
 							QueryResult result = null;
 							for (int execution = 1; execution <= executions; execution++) {
@@ -88,15 +88,9 @@ public class Benchmark {
 								setResultInResultset(execution, queryScenario, nanoExecutionTimeInMilliseconds(queryStart, queryEnd), benchmarkObject.getQueryQueryScenarioResults());
 							}
 							
-							clearStart = System.nanoTime();
-							db.clear(queryScenario);
-							clearEnd = System.nanoTime();
-							
-							
 							benchmarkObject.getQueryResults().put(queryScenario, result);
 	
 							setResultInResultset(1, queryScenario, nanoExecutionTimeInMilliseconds(prepareStart, prepareEnd), benchmarkObject.getPrepareQueryScenarioResults());
-							setResultInResultset(1, queryScenario, nanoExecutionTimeInMilliseconds(clearStart, clearEnd), benchmarkObject.getClearQueryScenarioResults());
 							
 						} catch (Exception e) {
 							// Abort only current QueryScenario

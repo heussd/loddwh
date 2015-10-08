@@ -14,7 +14,7 @@ public class BenchmarkObject {
 	
 	private Database database;
 	
-	private Hashtable<Integer, Hashtable<QueryScenario, Double>> prepareQueryScenarioResults, queryQueryScenarioResults, clearQueryScenarioResults;
+	private Hashtable<Integer, Hashtable<QueryScenario, Double>> prepareQueryScenarioResults, queryQueryScenarioResults;
 	private double setUpTime, loadTime;
 	
 	private Hashtable<QueryScenario, QueryResult> queryResults;
@@ -26,7 +26,6 @@ public class BenchmarkObject {
 		
 		prepareQueryScenarioResults = new Hashtable<Integer, Hashtable<QueryScenario, Double>>();
 		queryQueryScenarioResults = new Hashtable<Integer, Hashtable<QueryScenario, Double>>();
-		clearQueryScenarioResults = new Hashtable<Integer, Hashtable<QueryScenario, Double>>();
 		
 		queryResults = new Hashtable<QueryScenario, QueryResult>();
 	}
@@ -67,17 +66,12 @@ public class BenchmarkObject {
 		return queryQueryScenarioResults;
 	}
 
-	public Hashtable<Integer, Hashtable<QueryScenario, Double>> getClearQueryScenarioResults() {
-		return clearQueryScenarioResults;
-	}
-
 	@Override
 	public String toString() {
 		return "BenchmarkObject [database=" + database
 				+ ", prepareQueryScenarioResults="
 				+ prepareQueryScenarioResults + ", queryQueryScenarioResults="
-				+ queryQueryScenarioResults + ", clearQueryScenarioResults="
-				+ clearQueryScenarioResults + ", setUpTime=" + setUpTime
+				+ queryQueryScenarioResults + ", setUpTime=" + setUpTime
 				+ ", loadTime=" + loadTime + ", queryResults=" + "Way to much for print"
 				+ "]";
 	}
@@ -85,7 +79,6 @@ public class BenchmarkObject {
 	public void InvalidateQueryScenarioResults(QueryScenario queryScenario){
 		InvalidateQueryScenarioResultsForAllExecutions(queryScenario, prepareQueryScenarioResults);
 		InvalidateQueryScenarioResultsForAllExecutions(queryScenario, queryQueryScenarioResults);
-		InvalidateQueryScenarioResultsForAllExecutions(queryScenario, clearQueryScenarioResults);
 		queryResults.remove(queryScenario);
 	}
 	private void InvalidateQueryScenarioResultsForAllExecutions(QueryScenario queryScenario, Hashtable<Integer, Hashtable<QueryScenario, Double>> executionsResults){
