@@ -216,12 +216,12 @@ public class Fuseki extends Helpers implements Database {
 	}
 
 	@Override
-	public void start() throws Exception {
+	public void start() {
 		Helpers.terminalLaunch("fuseki.sh", 7);
 	}
 
 	@Override
-	public void stop() throws Exception {
+	public void stop() {
 		// TODO Auto-generated method stub
 
 	}

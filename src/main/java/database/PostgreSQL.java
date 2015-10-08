@@ -322,12 +322,12 @@ public class PostgreSQL extends Helpers implements Database {
 	}
 
 	@Override
-	public void start() throws Exception {
+	public void start() {
 		terminalLaunch("postgresql.sh", 5);
 	}
 
 	@Override
-	public void stop() throws Exception {
+	public void stop() {
 		// TODO Auto-generated method stub
 
 	}

@@ -322,15 +322,15 @@ public class SQLiteXerial extends Helpers implements Database {
 	}
 
 	@Override
-	public void start() throws Exception {
+	public void start() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void stop() throws Exception {
+	public void stop() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

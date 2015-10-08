@@ -37,13 +37,13 @@ public interface Database {
 	 * Starts the database, if applicable, e.g. via shell script. Implementation
 	 * is not mandatory for all databases. Times are not measured.
 	 */
-	public void start() throws Exception;
+	public void start();
 
 	/**
 	 * Stops the database, if applicable, e.g. via shell script. Implementation
 	 * is not mandatory for all databases. Times are not measured.
 	 */
-	public void stop() throws Exception;
+	public void stop();
 
 	/**
 	 * Deletes possible old structures in the database. Query times are not

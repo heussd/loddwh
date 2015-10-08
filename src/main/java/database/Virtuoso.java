@@ -359,12 +359,12 @@ public class Virtuoso implements Database {
 	}
 
 	@Override
-	public void start() throws Exception {
+	public void start() {
 		Helpers.terminalLaunch("virtuoso.sh", 12);
 	}
 
 	@Override
-	public void stop() throws Exception {
+	public void stop() {
 		// TODO Auto-generated method stub
 		
 	}
