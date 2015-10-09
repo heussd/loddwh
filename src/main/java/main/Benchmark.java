@@ -60,6 +60,9 @@ public class Benchmark {
 				long setUpStart, setUpEnd, loadStart, loadEnd;
 				
 				try {
+					db.start();
+					db.clean();
+					
 					setUpStart = System.nanoTime();
 					db.setUp();
 					setUpEnd = System.nanoTime();
@@ -103,9 +106,11 @@ public class Benchmark {
 						}
 					}
 					
+					db.stop();
+					
 					benchmarkObject.setSetUpTime(nanoExecutionTimeInMilliseconds(setUpStart, setUpEnd));
 					benchmarkObject.setLoadTime(nanoExecutionTimeInMilliseconds(loadStart, loadEnd));
-	
+					
 				} catch (Exception e) {
 					// Abort only current BenchmarkObject
 					benchmarkObject.InvalidateBenchmarkResults();
