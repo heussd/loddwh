@@ -353,6 +353,7 @@ public class Virtuoso implements Database {
 
 	@Override
 	public void clean() throws Exception {
+		connection = DriverManager.getConnection("jdbc:virtuoso://127.0.0.1/CHARSET=UTF-8", "dba", "dba");
 		stmt = connection.createStatement();
 		// Drop auf evtl. alten Identifier
 		stmt.execute(String.format("SPARQL CLEAR GRAPH <%s>", graphId));
@@ -360,7 +361,7 @@ public class Virtuoso implements Database {
 
 	@Override
 	public void start() {
-		Helpers.terminalLaunch("virtuoso.sh", 12);
+		Helpers.terminalLaunchScript("virtuoso.sh", 12);
 	}
 
 	@Override

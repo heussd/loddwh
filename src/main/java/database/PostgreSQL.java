@@ -42,6 +42,8 @@ public class PostgreSQL extends Helpers implements Database {
 	public static void main(String[] args) throws Exception {
 
 		PostgreSQL postgreSQL = new PostgreSQL();
+		postgreSQL.start();
+		postgreSQL.stop();
 
 		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES;
 
@@ -323,13 +325,14 @@ public class PostgreSQL extends Helpers implements Database {
 
 	@Override
 	public void start() {
-		terminalLaunch("postgresql.sh", 5);
+		terminalLaunchScript("postgresql.sh", 5);
 	}
 
 	@Override
 	public void stop() {
-		// TODO Auto-generated method stub
-
+		terminalLaunchApp(new String[] { "/usr/local/bin/pg_ctl", "-D", "/usr/local/var/loddwhbench", "stop", "-m", "immediate" });
 	}
+
+	
 
 }

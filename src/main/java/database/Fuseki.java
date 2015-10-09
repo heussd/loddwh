@@ -217,7 +217,7 @@ public class Fuseki extends Helpers implements Database {
 
 	@Override
 	public void start() {
-		Helpers.terminalLaunch("fuseki.sh", 7);
+		Helpers.terminalLaunchScript("fuseki.sh", 7);
 	}
 
 	@Override

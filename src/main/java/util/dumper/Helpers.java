@@ -424,10 +424,10 @@ public abstract class Helpers {
 
 	}
 
-	public static void terminalLaunch(String command, int waitSeconds) {
-		if(!Config.THIS_IS_OSX)
+	public static void terminalLaunchScript(String command, int waitSeconds) {
+		if (!Config.THIS_IS_OSX)
 			return;
-		
+
 		try {
 			command = Helpers.class.getResource("/shell/" + command).getFile();
 			System.out.println(command);
@@ -436,6 +436,19 @@ public abstract class Helpers {
 			Thread.sleep(waitSeconds * 1000);
 		} catch (Exception e) {
 			throw new RuntimeException("Cannot launch " + command, e);
+		}
+	}
+
+	public static void terminalLaunchApp(String... commands) {
+		if(!Config.THIS_IS_OSX)
+			return;
+		
+		try {
+			ProcessBuilder processBuilder = new ProcessBuilder(commands);
+			Process process = processBuilder.start();
+			process.waitFor();
+		} catch (Exception e) {
+			throw new RuntimeException("Cannot launch " + commands, e);
 		}
 	}
 }

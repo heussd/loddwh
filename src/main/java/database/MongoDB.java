@@ -55,7 +55,7 @@ public class MongoDB implements Database {
 	@Override
 	public void setUp() throws Exception {
 		if (Config.THIS_IS_OSX)
-			Helpers.terminalLaunch("mongodb.sh", 4);
+			Helpers.terminalLaunchScript("mongodb.sh", 4);
 
 		mongoClient = new MongoClient("localhost", 27017);
 
