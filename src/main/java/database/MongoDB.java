@@ -34,13 +34,10 @@ public class MongoDB implements Database {
 
 		mongoDb.query(QueryScenario.SCHEMA_CHANGE_INTRODUCE_STRING_OP);
 	}
-
+	
 	MongoClient mongoClient;
 	MongoDatabase database;
 	MongoCollection<Document> collection;
-
-	public MongoDB() {
-	}
 
 	@Override
 	public String getName() {
@@ -51,24 +48,17 @@ public class MongoDB implements Database {
 	public String getVersion() {
 		return "3.0.6 2008R2Plus SSL 64bit";
 	}
-
+	
+	@Override
+	public void clean() throws Exception {
+		mongoClient = new MongoClient("localhost", 27017);
+		mongoClient.dropDatabase(Config.DATABASE);
+	}
+	
 	@Override
 	public void setUp() throws Exception {
-		if (Config.THIS_IS_OSX)
-			Helpers.terminalLaunchScript("mongodb.sh", 4);
-
-		mongoClient = new MongoClient("localhost", 27017);
-
-		mongoClient.dropDatabase(Config.DATABASE);
 		database = mongoClient.getDatabase(Config.DATABASE);
-
 		collection = database.getCollection(Config.DATABASE);
-
-		// collection.bulkWrite(arg0);
-		// http://docs.mongodb.org/manual/tutorial/insert-documents/
-		// collection.insertMany(arg0);
-		// DBObject doc = (DBObject)JSON.parse("{'neutest':12321}");
-		// index sinnvoll auf feld id? hat auch text indexe
 	}
 
 	@Override
@@ -104,6 +94,9 @@ public class MongoDB implements Database {
 
 	@Override
 	public void prepare(QueryScenario queryScenario) throws Exception {
+		
+		// TODO: sollte ich die Queries hier drin bauen?
+		
 	}
 
 	private DataObject BuildDataObjectFromDocument(Document document) {
@@ -144,8 +137,6 @@ public class MongoDB implements Database {
 				results.forEach(new Block<Document>() {
 					@Override
 					public void apply(Document arg0) {
-						// System.out.println(arg0.getString("_id") + " ==> " +
-						// arg0.getInteger("count").toString());
 						queryResult.push(arg0.getString("_id"), arg0.getInteger("count").toString());
 					}
 				});
@@ -157,8 +148,6 @@ public class MongoDB implements Database {
 				results2.forEach(new Block<Document>() {
 					@Override
 					public void apply(Document arg0) {
-						// System.out.println(arg0.getString("_id") + " ==> " +
-						// arg0.getInteger("count").toString());
 						queryResult.push(arg0.getString("_id"), arg0.getInteger("count").toString());
 					}
 				});
@@ -170,8 +159,6 @@ public class MongoDB implements Database {
 				results3.forEach(new Block<Document>() {
 					@Override
 					public void apply(Document arg0) {
-						// System.out.println(arg0.getString("_id") + " ==> " +
-						// arg0.getInteger("count").toString());
 						queryResult.push(arg0.getString("_id"), arg0.getInteger("count").toString());
 					}
 				});
@@ -184,8 +171,6 @@ public class MongoDB implements Database {
 				ispdec1.forEach(new Block<Document>() {
 					@Override
 					public void apply(Document arg0) {
-						// System.out.println(arg0.getString("_id") + " ==> " +
-						// arg0.getInteger("count").toString());
 						queryResult.push(arg0.getString("_id"), arg0.getInteger("count").toString());
 					}
 				});
@@ -197,8 +182,6 @@ public class MongoDB implements Database {
 				ispdec2.forEach(new Block<Document>() {
 					@Override
 					public void apply(Document arg0) {
-						// System.out.println(arg0.getString("_id") + " ==> " +
-						// arg0.getInteger("count").toString());
 						queryResult.push(arg0.getString("_id"), arg0.getInteger("count").toString());
 					}
 				});
@@ -210,8 +193,6 @@ public class MongoDB implements Database {
 				ispdec3.forEach(new Block<Document>() {
 					@Override
 					public void apply(Document arg0) {
-						// System.out.println(arg0.getString("_id") + " ==> " +
-						// arg0.getInteger("count").toString());
 						queryResult.push(arg0.getString("_id"), arg0.getInteger("count").toString());
 					}
 				});
@@ -332,11 +313,6 @@ public class MongoDB implements Database {
 				return queryResult;
 
 			case SCHEMA_CHANGE_INTRODUCE_STRING_OP:
-				// collection.updateMany(new Document(), new Document("$set",
-				// new Document("idSuffix", new Document("$substr",
-				// asList("$RDF_ABOUT", 29, -1)))));
-				// collection.updateMany(new Document(), new Document("$set",
-				// new Document("idSuffix", "$RDF_ABOUT")));
 				FindIterable<Document> stringOps = collection.find();
 				stringOps.forEach(new Block<Document>() {
 					@Override
@@ -348,17 +324,12 @@ public class MongoDB implements Database {
 				return queryResult;
 
 			case SCHEMA_CHANGE_MIGRATE_RDF_TYPE:
-				// 1. Add fields to every document, false
-				// 2. Update fields for every RDF_TYPE, set true if exists
-				// 3. Remove RDF_TYPE
 				collection.updateMany(new Document(), new Document("$set", new Document("manifestation", false).append("bibresource", false).append("book", false)));
 				collection.updateMany(new Document("RDF_TYPE", "http://purl.org/vocab/frbr/core#Manifestation"), new Document("$set", new Document("manifestation", true)));
 				collection.updateMany(new Document("RDF_TYPE", "http://purl.org/dc/terms/BibliographicResource"), new Document("$set", new Document("bibresource", true)));
 				collection.updateMany(new Document("RDF_TYPE", "http://purl.org/ontology/bibo/Book"), new Document("$set", new Document("book", true)));
-				collection.updateMany(new Document(), new Document("$unset", new Document("RDF_TYPE", "")));
 				return queryResult;
 
-			// TODO Mhh? Doppelte Entfernung? Selbes Problem
 			case SCHEMA_CHANGE_REMOVE_RDF_TYPE:
 				collection.updateMany(new Document(), new Document("$unset", new Document("RDF_TYPE", "")));
 				return queryResult;
@@ -371,20 +342,12 @@ public class MongoDB implements Database {
 				collection.updateMany(new Document("DCTERMS_ISSUED", new Document("$exists", false)), new Document("$set", new Document("DCTERMS_ISSUED", 0)));
 				return queryResult;
 
-			// TODO L�schen etwas ung�nstig nachdem alle mit paper auf "recycled
-			// trees" gesetzt wurden?
-			// Also f�r die Aussage er h�tte so viel so schnell gel�scht. Diese
-			// Aussage stimmt dann einfach bei allen Datenbanken hier nicht,
-			// wenn vorher das Update l�uft.
-			// Umgekehrt hat halt sonst das Update eigentlich keine
-			// Aussagekraft.
 			case DELETE_LOW_SELECTIVITY_PAPER_MEDIUM:
-				collection.deleteMany(new Document("DCTERMS_MEDIUM", "paper"));
+				collection.deleteMany(new Document("DCTERMS_MEDIUM", "recycled trees"));
 				return queryResult;
 
-			// TODO Selbes Problem
 			case DELETE_HIGH_SELECTIVIY_NON_ISSUED:
-				collection.deleteMany(new Document("DCTERMS_ISSUED", new Document("$exists", false)));
+				collection.deleteMany(new Document("DCTERMS_ISSUED", 0));
 				return queryResult;
 			}
 			break;
@@ -399,21 +362,12 @@ public class MongoDB implements Database {
 	}
 
 	@Override
-	public void clean() throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void start() {
-		// TODO Auto-generated method stub
-		
+		if (Config.THIS_IS_OSX)
+			Helpers.terminalLaunchScript("mongodb.sh", 4);
 	}
 
 	@Override
 	public void stop() {
-		// TODO Auto-generated method stub
-		
 	}
-
 }
