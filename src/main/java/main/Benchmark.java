@@ -36,7 +36,7 @@ public class Benchmark {
 		for (TestSeries testSerie : testSeries) {
 			List<BenchmarkObject> benchmarkObjects = new ArrayList<BenchmarkObject>();
 			
-			// SQLite (Xerial)
+			// SQLite (4Java)
 			benchmarkObjects.add(new BenchmarkObject(new SQLite4Java()));
 	
 			// SQLite (Xerial)

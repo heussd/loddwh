@@ -29,10 +29,14 @@ public class MongoDB implements Database {
 
 	public static void main(String[] args) throws Throwable {
 		MongoDB mongoDb = new MongoDB();
+		mongoDb.start();
+		mongoDb.clean();
 		mongoDb.setUp();
 		mongoDb.load(Dataset.hebis_1000_records);
 
-		mongoDb.query(QueryScenario.SCHEMA_CHANGE_INTRODUCE_STRING_OP);
+		mongoDb.query(QueryScenario.CONDITIONAL_TABLE_SCAN_ALL_STUDIES);
+		
+		mongoDb.stop();
 	}
 	
 	MongoClient mongoClient;
@@ -108,15 +112,16 @@ public class MongoDB implements Database {
 				continue;
 			}
 
-			// TODO wirft unerwartete Fehler
-			// if(code.IS_MULTIPLE){
-			// for(String value : (String[]) document.get(code.toString())){
-			// dataObject.putMultiple(code, value);
-			// }
-			// }else{
-			// Object obj = document.get(code.toString());
-			// dataObject.set(code, obj.toString());
-			// }
+			if (code.IS_MULTIPLE){
+				for(String value : (ArrayList<String>) document.get(code.toString())){
+					dataObject.putMultiple(code, value);
+				}
+			}
+			else
+			{
+				Object obj = document.get(code.toString());
+				dataObject.set(code, obj.toString());
+			}
 		}
 
 		return dataObject;
