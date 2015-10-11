@@ -252,7 +252,7 @@ public class MongoDB implements Database {
 
 			case ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY:
 				FindIterable<Document> results7 = collection.find()
-						.sort(new Document("DCTERMS_MEDIUM", 1).append("ISBD_P1008", 1).append("DCTERM_CONTRIBUTOR", 1).append("DCTERMS_SUBJECT", 1)).limit(1);
+						.sort(new Document("DCTERMS_MEDIUM", 1).append("ISBD_P1008", 1).append("DCTERM_CONTRIBUTOR", 1).append("DCTERMS_ISSUED", 1).append("DCTERMS_IDENTIFIER", 1)).limit(1);
 				results7.forEach(new Block<Document>() {
 					@Override
 					public void apply(Document arg0) {
@@ -268,7 +268,7 @@ public class MongoDB implements Database {
 				return queryResult;
 			case ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES:
 				FindIterable<Document> results8 = collection.find()
-						.sort(new Document("DCTERMS_MEDIUM", 1).append("ISBD_P1008", 1).append("DCTERM_CONTRIBUTOR", 1).append("DCTERMS_SUBJECT", 1)).limit(10);
+						.sort(new Document("DCTERMS_MEDIUM", 1).append("ISBD_P1008", 1).append("DCTERM_CONTRIBUTOR", 1).append("DCTERMS_ISSUED", 1).append("DCTERMS_IDENTIFIER", 1)).limit(10);
 				results8.forEach(new Block<Document>() {
 					@Override
 					public void apply(Document arg0) {
@@ -284,7 +284,7 @@ public class MongoDB implements Database {
 				return queryResult;
 			case ENTITY_RETRIEVAL_BY_ID_100_ENTITIES:
 				FindIterable<Document> results9 = collection.find()
-						.sort(new Document("DCTERMS_MEDIUM", 1).append("ISBD_P1008", 1).append("DCTERM_CONTRIBUTOR", 1).append("DCTERMS_SUBJECT", 1)).limit(100);
+						.sort(new Document("DCTERMS_MEDIUM", 1).append("ISBD_P1008", 1).append("DCTERM_CONTRIBUTOR", 1).append("DCTERMS_ISSUED", 1).append("DCTERMS_IDENTIFIER", 1)).limit(100);
 				results9.forEach(new Block<Document>() {
 					@Override
 					public void apply(Document arg0) {
