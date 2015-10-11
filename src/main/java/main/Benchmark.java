@@ -91,9 +91,8 @@ public class Benchmark {
 								setResultInResultset(execution, queryScenario, nanoExecutionTimeInMilliseconds(queryStart, queryEnd), benchmarkObject.getQueryQueryScenarioResults());
 							}
 							
-							benchmarkObject.getQueryResults().put(queryScenario, result);
-	
-							setResultInResultset(1, queryScenario, nanoExecutionTimeInMilliseconds(prepareStart, prepareEnd), benchmarkObject.getPrepareQueryScenarioResults());
+							benchmarkObject.getQueryResults().put(queryScenario, result);							
+							benchmarkObject.getPrepareQueryScenarioResults().put(queryScenario, nanoExecutionTimeInMilliseconds(prepareStart, prepareEnd));
 							
 						} catch (Exception e) {
 							// Abort only current QueryScenario

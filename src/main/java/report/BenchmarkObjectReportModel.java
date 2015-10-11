@@ -28,20 +28,18 @@ public class BenchmarkObjectReportModel {
 		
 		int sort = 2;
 		for (QueryScenario queryScenario : QueryScenario.values()) {
-			double max,min,avg,firstOrOne;
+			double firstOrOne;
 			
 			// Prepare
-			max = GetMax(queryScenario, benchmarkObject.getPrepareQueryScenarioResults());
-			min = GetMin(queryScenario, benchmarkObject.getPrepareQueryScenarioResults());
-			avg = GetAvg(queryScenario, benchmarkObject.getPrepareQueryScenarioResults());
-			firstOrOne = GetFirstOrOne(queryScenario, benchmarkObject.getPrepareQueryScenarioResults());
+			firstOrOne = benchmarkObject.getPrepareQueryScenarioResults().get(queryScenario);
 			if(queryScenario.isReadOnly)
-				readOnly.add(new BenchmarkObjectReportModelRow(queryScenario.toString(), "Prepare", firstOrOne, avg, min, max, sort));
+				readOnly.add(new BenchmarkObjectReportModelRow(queryScenario.toString(), "Prepare", firstOrOne, null, null, null, sort));
 			else
-				notReadOnly.add(new BenchmarkObjectReportModelRow(queryScenario.toString(), "Prepare", firstOrOne, avg, min, max, sort));
+				notReadOnly.add(new BenchmarkObjectReportModelRow(queryScenario.toString(), "Prepare", firstOrOne, null, null, null, sort));
 			sort++;
 			
 			// Query
+			double max,min,avg;
 			max = GetMax(queryScenario, benchmarkObject.getQueryQueryScenarioResults());
 			min = GetMin(queryScenario, benchmarkObject.getQueryQueryScenarioResults());
 			avg = GetAvg(queryScenario, benchmarkObject.getQueryQueryScenarioResults());

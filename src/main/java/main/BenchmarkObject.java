@@ -14,7 +14,8 @@ public class BenchmarkObject {
 	
 	private Database database;
 	
-	private Hashtable<Integer, Hashtable<QueryScenario, Double>> prepareQueryScenarioResults, queryQueryScenarioResults;
+	private Hashtable<QueryScenario, Double> prepareQueryScenarioResults;
+	private Hashtable<Integer, Hashtable<QueryScenario, Double>> queryQueryScenarioResults;
 	private double setUpTime, loadTime;
 	
 	private Hashtable<QueryScenario, QueryResult> queryResults;
@@ -24,7 +25,7 @@ public class BenchmarkObject {
 		
 		this.database = database;
 		
-		prepareQueryScenarioResults = new Hashtable<Integer, Hashtable<QueryScenario, Double>>();
+		prepareQueryScenarioResults = new Hashtable<QueryScenario, Double>();
 		queryQueryScenarioResults = new Hashtable<Integer, Hashtable<QueryScenario, Double>>();
 		
 		queryResults = new Hashtable<QueryScenario, QueryResult>();
@@ -58,7 +59,7 @@ public class BenchmarkObject {
 		return queryResults;
 	}
 
-	public Hashtable<Integer, Hashtable<QueryScenario, Double>> getPrepareQueryScenarioResults() {
+	public Hashtable<QueryScenario, Double> getPrepareQueryScenarioResults() {
 		return prepareQueryScenarioResults;
 	}
 
@@ -77,7 +78,7 @@ public class BenchmarkObject {
 	}
 
 	public void InvalidateQueryScenarioResults(QueryScenario queryScenario){
-		InvalidateQueryScenarioResultsForAllExecutions(queryScenario, prepareQueryScenarioResults);
+		prepareQueryScenarioResults.put(queryScenario, (double)-1);		
 		InvalidateQueryScenarioResultsForAllExecutions(queryScenario, queryQueryScenarioResults);
 		queryResults.remove(queryScenario);
 	}

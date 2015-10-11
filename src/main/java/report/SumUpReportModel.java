@@ -41,7 +41,7 @@ public class SumUpReportModel {
 		
 		// QueryScenarios
 		int sort = 2;
-		for (QueryScenario queryScenario : QueryScenario.values()) {
+		for (QueryScenario queryScenario : QueryScenario.values()) {			
 			// Prepare
 			List<Double> prepVals = new ArrayList<Double>();
 			for (String db : databases) {
@@ -51,10 +51,7 @@ public class SumUpReportModel {
 					prepVals.add(null); // TODO
 					continue;
 				}
-				if(queryScenario.isReadOnly)
-					prepVals.add(target.stream().filter(s -> s.QueryScenario.equals(queryScenario.toString()) && s.Phase.equals("Prepare")).findFirst().get().Avg);
-				else
-					prepVals.add(target.stream().filter(s -> s.QueryScenario.equals(queryScenario.toString()) && s.Phase.equals("Prepare")).findFirst().get().FirstOrOne);
+				prepVals.add(target.stream().filter(s -> s.QueryScenario.equals(queryScenario.toString()) && s.Phase.equals("Prepare")).findFirst().get().FirstOrOne);
 			}
 			entrys.add(new SumUpReportModelRow(queryScenario.toString(), "Prepare", prepVals, sort));
 			sort++;
