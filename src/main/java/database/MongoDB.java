@@ -34,8 +34,10 @@ public class MongoDB implements Database {
 		mongoDb.setUp();
 		mongoDb.load(Dataset.hebis_1000_records);
 
-		mongoDb.query(QueryScenario.CONDITIONAL_TABLE_SCAN_ALL_STUDIES);
+		QueryScenario testScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES;
 		
+		mongoDb.prepare(testScenario);
+		mongoDb.query(testScenario);		
 		mongoDb.stop();
 	}
 	
@@ -96,10 +98,64 @@ public class MongoDB implements Database {
 
 	}
 
+	private List<Double> EntityRetrievalScenariosDcTermsIdentifiers = new ArrayList<>();
+	private void FillEntityRetrievalScenariosDcTermsIdentifiers(Document doc){
+		if(!doc.containsKey("DCTERMS_IDENTIFIER")){
+			System.err.println("MongoDB, prepare ENTITY_RETRIEVAL: One element has no DCTERMS_IDENTIFIER. Element is ignored. Query-Size will not be 1, 10 or 100.");
+			return;
+		}
+		
+		try{
+			EntityRetrievalScenariosDcTermsIdentifiers.add(doc.getDouble("DCTERMS_IDENTIFIER"));
+		}
+		catch(ClassCastException e)
+		{
+			// TODO: Manche Dinger sind keine Zahlen, sondern Strings wie 26888045X
+			// Das Problem mag selbst gemacht sein, weil ich es als Zahl speichere sofern es als Zahl gecastet werden kann
+			// Lösung wäre wohl alle als Text zu speichern, im Load eben nach diesem Code filtern...
+			// Die anderen DBs haben das wahrscheinlich auch als Text.
+			// Das wäre auch fürs VerifyResults wichtig, weil Double als String sonst anders ist als die anderen. Und das bezieht sich nicht nur auf dieses Feld.
+			System.err.println("MongoDB, prepare ENTITY_RETRIEVAL: One element has no valid DCTERMS_IDENTIFIER. Should be numerical, but can't be cast. Element is ignored. Query-Size will not be 1, 10 or 100. Element is: " + doc.get("DCTERMS_IDENTIFIER").toString());
+		}
+	}
+	
 	@Override
 	public void prepare(QueryScenario queryScenario) throws Exception {
 		
-		// TODO: sollte ich die Queries hier drin bauen?
+		switch(queryScenario){
+			case ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY:
+				EntityRetrievalScenariosDcTermsIdentifiers.clear();
+				FindIterable<Document> prepEntOne = collection.find().sort(new Document("DCTERMS_MEDIUM", 1).append("ISBD_P1008", 1).append("DCTERM_CONTRIBUTOR", 1).append("DCTERMS_ISSUED", 1).append("DCTERMS_IDENTIFIER", 1)).limit(1);
+				prepEntOne.forEach(new Block<Document>(){
+					@Override
+					public void apply(Document arg0) {
+						FillEntityRetrievalScenariosDcTermsIdentifiers(arg0);
+					}
+				});
+				break;
+				
+			case ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES:
+				EntityRetrievalScenariosDcTermsIdentifiers.clear();
+				FindIterable<Document> prepEntTen = collection.find().sort(new Document("DCTERMS_MEDIUM", 1).append("ISBD_P1008", 1).append("DCTERM_CONTRIBUTOR", 1).append("DCTERMS_ISSUED", 1).append("DCTERMS_IDENTIFIER", 1)).limit(10);
+				prepEntTen.forEach(new Block<Document>(){
+					@Override
+					public void apply(Document arg0) {
+						FillEntityRetrievalScenariosDcTermsIdentifiers(arg0);
+					}
+				});
+				break;
+				
+			case ENTITY_RETRIEVAL_BY_ID_100_ENTITIES:
+				EntityRetrievalScenariosDcTermsIdentifiers.clear();
+				FindIterable<Document> prepEntHun = collection.find().sort(new Document("DCTERMS_MEDIUM", 1).append("ISBD_P1008", 1).append("DCTERM_CONTRIBUTOR", 1).append("DCTERMS_ISSUED", 1).append("DCTERMS_IDENTIFIER", 1)).limit(100);
+				prepEntHun.forEach(new Block<Document>(){
+					@Override
+					public void apply(Document arg0) {
+						FillEntityRetrievalScenariosDcTermsIdentifiers(arg0);
+					}
+				});
+				break;
+		}
 		
 	}
 
@@ -237,52 +293,17 @@ public class MongoDB implements Database {
 				return queryResult;
 
 			case ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY:
-				FindIterable<Document> results7 = collection.find()
-						.sort(new Document("DCTERMS_MEDIUM", 1).append("ISBD_P1008", 1).append("DCTERM_CONTRIBUTOR", 1).append("DCTERMS_ISSUED", 1).append("DCTERMS_IDENTIFIER", 1)).limit(1);
-				results7.forEach(new Block<Document>() {
-					@Override
-					public void apply(Document arg0) {
-						// System.out.println(String.format("%s - %s - %s - %s",
-						// arg0.getString("DCTERMS_MEDIUM"),
-						// arg0.getString("ISBD_P1008"),
-						// arg0.getString("DCTERM_CONTRIBUTOR"),
-						// arg0.get("DCTERMS_SUBJECT")));
-						// System.out.println(arg0);
-						queryResult.push(BuildDataObjectFromDocument(arg0));
-					}
-				});
-				return queryResult;
 			case ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES:
-				FindIterable<Document> results8 = collection.find()
-						.sort(new Document("DCTERMS_MEDIUM", 1).append("ISBD_P1008", 1).append("DCTERM_CONTRIBUTOR", 1).append("DCTERMS_ISSUED", 1).append("DCTERMS_IDENTIFIER", 1)).limit(10);
-				results8.forEach(new Block<Document>() {
-					@Override
-					public void apply(Document arg0) {
-						// System.out.println(String.format("%s - %s - %s - %s",
-						// arg0.getString("DCTERMS_MEDIUM"),
-						// arg0.getString("ISBD_P1008"),
-						// arg0.getString("DCTERM_CONTRIBUTOR"),
-						// arg0.get("DCTERMS_SUBJECT")));
-						// System.out.println(arg0);
-						queryResult.push(BuildDataObjectFromDocument(arg0));
-					}
-				});
-				return queryResult;
 			case ENTITY_RETRIEVAL_BY_ID_100_ENTITIES:
-				FindIterable<Document> results9 = collection.find()
-						.sort(new Document("DCTERMS_MEDIUM", 1).append("ISBD_P1008", 1).append("DCTERM_CONTRIBUTOR", 1).append("DCTERMS_ISSUED", 1).append("DCTERMS_IDENTIFIER", 1)).limit(100);
-				results9.forEach(new Block<Document>() {
-					@Override
-					public void apply(Document arg0) {
-						// System.out.println(String.format("%s - %s - %s - %s",
-						// arg0.getString("DCTERMS_MEDIUM"),
-						// arg0.getString("ISBD_P1008"),
-						// arg0.getString("DCTERM_CONTRIBUTOR"),
-						// arg0.get("DCTERMS_SUBJECT")));
-						// System.out.println(arg0);
-						queryResult.push(BuildDataObjectFromDocument(arg0));
-					}
-				});
+				for (Double dc_ident : EntityRetrievalScenariosDcTermsIdentifiers) {
+					FindIterable<Document> resultById = collection.find(new Document("DCTERMS_IDENTIFIER", dc_ident));
+					resultById.forEach(new Block<Document>(){
+						@Override
+						public void apply(Document arg0) {
+							queryResult.push(BuildDataObjectFromDocument(arg0));
+						}
+					});
+				}
 				return queryResult;
 			}
 			break;
