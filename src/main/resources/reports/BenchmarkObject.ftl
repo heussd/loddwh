@@ -1,6 +1,6 @@
 -----
 
-## Report for ${name}
+## Evaluation Details for ${name}, Version $Version, Test Series $Testseries
 
 | Task | Time |
 | :-- | --: |

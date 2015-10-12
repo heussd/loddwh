@@ -1,6 +1,6 @@
 -----
 
-## Sum up Report for Benchmark
+## Evaluation Overview, all Databases, Test Series $TestSeries 
 
 | QueryScenario | Phase |<#list databases as db> ${db} |</#list>
 | :-- | :-- |<#list databases as db> --: |</#list>
