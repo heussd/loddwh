@@ -32,9 +32,9 @@ public class MongoDB implements Database {
 		mongoDb.start();
 		mongoDb.clean();
 		mongoDb.setUp();
-		mongoDb.load(Dataset.hebis_1000_records);
+		mongoDb.load(Dataset.hebis_10000_records);
 
-		QueryScenario testScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES;
+		QueryScenario testScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS;
 		
 		mongoDb.prepare(testScenario);
 		mongoDb.query(testScenario);		
@@ -309,27 +309,56 @@ public class MongoDB implements Database {
 			break;
 
 		case GRAPH:
-			// switch(queryScenario){
-			// case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP:
-			// FindIterable<Document> findIter1 = collection.find(asList(new
-			// Document("DCTERMS_SUBJECT", new Document("$exists", true)), new
-			// Document("DCTERMS_IDENTIFIER", 1).append("DCTERMS_SUBJECT",
-			// 1).append("_id", 0)));
-			// findIter1.forEach(new Block<Document>(){
-			// @Override
-			// public void apply(Document arg0) {
-			// // Hier fï¿½r jeden neue Abfrage mit Filter auf ï¿½bereinstimmende
-			// Subjects bei nicht ï¿½bereinstimmender ID.
-			// // Auch ï¿½ber die iterieren und dann jeweils alles ins queryResult
-			// legen
-			// // TODO klï¿½ren mit DCTERMS_SUBJECT und MULTIPLE ob das so gedacht
-			// war. MongoDb dï¿½rfte sich an Arrays aber nicht stï¿½ren.
-			// }
-			// });
-			// return queryResult;
-			//
-			// case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS:
-			// }
+			switch(queryScenario){
+				case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP:
+					FindIterable<Document> findIter1 = collection.find(new Document("DCTERMS_SUBJECT", new Document("$exists", true)));
+					findIter1.forEach(new Block<Document>(){
+						@Override
+						public void apply(Document arg0) {							
+							for (String subject : (ArrayList<String>)arg0.get("DCTERMS_SUBJECT")) {
+								FindIterable<Document> findIter2 = collection.find(new Document("DCTERMS_SUBJECT", subject).append("_id", new Document("$ne", arg0.getObjectId("_id"))));
+								findIter2.forEach(new Block<Document>(){
+									@Override
+									public void apply(Document arg1) {
+										// TODO Hier auch mit DCTERMS_IDENTIFIER wäre als String besser/sicherer für's VerifyResults
+										queryResult.push(arg0.get("DCTERMS_IDENTIFIER").toString(), subject, arg1.get("DCTERMS_IDENTIFIER").toString());
+										
+										//System.out.println(String.format("%s - %s - %s", arg0.get("DCTERMS_IDENTIFIER").toString(), subject, arg1.get("DCTERMS_IDENTIFIER").toString()));
+									}
+								});
+							}
+						}
+					});
+					return queryResult;
+				case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS:
+					FindIterable<Document> findIter2Hops = collection.find(new Document("DCTERMS_SUBJECT", new Document("$exists", true)));
+					findIter2Hops.forEach(new Block<Document>(){
+						@Override
+						public void apply(Document arg0) {							
+							for (String subject : (ArrayList<String>)arg0.get("DCTERMS_SUBJECT")) {
+								FindIterable<Document> findIter2 = collection.find(new Document("DCTERMS_SUBJECT", subject).append("_id", new Document("$ne", arg0.getObjectId("_id"))));
+								findIter2.forEach(new Block<Document>(){
+									@Override
+									public void apply(Document arg1) {
+										for (String subject2 : (ArrayList<String>)arg1.get("DCTERMS_SUBJECT")) {
+											FindIterable<Document> findIter3 = collection.find(new Document("DCTERMS_SUBJECT", subject2).append("_id", new Document("$ne", arg1.getObjectId("_id"))));
+											findIter3.forEach(new Block<Document>(){
+												@Override
+												public void apply(Document arg2) {
+													// TODO Hier auch mit DCTERMS_IDENTIFIER wäre als String besser/sicherer für's VerifyResults
+													queryResult.push(arg0.get("DCTERMS_IDENTIFIER").toString(), subject, arg1.get("DCTERMS_IDENTIFIER").toString(), subject2, arg2.get("DCTERMS_IDENTIFIER").toString());
+													
+													//System.out.println(String.format("%s - %s - %s - %s - %s", arg0.get("DCTERMS_IDENTIFIER").toString(), subject, arg1.get("DCTERMS_IDENTIFIER").toString(), subject2, arg2.get("DCTERMS_IDENTIFIER").toString()));
+												}
+											});
+										}
+									}
+								});
+							}
+						}
+					});
+					return queryResult;
+			 }
 			break;
 
 		case NONE:

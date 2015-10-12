@@ -107,7 +107,7 @@ public enum QueryScenario {
 	 * For each record, find records that share a DCTERMS_SUBJECT, find records
 	 * that share a DCTERMS-SUBJECT with those, and return:
 	 * original.dcterms_identifier, original.dcterms_subject,
-	 * firstrelated.dcterms_identifier, secondrelated.dcterms_identifier.
+	 * firstrelated.dcterms_identifier, firstrelated.dcterms_subject, secondrelated.dcterms_identifier.
 	 */
 	GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS(QueryResult.Type.GRAPH),
 
