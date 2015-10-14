@@ -4,5 +4,5 @@ where
 	?a <http://purl.org/dc/terms/publisher> ?publisher .
 } 
 group by ?publisher 
-order by desc(?count)
+order by desc(?count) ?publisher
 limit 10
