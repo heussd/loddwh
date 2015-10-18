@@ -31,9 +31,12 @@ public class DataObject {
 	public String toString() {
 		String result = "";
 
-		for (Codes code : data.keySet()) {
-			result += code.toString() + ":\t" + data.get(code) + "\n";
+		for(Codes outerCode : Codes.values()){
+			if(data.containsKey(outerCode)){
+				result += outerCode.toString() + ":\t" + data.get(outerCode) + "\n";
+			}
 		}
+		
 		return result;
 	}
 

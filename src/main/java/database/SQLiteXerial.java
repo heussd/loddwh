@@ -263,9 +263,10 @@ public class SQLiteXerial extends Helpers implements Database {
 				while (resultSet.next()) {
 					DataObject dataObject = new DataObject();
 					for (Codes code : Codes.values()) {
-						if (resultSet.getObject(code.ordinal() + 1) == null)
+						if (resultSet.getObject(code.ordinal() + 1) == null){
+							dataObject.set(code, null);
 							continue;
-
+						}
 						if (code.IS_MULTIPLE) {
 							// https://stackoverflow.com/questions/3395729/convert-json-array-to-normal-java-array
 							JSONArray jsonArray = new JSONArray(resultSet.getString(code.ordinal() + 1));

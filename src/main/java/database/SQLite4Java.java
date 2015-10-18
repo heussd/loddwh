@@ -280,8 +280,10 @@ public class SQLite4Java extends Helpers implements Database {
 				while (preparedStatement.step()) {
 					DataObject dataObject = new DataObject();
 					for (Codes code : Codes.values()) {
-						if (preparedStatement.columnNull(code.ordinal()))
+						if (preparedStatement.columnNull(code.ordinal())){
+							dataObject.set(code, null);
 							continue;
+						}
 						if (code.IS_MULTIPLE) {
 							// https://stackoverflow.com/questions/3395729/convert-json-array-to-normal-java-array
 							JSONArray jsonArray = new JSONArray(preparedStatement.columnString(code.ordinal()));
@@ -314,21 +316,24 @@ public class SQLite4Java extends Helpers implements Database {
 	public static void main(String[] args) throws Exception {
 
 		SQLite4Java sqLiteXerial = new SQLite4Java();
+		sqLiteXerial.start();
+		sqLiteXerial.clean();
 		sqLiteXerial.setUp();
-		sqLiteXerial.load(Dataset.hebis_1000_records);
+		sqLiteXerial.load(Dataset.hebis_10000_records);
 
-		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES;
+		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY;
 
 		sqLiteXerial.prepare(queryScenario);
-		QueryResult queryResult = (sqLiteXerial.query(queryScenario));
+		QueryResult queryResult = sqLiteXerial.query(queryScenario);
 
-		System.out.println(queryResult);
+		//System.out.println(queryResult);
 		//
 		// queryScenario =
 		// QueryScenario.AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10;
 		// sqLiteXerial.prepare(queryScenario);
 		// System.out.println(sqLiteXerial.query(queryScenario));
-
+		
+		sqLiteXerial.stop();
 	}
 
 	@Override
