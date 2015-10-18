@@ -34,7 +34,7 @@ public class MongoDB implements Database {
 		mongoDb.setUp();
 		mongoDb.load(Dataset.hebis_10000_records);
 
-		QueryScenario testScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS;
+		QueryScenario testScenario = QueryScenario.AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL;
 		
 		mongoDb.prepare(testScenario);
 		mongoDb.query(testScenario);		
@@ -194,7 +194,7 @@ public class MongoDB implements Database {
 			case AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL:
 				AggregateIterable<Document> results = collection.aggregate(asList(new Document("$match", new Document("DCTERMS_PUBLISHER", new Document("$exists", true))),
 						new Document("$group", new Document("_id", "$DCTERMS_PUBLISHER").append("count", new Document("$sum", 1))),
-						new Document("$sort", new Document("count", -1))));
+						new Document("$sort", new Document("count", -1).append("_id", 1))));
 				results.forEach(new Block<Document>() {
 					@Override
 					public void apply(Document arg0) {
@@ -205,7 +205,7 @@ public class MongoDB implements Database {
 			case AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10:
 				AggregateIterable<Document> results2 = collection.aggregate(asList(new Document("$match", new Document("DCTERMS_PUBLISHER", new Document("$exists", true))),
 						new Document("$group", new Document("_id", "$DCTERMS_PUBLISHER").append("count", new Document("$sum", 1))),
-						new Document("$sort", new Document("count", -1)), new Document("$limit", 10)));
+						new Document("$sort", new Document("count", -1).append("_id", 1)), new Document("$limit", 10)));
 				results2.forEach(new Block<Document>() {
 					@Override
 					public void apply(Document arg0) {
@@ -216,7 +216,7 @@ public class MongoDB implements Database {
 			case AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100:
 				AggregateIterable<Document> results3 = collection.aggregate(asList(new Document("$match", new Document("DCTERMS_PUBLISHER", new Document("$exists", true))),
 						new Document("$group", new Document("_id", "$DCTERMS_PUBLISHER").append("count", new Document("$sum", 1))),
-						new Document("$sort", new Document("count", -1)), new Document("$limit", 100)));
+						new Document("$sort", new Document("count", -1).append("_id", 1)), new Document("$limit", 100)));
 				results3.forEach(new Block<Document>() {
 					@Override
 					public void apply(Document arg0) {
@@ -228,7 +228,7 @@ public class MongoDB implements Database {
 			case AGGREGATE_ISSUES_PER_DECADE_ALL:
 				AggregateIterable<Document> ispdec1 = collection.aggregate(asList(new Document("$match", new Document("DCTERMS_ISSUED", new Document("$exists", true))),
 						new Document("$group", new Document("_id", new Document("$substr", asList("$DCTERMS_ISSUED", 0, 3))).append("count", new Document("$sum", 1))),
-						new Document("$sort", new Document("count", -1))));
+						new Document("$sort", new Document("count", -1).append("_id", 1))));
 				ispdec1.forEach(new Block<Document>() {
 					@Override
 					public void apply(Document arg0) {
@@ -239,7 +239,7 @@ public class MongoDB implements Database {
 			case AGGREGATE_ISSUES_PER_DECADE_TOP10:
 				AggregateIterable<Document> ispdec2 = collection.aggregate(asList(new Document("$match", new Document("DCTERMS_ISSUED", new Document("$exists", true))),
 						new Document("$group", new Document("_id", new Document("$substr", asList("$DCTERMS_ISSUED", 0, 3))).append("count", new Document("$sum", 1))),
-						new Document("$sort", new Document("count", -1)), new Document("$limit", 10)));
+						new Document("$sort", new Document("count", -1).append("_id", 1)), new Document("$limit", 10)));
 				ispdec2.forEach(new Block<Document>() {
 					@Override
 					public void apply(Document arg0) {
@@ -250,7 +250,7 @@ public class MongoDB implements Database {
 			case AGGREGATE_ISSUES_PER_DECADE_TOP100:
 				AggregateIterable<Document> ispdec3 = collection.aggregate(asList(new Document("$match", new Document("DCTERMS_ISSUED", new Document("$exists", true))),
 						new Document("$group", new Document("_id", new Document("$substr", asList("$DCTERMS_ISSUED", 0, 3))).append("count", new Document("$sum", 1))),
-						new Document("$sort", new Document("count", -1)), new Document("$limit", 100)));
+						new Document("$sort", new Document("count", -1).append("_id", 1)), new Document("$limit", 100)));
 				ispdec3.forEach(new Block<Document>() {
 					@Override
 					public void apply(Document arg0) {
