@@ -1,4 +1,3 @@
 select DCTERMS_PUBLISHER, count(DCTERMS_PUBLISHER) from justatable
 group by DCTERMS_PUBLISHER
-order by count(DCTERMS_PUBLISHER), DCTERMS_PUBLISHER asc
-desc
+order by count(DCTERMS_PUBLISHER) desc, DCTERMS_PUBLISHER asc
