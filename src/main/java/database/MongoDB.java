@@ -79,10 +79,7 @@ public class MongoDB implements Database {
 					String key = code.toString();
 					if (!code.IS_MULTIPLE) {
 						String value = dataObject.get(code).toString();
-						if (Helpers.isNumeric(value))
-							doc.append(key, Double.parseDouble(value));
-						else
-							doc.append(key, value);
+						doc.append(key, value);
 					} else {
 						List<String> values = (ArrayList<String>) dataObject.get(code);
 						doc.append(key, values);
@@ -98,25 +95,14 @@ public class MongoDB implements Database {
 
 	}
 
-	private List<Double> EntityRetrievalScenariosDcTermsIdentifiers = new ArrayList<>();
+	private List<String> EntityRetrievalScenariosDcTermsIdentifiers = new ArrayList<>();
 	private void FillEntityRetrievalScenariosDcTermsIdentifiers(Document doc){
 		if(!doc.containsKey("DCTERMS_IDENTIFIER")){
 			System.err.println("MongoDB, prepare ENTITY_RETRIEVAL: One element has no DCTERMS_IDENTIFIER. Element is ignored. Query-Size will not be 1, 10 or 100.");
 			return;
 		}
 		
-		try{
-			EntityRetrievalScenariosDcTermsIdentifiers.add(doc.getDouble("DCTERMS_IDENTIFIER"));
-		}
-		catch(ClassCastException e)
-		{
-			// TODO: Manche Dinger sind keine Zahlen, sondern Strings wie 26888045X
-			// Das Problem mag selbst gemacht sein, weil ich es als Zahl speichere sofern es als Zahl gecastet werden kann
-			// Lösung wäre wohl alle als Text zu speichern, im Load eben nach diesem Code filtern...
-			// Die anderen DBs haben das wahrscheinlich auch als Text.
-			// Das wäre auch fürs VerifyResults wichtig, weil Double als String sonst anders ist als die anderen. Und das bezieht sich nicht nur auf dieses Feld.
-			System.err.println("MongoDB, prepare ENTITY_RETRIEVAL: One element has no valid DCTERMS_IDENTIFIER. Should be numerical, but can't be cast. Element is ignored. Query-Size will not be 1, 10 or 100. Element is: " + doc.get("DCTERMS_IDENTIFIER").toString());
-		}
+		EntityRetrievalScenariosDcTermsIdentifiers.add(doc.getString("DCTERMS_IDENTIFIER"));
 	}
 	
 	@Override
@@ -175,8 +161,7 @@ public class MongoDB implements Database {
 			}
 			else
 			{
-				Object obj = document.get(code.toString());
-				dataObject.set(code, obj.toString());
+				dataObject.set(code, document.getString(code.toString()));
 			}
 		}
 
@@ -295,7 +280,7 @@ public class MongoDB implements Database {
 			case ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY:
 			case ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES:
 			case ENTITY_RETRIEVAL_BY_ID_100_ENTITIES:
-				for (Double dc_ident : EntityRetrievalScenariosDcTermsIdentifiers) {
+				for (String dc_ident : EntityRetrievalScenariosDcTermsIdentifiers) {
 					FindIterable<Document> resultById = collection.find(new Document("DCTERMS_IDENTIFIER", dc_ident));
 					resultById.forEach(new Block<Document>(){
 						@Override
@@ -320,8 +305,7 @@ public class MongoDB implements Database {
 								findIter2.forEach(new Block<Document>(){
 									@Override
 									public void apply(Document arg1) {
-										// TODO Hier auch mit DCTERMS_IDENTIFIER wäre als String besser/sicherer für's VerifyResults
-										queryResult.push(arg0.get("DCTERMS_IDENTIFIER").toString(), subject, arg1.get("DCTERMS_IDENTIFIER").toString());
+										queryResult.push(arg0.getString("DCTERMS_IDENTIFIER"), subject, arg1.getString("DCTERMS_IDENTIFIER"));
 										
 										//System.out.println(String.format("%s - %s - %s", arg0.get("DCTERMS_IDENTIFIER").toString(), subject, arg1.get("DCTERMS_IDENTIFIER").toString()));
 									}
@@ -345,8 +329,7 @@ public class MongoDB implements Database {
 											findIter3.forEach(new Block<Document>(){
 												@Override
 												public void apply(Document arg2) {
-													// TODO Hier auch mit DCTERMS_IDENTIFIER wäre als String besser/sicherer für's VerifyResults
-													queryResult.push(arg0.get("DCTERMS_IDENTIFIER").toString(), subject, arg1.get("DCTERMS_IDENTIFIER").toString(), subject2, arg2.get("DCTERMS_IDENTIFIER").toString());
+													queryResult.push(arg0.getString("DCTERMS_IDENTIFIER"), subject, arg1.getString("DCTERMS_IDENTIFIER"), subject2, arg2.getString("DCTERMS_IDENTIFIER"));
 													
 													//System.out.println(String.format("%s - %s - %s - %s - %s", arg0.get("DCTERMS_IDENTIFIER").toString(), subject, arg1.get("DCTERMS_IDENTIFIER").toString(), subject2, arg2.get("DCTERMS_IDENTIFIER").toString()));
 												}
@@ -394,7 +377,7 @@ public class MongoDB implements Database {
 				return queryResult;
 
 			case UPDATE_HIGH_SELECTIVITY_NON_ISSUED:
-				collection.updateMany(new Document("DCTERMS_ISSUED", new Document("$exists", false)), new Document("$set", new Document("DCTERMS_ISSUED", 0)));
+				collection.updateMany(new Document("DCTERMS_ISSUED", new Document("$exists", false)), new Document("$set", new Document("DCTERMS_ISSUED", "0")));
 				return queryResult;
 
 			case DELETE_LOW_SELECTIVITY_PAPER_MEDIUM:
@@ -402,7 +385,7 @@ public class MongoDB implements Database {
 				return queryResult;
 
 			case DELETE_HIGH_SELECTIVIY_NON_ISSUED:
-				collection.deleteMany(new Document("DCTERMS_ISSUED", 0));
+				collection.deleteMany(new Document("DCTERMS_ISSUED", "0"));
 				return queryResult;
 			}
 			break;
