@@ -226,4 +226,9 @@ public class Fuseki extends Helpers implements Database {
 
 	}
 
+	@Override
+	public String toString() {
+		return "Fuseki [getName()=" + getName() + ", getVersion()="
+				+ getVersion() + "]";
+	}
 }

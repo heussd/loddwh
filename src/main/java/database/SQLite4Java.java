@@ -358,4 +358,9 @@ public class SQLite4Java extends Helpers implements Database {
 		
 	}
 
+	@Override
+	public String toString() {
+		return "SQLite4Java [getName()=" + getName() + ", getVersion()="
+				+ getVersion() + "]";
+	}
 }

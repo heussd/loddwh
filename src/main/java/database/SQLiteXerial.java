@@ -334,4 +334,9 @@ public class SQLiteXerial extends Helpers implements Database {
 
 	}
 
+	@Override
+	public String toString() {
+		return "SQLiteXerial [getName()=" + getName() + ", getVersion()="
+				+ getVersion() + "]";
+	}
 }
