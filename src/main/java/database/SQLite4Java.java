@@ -35,6 +35,9 @@ public class SQLite4Java extends Helpers implements Database {
 	private ArrayList<Dataset> lastLoadedDatasets = new ArrayList<>();
 
 	public SQLite4Java() {
+		// Disable logging of sqlite4java
+		java.util.logging.Logger.getLogger("com.almworks.sqlite4java").setLevel(java.util.logging.Level.OFF);		
+		
 		// Produce some queries based on Config / Codes enums - do not prepare
 		// statements as PreparedStatements is part of the load() or prepare().
 		createQuery = "CREATE TABLE " + Config.TABLE + " ( \n";
