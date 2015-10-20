@@ -33,28 +33,22 @@ public class Benchmark {
 //		testSeries.add(TestSeries.MEDIUM);
 //		testSeries.add(TestSeries.LARGE);
 		
+		List<Database> testDatabases = new ArrayList<>();
+		testDatabases.add(new SQLite4Java());
+//		testDatabases.add(new SQLiteXerial());
+//		testDatabases.add(new PostgreSQL());
+//		testDatabases.add(new Fuseki());
+//		testDatabases.add(new Virtuoso());
+		testDatabases.add(new MongoDB());
+		
+		
+		
 		for (TestSeries testSerie : testSeries) {
-			List<BenchmarkObject> benchmarkObjects = new ArrayList<BenchmarkObject>();
+			List<BenchmarkObject> benchmarkObjects = new ArrayList<>();
+			for (Database database : testDatabases) {
+				benchmarkObjects.add(new BenchmarkObject(database));
+			}
 			
-			// SQLite (4Java)
-			benchmarkObjects.add(new BenchmarkObject(new SQLite4Java()));
-	
-			// SQLite (Xerial)
-			benchmarkObjects.add(new BenchmarkObject(new SQLiteXerial()));
-	
-			// POSTGRESQL
-			//benchmarkObjects.add(new BenchmarkObject(new PostgreSQL()));
-	
-			// Fuseki
-			//benchmarkObjects.add(new BenchmarkObject(new Fuseki()));
-	
-			// Virtuoso
-			//benchmarkObjects.add(new BenchmarkObject(new Virtuoso()));
-			
-			// MongoDB
-			benchmarkObjects.add(new BenchmarkObject(new MongoDB()));
-			
-	
 			for (BenchmarkObject benchmarkObject : benchmarkObjects) {
 				Database db = benchmarkObject.getDatabase();
 				long setUpStart, setUpEnd, loadStart, loadEnd;
