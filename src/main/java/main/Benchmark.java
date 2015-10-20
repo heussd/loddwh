@@ -9,6 +9,7 @@ import org.apache.commons.io.FileUtils;
 import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
 
+import database.ArangoDB;
 import database.Database;
 import database.Fuseki;
 import database.MongoDB;
@@ -40,6 +41,7 @@ public class Benchmark {
 //		testDatabases.add(new Fuseki());
 //		testDatabases.add(new Virtuoso());
 		testDatabases.add(new MongoDB());
+		testDatabases.add(new ArangoDB());
 		
 		
 		
