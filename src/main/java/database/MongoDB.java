@@ -295,7 +295,7 @@ public class MongoDB implements Database {
 
 		case GRAPH:
 			switch(queryScenario){
-				case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP:
+				case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
 					FindIterable<Document> findIter1 = collection.find(new Document("DCTERMS_SUBJECT", new Document("$exists", true)));
 					findIter1.forEach(new Block<Document>(){
 						@Override

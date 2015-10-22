@@ -80,17 +80,55 @@ public enum QueryScenario {
 	CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES(QueryResult.Type.COMPLETE_ENTITIES),
 
 	/**
-	 * For each record, find records that share a DCTERMS_SUBJECT and return: original.dcterms_identifier, original.dcterms_subject, related.dcterms_identifier. E.g.:
+	 * During prepare: Retrieve the first dcterms_identifier-value from a list of all entities that have dcterms_subjects (ergo dcterms_subjects != 0), ordered by dcterms_medium,
+	 * isbd_p1008, dcterm_contributor, dcterms_issued, dcterms_identifier.<br>
+	 * During query: For each record, find records that share a DCTERMS_SUBJECT and return: original.dcterms_identifier, original.dcterms_subject, related.dcterms_identifier. E.g.:
 	 * 
 	 * "272250422" -> "http://d-nb.info/gnd/1007928-2" <- "272527807"
 	 */
-	GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP(QueryResult.Type.GRAPH),
+	GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY(QueryResult.Type.GRAPH),
 
 	/**
-	 * For each record, find records that share a DCTERMS_SUBJECT, find records that share a DCTERMS-SUBJECT with those, and return: original.dcterms_identifier,
+	 * During prepare: Retrieve the first 10 dcterms_identifier-values from a list of all entities that have dcterms_subjects (ergo dcterms_subjects != 0), ordered by
+	 * dcterms_medium, isbd_p1008, dcterm_contributor, dcterms_issued, dcterms_identifier.<br>
+	 * During query: For each record, find records that share a DCTERMS_SUBJECT and return: original.dcterms_identifier, original.dcterms_subject, related.dcterms_identifier. E.g.:
+	 * 
+	 * "272250422" -> "http://d-nb.info/gnd/1007928-2" <- "272527807"
+	 */
+	GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES(QueryResult.Type.GRAPH),
+
+	/**
+	 * During prepare: Retrieve the first 100 dcterms_identifier-values from a list of all entities that have dcterms_subjects (ergo dcterms_subjects != 0), ordered by
+	 * dcterms_medium, isbd_p1008, dcterm_contributor, dcterms_issued, dcterms_identifier.<br>
+	 * During query: For each record, find records that share a DCTERMS_SUBJECT and return: original.dcterms_identifier, original.dcterms_subject, related.dcterms_identifier. E.g.:
+	 * 
+	 * "272250422" -> "http://d-nb.info/gnd/1007928-2" <- "272527807"
+	 */
+	GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES(QueryResult.Type.GRAPH),
+
+	/**
+	 * During prepare: Retrieve the first dcterms_identifier-value from a list of all entities that have dcterms_subjects (ergo dcterms_subjects != 0), ordered by dcterms_medium,
+	 * isbd_p1008, dcterm_contributor, dcterms_issued, dcterms_identifier.<br>
+	 * During query: For each record, find records that share a DCTERMS_SUBJECT, find records that share a DCTERMS-SUBJECT with those, and return: original.dcterms_identifier,
 	 * original.dcterms_subject, firstrelated.dcterms_identifier, firstrelated.dcterms_subject, secondrelated.dcterms_identifier.
 	 */
-	GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS(QueryResult.Type.GRAPH),
+	GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY(QueryResult.Type.GRAPH),
+
+	/**
+	 * During prepare: Retrieve the first 10 dcterms_identifier-values from a list of all entities that have dcterms_subjects (ergo dcterms_subjects != 0), ordered by
+	 * dcterms_medium, isbd_p1008, dcterm_contributor, dcterms_issued, dcterms_identifier.<br>
+	 * During query: For each record, find records that share a DCTERMS_SUBJECT, find records that share a DCTERMS-SUBJECT with those, and return: original.dcterms_identifier,
+	 * original.dcterms_subject, firstrelated.dcterms_identifier, firstrelated.dcterms_subject, secondrelated.dcterms_identifier.
+	 */
+	GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES(QueryResult.Type.GRAPH),
+
+	/**
+	 * During prepare: Retrieve the first 100 dcterms_identifier-values from a list of all entities that have dcterms_subjects (ergo dcterms_subjects != 0), ordered by
+	 * dcterms_medium, isbd_p1008, dcterm_contributor, dcterms_issued, dcterms_identifier.<br>
+	 * During query: For each record, find records that share a DCTERMS_SUBJECT, find records that share a DCTERMS-SUBJECT with those, and return: original.dcterms_identifier,
+	 * original.dcterms_subject, firstrelated.dcterms_identifier, firstrelated.dcterms_subject, secondrelated.dcterms_identifier.
+	 */
+	GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES(QueryResult.Type.GRAPH),
 
 	/**
 	 * Create a new property for every record, defaulting to "cheesecake".

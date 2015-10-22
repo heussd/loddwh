@@ -151,7 +151,7 @@ public class SQLiteXerial extends Helpers implements Database {
 		Statement statement = connection.createStatement();
 
 		switch (queryScenario) {
-		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP:
+		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS:
 			connection.createStatement().executeUpdate("drop table if exists subjects");
 			connection.createStatement().executeUpdate("create table subjects (id text, subject text)");

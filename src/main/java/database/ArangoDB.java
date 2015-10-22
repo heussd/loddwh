@@ -56,7 +56,7 @@ public class ArangoDB implements Database {
 		arangoDb.setUp();
 		arangoDb.load(Dataset.hebis_10000_records);
 		
-		QueryScenario testScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP;
+		QueryScenario testScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY;
 		
 		arangoDb.prepare(testScenario);
 		QueryResult queryResult = arangoDb.query(testScenario);
@@ -298,7 +298,7 @@ public class ArangoDB implements Database {
 				
 			case GRAPH:
 				switch(queryScenario){
-					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP:
+					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
 						query = "for e in GRAPH_EDGES('loddwhbench_graph', {}, {includeData: true}) return e";
 						documentCursor = arangoDriver.executeDocumentQuery(query, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class);
 						for (DocumentEntity<BaseDocument> documentEntity : documentCursor) {

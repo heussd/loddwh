@@ -159,7 +159,7 @@ public class SQLite4Java extends Helpers implements Database {
 		// SQL queries / prepared statements to be executed before the actual
 		// QueryScenario statement
 		switch (queryScenario) {
-		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP:
+		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS:
 			connection.exec("drop table if exists subjects");
 			connection.exec("create table subjects (id text, subject text)");
@@ -267,7 +267,7 @@ public class SQLite4Java extends Helpers implements Database {
 			switch (queryScenario.queryResultType) {
 			case GRAPH:
 				while (preparedStatement.step()) {
-					if (queryScenario == QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP)
+					if (queryScenario == QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY)
 						queryResult.push(preparedStatement.columnString(0), preparedStatement.columnString(1), preparedStatement.columnString(2));
 					else
 						queryResult.push(preparedStatement.columnString(0), preparedStatement.columnString(1), preparedStatement.columnString(2), preparedStatement.columnString(3),
