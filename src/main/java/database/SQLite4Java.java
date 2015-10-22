@@ -17,6 +17,7 @@ import util.Config;
 import util.DataObject;
 import util.Dataset;
 import util.QueryResult;
+import util.QueryResult.Type;
 import util.QueryScenario;
 import util.Templates;
 import util.dumper.Helpers;
@@ -36,8 +37,8 @@ public class SQLite4Java extends Helpers implements Database {
 
 	public SQLite4Java() {
 		// Disable logging of sqlite4java
-		java.util.logging.Logger.getLogger("com.almworks.sqlite4java").setLevel(java.util.logging.Level.OFF);		
-		
+		java.util.logging.Logger.getLogger("com.almworks.sqlite4java").setLevel(java.util.logging.Level.OFF);
+
 		// Produce some queries based on Config / Codes enums - do not prepare
 		// statements as PreparedStatements is part of the load() or prepare().
 		createQuery = "CREATE TABLE " + Config.TABLE + " ( \n";
@@ -160,7 +161,11 @@ public class SQLite4Java extends Helpers implements Database {
 		// QueryScenario statement
 		switch (queryScenario) {
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
-		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS:
+		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES:
+		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES:
+		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
+		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
+		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
 			connection.exec("drop table if exists subjects");
 			connection.exec("create table subjects (id text, subject text)");
 			connection.exec("create index if not exists idxid on subjects (id)");
@@ -219,7 +224,7 @@ public class SQLite4Java extends Helpers implements Database {
 		queue.stop(true).join();
 
 		SQLiteStatement preparedStatement = connection.prepare(templates.resolve(queryScenario));
-		
+
 		// Prepare IDs for ENTITY_RETRIEVAL scenarios
 		if (queryScenario.equals(QueryScenario.ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY) || queryScenario.equals(QueryScenario.ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES)
 				|| queryScenario.equals(QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES)) {
@@ -246,6 +251,39 @@ public class SQLite4Java extends Helpers implements Database {
 			// I have no idea why this does not work...
 			// preparedStatement.bind(1, Joiner.on(",").join(ids));
 			preparedStatement = connection.prepare("select * from justatable where dcterms_identifier in (" + Joiner.on(",").join(ids) + ")");
+		} else if (queryScenario.queryResultType == Type.GRAPH) {
+			// Prepare IDs for ENTITY_RETRIEVAL scenarios
+
+			String query = "select DCTERMS_IDENTIFIER from justatable where dcterms_subject != null order by dcterms_medium, isbd_p1008, dcterm_contributor, dcterms_issued, dcterms_identifier limit";
+			switch (queryScenario) {
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES:
+				query += " 100;";
+				break;
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES:
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
+				query += " 10;";
+				break;
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
+				query += " 100;";
+				break;
+			default:
+				throw new RuntimeException("Dont know how to limit " + queryScenario);
+			}
+
+			SQLiteStatement statement = connection.prepare(query);
+			ArrayList<String> ids = new ArrayList<>();
+			while (statement.step()) {
+				ids.add("'" + statement.columnString(0) + "'");
+			}
+
+			// I have no idea why this does not work...
+			// preparedStatement.setString(1, Joiner.on(",").join(ids));
+			
+			String queryString = templates.resolve(queryScenario);
+			queryString += " where level0.id in (" + Joiner.on(",").join(ids) + ")";
+			preparedStatement = connection.prepare(queryString);
 		}
 
 		this.queryScenario = queryScenario;
@@ -270,8 +308,8 @@ public class SQLite4Java extends Helpers implements Database {
 					if (queryScenario == QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY)
 						queryResult.push(preparedStatement.columnString(0), preparedStatement.columnString(1), preparedStatement.columnString(2));
 					else
-						queryResult.push(preparedStatement.columnString(0), preparedStatement.columnString(1), preparedStatement.columnString(2), preparedStatement.columnString(3),
-								preparedStatement.columnString(4));
+						queryResult.push(preparedStatement.columnString(0), preparedStatement.columnString(1), preparedStatement.columnString(2),
+								preparedStatement.columnString(3), preparedStatement.columnString(4));
 				}
 				break;
 			case TWO_COLUMNS:
@@ -283,7 +321,7 @@ public class SQLite4Java extends Helpers implements Database {
 				while (preparedStatement.step()) {
 					DataObject dataObject = new DataObject();
 					for (Codes code : Codes.values()) {
-						if (preparedStatement.columnNull(code.ordinal())){
+						if (preparedStatement.columnNull(code.ordinal())) {
 							dataObject.set(code, null);
 							continue;
 						}
@@ -329,13 +367,13 @@ public class SQLite4Java extends Helpers implements Database {
 		sqLiteXerial.prepare(queryScenario);
 		QueryResult queryResult = sqLiteXerial.query(queryScenario);
 
-		//System.out.println(queryResult);
+		// System.out.println(queryResult);
 		//
 		// queryScenario =
 		// QueryScenario.AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10;
 		// sqLiteXerial.prepare(queryScenario);
 		// System.out.println(sqLiteXerial.query(queryScenario));
-		
+
 		sqLiteXerial.stop();
 	}
 
@@ -349,18 +387,17 @@ public class SQLite4Java extends Helpers implements Database {
 	@Override
 	public void start() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void stop() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public String toString() {
-		return "SQLite4Java [getName()=" + getName() + ", getVersion()="
-				+ getVersion() + "]";
+		return "SQLite4Java [getName()=" + getName() + ", getVersion()=" + getVersion() + "]";
 	}
 }

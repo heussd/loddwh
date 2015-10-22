@@ -17,6 +17,7 @@ import util.Dataset;
 import util.QueryResult;
 import util.QueryScenario;
 import util.Templates;
+import util.QueryResult.Type;
 import util.dumper.Helpers;
 
 public class PostgreSQL extends Helpers implements Database {
@@ -211,6 +212,46 @@ public class PostgreSQL extends Helpers implements Database {
 			preparedStatement = connection.prepareStatement("select * from justatable where dcterms_identifier in (" + Joiner.on(",").join(ids) + ")");
 
 			// System.out.println(preparedStatement);
+		} else if (queryScenario.queryResultType == Type.GRAPH) {
+			// Prepare IDs for ENTITY_RETRIEVAL scenarios
+
+			String query = "select DCTERMS_IDENTIFIER from justatable where dcterms_subject <> null order by dcterms_medium, isbd_p1008, dcterm_contributor, dcterms_issued, dcterms_identifier limit";
+			switch (queryScenario) {
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES:
+				query += " 100;";
+				break;
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES:
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
+				query += " 10;";
+				break;
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
+				query += " 100;";
+				break;
+			default:
+				throw new RuntimeException("Dont know how to limit " + queryScenario);
+			}
+
+			ResultSet resultSet = connection.createStatement().executeQuery(query);
+			ArrayList<String> ids = new ArrayList<>();
+			while (resultSet.next()) {
+				ids.add("'" + resultSet.getString(1) + "'");
+			}
+
+			// I have no idea why this does not work...
+			// preparedStatement.setString(1, Joiner.on(",").join(ids));
+
+			String queryString = templates.resolve(queryScenario);
+
+			if (ids.size() == 0) {
+				queryString += " where level0.dcterms_identifier in (null)";
+			} else {
+				queryString += " where level0.dcterms_identifier in (" + Joiner.on(",").join(ids) + ")";
+			}
+
+//			System.out.println(queryString);
+			preparedStatement = connection.prepareStatement(queryString);
 		}
 
 		this.scenarioStatements.add(preparedStatement);
@@ -236,7 +277,8 @@ public class PostgreSQL extends Helpers implements Database {
 						queryResult.push(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3));
 						break;
 					case 5:
-						queryResult.push(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
+						queryResult.push(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),
+								resultSet.getString(5));
 						break;
 					default:
 						throw new RuntimeException("Cannot parse " + resultSet.getMetaData().getColumnCount() + " columns in result set");
@@ -332,7 +374,5 @@ public class PostgreSQL extends Helpers implements Database {
 	public void stop() {
 		terminalLaunchApp(new String[] { "/usr/local/bin/pg_ctl", "-D", "/usr/local/var/loddwhbench", "stop", "-m", "immediate" });
 	}
-
-	
 
 }

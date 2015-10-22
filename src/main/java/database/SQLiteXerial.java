@@ -19,6 +19,7 @@ import util.Config;
 import util.DataObject;
 import util.Dataset;
 import util.QueryResult;
+import util.QueryResult.Type;
 import util.QueryScenario;
 import util.Templates;
 import util.dumper.Helpers;
@@ -152,7 +153,11 @@ public class SQLiteXerial extends Helpers implements Database {
 
 		switch (queryScenario) {
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
-		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS:
+		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES:
+		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES:
+		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
+		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
+		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
 			connection.createStatement().executeUpdate("drop table if exists subjects");
 			connection.createStatement().executeUpdate("create table subjects (id text, subject text)");
 
@@ -221,6 +226,39 @@ public class SQLiteXerial extends Helpers implements Database {
 			// I have no idea why this does not work...
 			// preparedStatement.setString(1, Joiner.on(",").join(ids));
 			preparedStatement = connection.prepareStatement("select * from justatable where dcterms_identifier in (" + Joiner.on(",").join(ids) + ")");
+		} else if (queryScenario.queryResultType == Type.GRAPH) {
+			// Prepare IDs for ENTITY_RETRIEVAL scenarios
+
+			String query = "select DCTERMS_IDENTIFIER from justatable where dcterms_subject != null order by dcterms_medium, isbd_p1008, dcterm_contributor, dcterms_issued, dcterms_identifier limit";
+			switch (queryScenario) {
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES:
+				query += " 100;";
+				break;
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES:
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
+				query += " 10;";
+				break;
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
+				query += " 100;";
+				break;
+			default:
+				throw new RuntimeException("Dont know how to limit " + queryScenario);
+			}
+
+			ResultSet resultSet = connection.createStatement().executeQuery(query);
+			ArrayList<String> ids = new ArrayList<>();
+			while (resultSet.next()) {
+				ids.add("'" + resultSet.getString(1) + "'");
+			}
+
+			// I have no idea why this does not work...
+			// preparedStatement.setString(1, Joiner.on(",").join(ids));
+			
+			String queryString = templates.resolve(queryScenario);
+			queryString += " where level0.id in (" + Joiner.on(",").join(ids) + ")";
+			preparedStatement = connection.prepareStatement(queryString);
 		}
 
 		this.queryScenario = queryScenario;
@@ -245,7 +283,8 @@ public class SQLiteXerial extends Helpers implements Database {
 						queryResult.push(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3));
 						break;
 					case 5:
-						queryResult.push(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5));
+						queryResult.push(resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),
+								resultSet.getString(5));
 						break;
 					default:
 						throw new RuntimeException("Cannot parse " + resultSet.getMetaData().getColumnCount() + " columns in result set");
@@ -263,7 +302,7 @@ public class SQLiteXerial extends Helpers implements Database {
 				while (resultSet.next()) {
 					DataObject dataObject = new DataObject();
 					for (Codes code : Codes.values()) {
-						if (resultSet.getObject(code.ordinal() + 1) == null){
+						if (resultSet.getObject(code.ordinal() + 1) == null) {
 							dataObject.set(code, null);
 							continue;
 						}
@@ -336,7 +375,6 @@ public class SQLiteXerial extends Helpers implements Database {
 
 	@Override
 	public String toString() {
-		return "SQLiteXerial [getName()=" + getName() + ", getVersion()="
-				+ getVersion() + "]";
+		return "SQLiteXerial [getName()=" + getName() + ", getVersion()=" + getVersion() + "]";
 	}
 }
