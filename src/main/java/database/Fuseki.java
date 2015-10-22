@@ -110,8 +110,10 @@ public class Fuseki extends Helpers implements Database {
 		if (queryScenario.isReadOnly) {
 
 			// Prepare IDs for ENTITY_RETRIEVAL scenarios
-			if (queryScenario.equals(QueryScenario.ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY) || queryScenario.equals(QueryScenario.ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES)
-					|| queryScenario.equals(QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES)) {
+			switch (queryScenario) {
+			case ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY:
+			case ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES:
+			case ENTITY_RETRIEVAL_BY_ID_100_ENTITIES: {
 				String query = templates.resolve("ENTITY_RETRIEVAL_prepare");
 				switch (queryScenario) {
 				case ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY:
@@ -134,8 +136,53 @@ public class Fuseki extends Helpers implements Database {
 				}
 
 				this.queryExecutionString = templates.resolve("ENTITY_RETRIEVAL").replaceAll("##ids##", Joiner.on(",").join(ids));
-			} else {
+				break;
+			}
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES:
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES:
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES: {
+				String query = templates.resolve("GRAPH_LIKE_prepare");
+				switch (queryScenario) {
+				case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
+				case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES:
+					query += " limit 100";
+					break;
+				case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES:
+				case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
+					query += " limit 10";
+					break;
+				case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
+				case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
+					query += " limit 100";
+					break;
+				default:
+					throw new RuntimeException("Dont know how to limit " + queryScenario);
+				}
+				ResultSet resultSet = QueryExecutionFactory.sparqlService(SPARQL_SERVICE_URL, query).execSelect();
+				ArrayList<String> ids = new ArrayList<>();
+				while (resultSet.hasNext()) {
+					QuerySolution querySolution = resultSet.nextSolution();
+					ids.add("\"" + querySolution.getLiteral(resultSet.getResultVars().get(0)).getString() + "\"");
+				}
+
+				String templateName = "GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS";
+				switch (queryScenario) {
+				case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES:
+				case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES:
+				case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
+					templateName = "GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP";
+					break;
+				}
+
+				this.queryExecutionString = templates.resolve(templateName).replaceAll("##ids##", Joiner.on(",").join(ids));
+				break;
+			}
+			default: {
 				this.queryExecutionString = templates.resolve(queryScenario);
+			}
 			}
 
 		} else {
@@ -168,12 +215,15 @@ public class Fuseki extends Helpers implements Database {
 				QuerySolution querySolution = resultSet.nextSolution();
 				switch (resultSet.getResultVars().size()) {
 				case 3:
-					queryResult.push(querySolution.getLiteral(resultSet.getResultVars().get(0)).getString(), querySolution.getLiteral(resultSet.getResultVars().get(1)).getString(),
+					queryResult.push(querySolution.getLiteral(resultSet.getResultVars().get(0)).getString(),
+							querySolution.getLiteral(resultSet.getResultVars().get(1)).getString(),
 							querySolution.getLiteral(resultSet.getResultVars().get(2)).getString());
 					break;
 				case 5:
-					queryResult.push(querySolution.getLiteral(resultSet.getResultVars().get(0)).getString(), querySolution.getLiteral(resultSet.getResultVars().get(1)).getString(),
-							querySolution.getLiteral(resultSet.getResultVars().get(2)).getString(), querySolution.getLiteral(resultSet.getResultVars().get(3)).getString(),
+					queryResult.push(querySolution.getLiteral(resultSet.getResultVars().get(0)).getString(),
+							querySolution.getLiteral(resultSet.getResultVars().get(1)).getString(),
+							querySolution.getLiteral(resultSet.getResultVars().get(2)).getString(),
+							querySolution.getLiteral(resultSet.getResultVars().get(3)).getString(),
 							querySolution.getLiteral(resultSet.getResultVars().get(4)).getString());
 					break;
 				default:
@@ -185,7 +235,8 @@ public class Fuseki extends Helpers implements Database {
 			resultSet = QueryExecutionFactory.sparqlService(SPARQL_SERVICE_URL, queryExecutionString).execSelect();
 			while (resultSet.hasNext()) {
 				QuerySolution querySolution = resultSet.nextSolution();
-				queryResult.push(querySolution.getLiteral(resultSet.getResultVars().get(0)).getString(), querySolution.getLiteral(resultSet.getResultVars().get(1)).getString());
+				queryResult.push(querySolution.getLiteral(resultSet.getResultVars().get(0)).getString(),
+						querySolution.getLiteral(resultSet.getResultVars().get(1)).getString());
 			}
 			break;
 		case COMPLETE_ENTITIES:
@@ -228,7 +279,6 @@ public class Fuseki extends Helpers implements Database {
 
 	@Override
 	public String toString() {
-		return "Fuseki [getName()=" + getName() + ", getVersion()="
-				+ getVersion() + "]";
+		return "Fuseki [getName()=" + getName() + ", getVersion()=" + getVersion() + "]";
 	}
 }

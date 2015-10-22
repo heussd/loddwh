@@ -11,4 +11,5 @@ where
 	?s3 <http://purl.org/dc/terms/identifier> ?secondRelated_id .   
 	?s3 <http://purl.org/dc/terms/subject> ?related_subj .    
 	filter( ?related_subj != ?orig_subj && ?orig_id != ?related_id && ?related_id != ?secondRelated_id)
+	filter( ?orig_id in (##ids##) )
 }
