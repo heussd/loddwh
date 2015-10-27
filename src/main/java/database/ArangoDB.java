@@ -56,7 +56,7 @@ public class ArangoDB implements Database {
 		arangoDb.setUp();
 		arangoDb.load(Dataset.hebis_10000_records);
 		
-		QueryScenario testScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY;
+		QueryScenario testScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES;
 		
 		arangoDb.prepare(testScenario);
 		QueryResult queryResult = arangoDb.query(testScenario);
@@ -67,10 +67,12 @@ public class ArangoDB implements Database {
 	}
 	
 	ArangoDriver arangoDriver;
-	CollectionEntity arangoCollection;
 
 	@Override
 	public void start() {
+		ArangoConfigure configure = new ArangoConfigure();
+		configure.init();
+		arangoDriver = new ArangoDriver(configure);
 	}
 
 	@Override
@@ -78,11 +80,7 @@ public class ArangoDB implements Database {
 	}
 
 	@Override
-	public void clean() throws Exception {
-		ArangoConfigure configure = new ArangoConfigure();
-		configure.init();
-		arangoDriver = new ArangoDriver(configure);
-		
+	public void clean() throws Exception {		
 		if(arangoDriver.getDatabases().getResult().contains(Config.DATABASE))
 			arangoDriver.deleteDatabase(Config.DATABASE);
 	}
@@ -90,8 +88,8 @@ public class ArangoDB implements Database {
 	@Override
 	public void setUp() throws Exception {
 		arangoDriver.createDatabase(Config.DATABASE);
-		arangoDriver.setDefaultDatabase(Config.DATABASE);		
-		arangoCollection = arangoDriver.createCollection(Config.DATABASE);
+		arangoDriver.setDefaultDatabase(Config.DATABASE);
+		arangoDriver.createCollection(Config.DATABASE);
 	}
 
 	@Override
@@ -118,9 +116,9 @@ public class ArangoDB implements Database {
 				System.out.println(counter + " records so far... (ArangoDB load())");
 		});
 		
-		InitializeDctermsSubjectsGraph();
 	}
 
+	private boolean GraphLoaded = false;
 	private void InitializeDctermsSubjectsGraph() throws Exception{
 		String graphName = Config.DATABASE + "_graph", edgeCollectionName = Config.DATABASE + "_sharesSubject";
 		
@@ -136,18 +134,7 @@ public class ArangoDB implements Database {
 		
 		arangoDriver.createGraph(graphName, edgeDefinitions, new ArrayList<String>(), true);
 		
-		
 		// Now build relations over DCTERMS_SUBJECT
-		
-		//TEST START
-//		String query = "FOR r IN loddwhbench FILTER r.DCTERMS_IDENTIFIER == '268876797' RETURN r"; // Einfluss der kopfform auf den kariesbefall
-//		DocumentEntity<BaseDocument> documentEntity1 = arangoDriver.executeDocumentQuery(query, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class).getUniqueResult();
-//		query = "FOR r IN loddwhbench FILTER r.DCTERMS_IDENTIFIER == '268877157' RETURN r"; // beitrag zur elektronenresonanz
-//		DocumentEntity<BaseDocument> documentEntity2 = arangoDriver.executeDocumentQuery(query, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class).getUniqueResult();
-//		BaseDocument values = new BaseDocument(); values.addAttribute("subject", "hierBitteDasGesharteSubject");
-//		arangoDriver.graphCreateEdge(graphName, edgeCollectionName, documentEntity1.getDocumentHandle(), documentEntity2.getDocumentHandle(), values, null);
-		//TEST ENDE
-		
 		String query1 = "for r in loddwhbench filter has(r, 'DCTERMS_SUBJECT') && has(r, 'DCTERMS_IDENTIFIER') return r";
 		DocumentCursor<BaseDocument> documentCursor1 = arangoDriver.executeDocumentQuery(query1, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class);
 		for (DocumentEntity<BaseDocument> documentEntity1 : documentCursor1) {
@@ -163,6 +150,8 @@ public class ArangoDB implements Database {
 				}
 			}
 		}
+		
+		GraphLoaded = true;
 	}
 	
 	private DataObject BuildDataObjectFromDocument(BaseDocument document) {
@@ -194,23 +183,27 @@ public class ArangoDB implements Database {
 		if(publisherOrDecade != null) spublisherOrDecade = publisherOrDecade.toString();
 		if(count != null) scount = String.valueOf((int) Double.parseDouble(count.toString()));		
 		queryResult.push(spublisherOrDecade, scount);
-		
-		System.out.println(scount + " = " + spublisherOrDecade);
 	}
 	
-	private List<String> EntityRetrievalScenariosDcTermsIdentifiers = new ArrayList<>();
-	private void FillEntityRetrievalScenariosDcTermsIdentifiers(BaseDocument doc){
+	private List<String> EntityRetrievalAndGraphScenariosDcTermsIdentifiers = new ArrayList<>();
+	private void FillEntityRetrievalAndGraphScenariosDcTermsIdentifiers(BaseDocument doc){
 		if(doc.getAttribute("DCTERMS_IDENTIFIER") == null){
-			System.err.println("ArangoDB, prepare ENTITY_RETRIEVAL: One element has no DCTERMS_IDENTIFIER. Element is ignored. Query-Size will not be 1, 10 or 100.");
+			System.err.println("ArangoDB, prepare ENTITY_RETRIEVAL/GRAPH: One element has no DCTERMS_IDENTIFIER. Element is ignored. Query-Size will not be 1, 10 or 100.");
 			return;
 		}
-		EntityRetrievalScenariosDcTermsIdentifiers.add(doc.getAttribute("DCTERMS_IDENTIFIER").toString());
+		EntityRetrievalAndGraphScenariosDcTermsIdentifiers.add(doc.getAttribute("DCTERMS_IDENTIFIER").toString());
 	}
 	
 	@Override
 	public void prepare(QueryScenario queryScenario) throws Exception {
 		String query;
 		DocumentCursor<BaseDocument> documentCursor;
+		String filterString = "";
+		
+		if(queryScenario == QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY || queryScenario == QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES || queryScenario == QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES || queryScenario == QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY || queryScenario == QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES || queryScenario == QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES){
+			if(!GraphLoaded) InitializeDctermsSubjectsGraph();
+			filterString = "FILTER HAS(r, 'DCTERMS_SUBJECT')";
+		}
 		
 		switch(queryScenario){
 			case CONDITIONAL_TABLE_SCAN_ALL_STUDIES:
@@ -218,29 +211,35 @@ public class ArangoDB implements Database {
 				break;
 				
 			case ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY:
-				EntityRetrievalScenariosDcTermsIdentifiers.clear();
-				query = "FOR r IN loddwhbench SORT r.DCTERMS_MEDIUM, r.ISBD_P1008, r.DCTERM_CONTRIBUTOR, r.DCTERMS_ISSUED, r.DCTERMS_IDENTIFIER LIMIT 1 RETURN { 'DCTERMS_IDENTIFIER' : r.DCTERMS_IDENTIFIER }";
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
+				EntityRetrievalAndGraphScenariosDcTermsIdentifiers.clear();
+				query = String.format("FOR r IN loddwhbench %s SORT r.DCTERMS_MEDIUM, r.ISBD_P1008, r.DCTERM_CONTRIBUTOR, r.DCTERMS_ISSUED, r.DCTERMS_IDENTIFIER LIMIT 1 RETURN { 'DCTERMS_IDENTIFIER' : r.DCTERMS_IDENTIFIER }", filterString);
 				documentCursor = arangoDriver.executeDocumentQuery(query, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class);
 				for (DocumentEntity<BaseDocument> documentEntity : documentCursor) {
-					FillEntityRetrievalScenariosDcTermsIdentifiers(documentEntity.getEntity());
+					FillEntityRetrievalAndGraphScenariosDcTermsIdentifiers(documentEntity.getEntity());
 				}
 				break;
 				
 			case ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES:
-				EntityRetrievalScenariosDcTermsIdentifiers.clear();
-				query = "FOR r IN loddwhbench SORT r.DCTERMS_MEDIUM, r.ISBD_P1008, r.DCTERM_CONTRIBUTOR, r.DCTERMS_ISSUED, r.DCTERMS_IDENTIFIER LIMIT 10 RETURN { 'DCTERMS_IDENTIFIER' : r.DCTERMS_IDENTIFIER }";
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES:
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
+				EntityRetrievalAndGraphScenariosDcTermsIdentifiers.clear();
+				query = String.format("FOR r IN loddwhbench %s SORT r.DCTERMS_MEDIUM, r.ISBD_P1008, r.DCTERM_CONTRIBUTOR, r.DCTERMS_ISSUED, r.DCTERMS_IDENTIFIER LIMIT 10 RETURN { 'DCTERMS_IDENTIFIER' : r.DCTERMS_IDENTIFIER }", filterString);
 				documentCursor = arangoDriver.executeDocumentQuery(query, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class);
 				for (DocumentEntity<BaseDocument> documentEntity : documentCursor) {
-					FillEntityRetrievalScenariosDcTermsIdentifiers(documentEntity.getEntity());
+					FillEntityRetrievalAndGraphScenariosDcTermsIdentifiers(documentEntity.getEntity());
 				}
 				break;
 				
 			case ENTITY_RETRIEVAL_BY_ID_100_ENTITIES:
-				EntityRetrievalScenariosDcTermsIdentifiers.clear();
-				query = "FOR r IN loddwhbench SORT r.DCTERMS_MEDIUM, r.ISBD_P1008, r.DCTERM_CONTRIBUTOR, r.DCTERMS_ISSUED, r.DCTERMS_IDENTIFIER LIMIT 100 RETURN { 'DCTERMS_IDENTIFIER' : r.DCTERMS_IDENTIFIER }";
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES:
+			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
+				EntityRetrievalAndGraphScenariosDcTermsIdentifiers.clear();
+				query = String.format("FOR r IN loddwhbench %s SORT r.DCTERMS_MEDIUM, r.ISBD_P1008, r.DCTERM_CONTRIBUTOR, r.DCTERMS_ISSUED, r.DCTERMS_IDENTIFIER LIMIT 100 RETURN { 'DCTERMS_IDENTIFIER' : r.DCTERMS_IDENTIFIER }", filterString);
 				documentCursor = arangoDriver.executeDocumentQuery(query, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class);
 				for (DocumentEntity<BaseDocument> documentEntity : documentCursor) {
-					FillEntityRetrievalScenariosDcTermsIdentifiers(documentEntity.getEntity());
+					FillEntityRetrievalAndGraphScenariosDcTermsIdentifiers(documentEntity.getEntity());
 				}
 				break;
 		}
@@ -282,7 +281,7 @@ public class ArangoDB implements Database {
 					case ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY:
 					case ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES:
 					case ENTITY_RETRIEVAL_BY_ID_100_ENTITIES:
-						for (String dcterms_identifier : EntityRetrievalScenariosDcTermsIdentifiers) {
+						for (String dcterms_identifier : EntityRetrievalAndGraphScenariosDcTermsIdentifiers) {
 							query = String.format("FOR r IN loddwhbench FILTER r.DCTERMS_IDENTIFIER == '%s' RETURN r", dcterms_identifier);
 							documentCursor = arangoDriver.executeDocumentQuery(query, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class);
 							for (DocumentEntity<BaseDocument> documentEntity : documentCursor) {
@@ -299,34 +298,68 @@ public class ArangoDB implements Database {
 			case GRAPH:
 				switch(queryScenario){
 					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
-						query = "for e in GRAPH_EDGES('loddwhbench_graph', {}, {includeData: true}) return e";
-						documentCursor = arangoDriver.executeDocumentQuery(query, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class);
-						for (DocumentEntity<BaseDocument> documentEntity : documentCursor) {
-							BaseDocument document = documentEntity.getEntity();
+					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES:
+					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES:
+						for (String dcterms_identifier : EntityRetrievalAndGraphScenariosDcTermsIdentifiers) {
+							query = String.format("for e in GRAPH_EDGES('loddwhbench_graph', {DCTERMS_IDENTIFIER: '%s'}, {includeData: true, direction: 'outbound', edgeCollectionRestriction: 'loddwhbench_sharesSubject'}) return e", dcterms_identifier);
+							documentCursor = arangoDriver.executeDocumentQuery(query, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class);
 							
-							String getFrom = String.format("FOR r IN loddwhbench FILTER r._id == '%s' RETURN r", document.getAttribute("_from"));
-							DocumentEntity<BaseDocument> fromEntity = arangoDriver.executeDocumentQuery(getFrom, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class).getUniqueResult();
-							
-							String getTo = String.format("FOR r IN loddwhbench FILTER r._id == '%s' RETURN r", document.getAttribute("_to"));
-							DocumentEntity<BaseDocument> toEntity = arangoDriver.executeDocumentQuery(getTo, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class).getUniqueResult();
-							
-							
-//							Object properties = document.getAttribute("properties");
-//							BaseDocument bdproperties = (BaseDocument)properties;
-//							String subject = bdproperties.getAttribute("subject").toString();
-							String subject = ""; // TODO...
-							
-							
-							String originalIdentifier = fromEntity.getEntity().getAttribute("DCTERMS_IDENTIFIER").toString();
-							String relatedIdentifier = toEntity.getEntity().getAttribute("DCTERMS_IDENTIFIER").toString();
-							
-							System.out.println(String.format("%s - %s - %s", originalIdentifier, subject, relatedIdentifier));
-							// TODO QUERYRESULT
+							for (DocumentEntity<BaseDocument> documentEntity : documentCursor) {
+								BaseDocument document = documentEntity.getEntity();
+								
+								String originalIdentifier = dcterms_identifier, relatedIdentifier = null, originalSubject = null;
+								
+								String getTo = String.format("FOR r IN loddwhbench FILTER r._id == '%s' RETURN r", document.getAttribute("_to"));
+								DocumentEntity<BaseDocument> toEntity = arangoDriver.executeDocumentQuery(getTo, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class).getUniqueResult();
+								relatedIdentifier = toEntity.getEntity().getAttribute("DCTERMS_IDENTIFIER").toString();
+								
+								HashMap<String, String> properties = (HashMap<String, String>)document.getAttribute("properties");
+								originalSubject = properties.get("subject");
+								
+								queryResult.push(originalIdentifier, originalSubject, relatedIdentifier);
+							}
 						}
 						return queryResult;
 						
 						
-					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS:
+					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
+					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
+					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
+						for (String dcterms_identifier : EntityRetrievalAndGraphScenariosDcTermsIdentifiers) {
+							query = String.format("for e in GRAPH_EDGES('loddwhbench_graph', {DCTERMS_IDENTIFIER: '%s'}, {includeData: true, direction: 'outbound', edgeCollectionRestriction: 'loddwhbench_sharesSubject'}) return e", dcterms_identifier);
+							documentCursor = arangoDriver.executeDocumentQuery(query, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class);
+							
+							for (DocumentEntity<BaseDocument> documentEntity : documentCursor) {
+								BaseDocument document = documentEntity.getEntity();
+								
+								String originalIdentifier = dcterms_identifier, firstRelatedIdentifier = null, originalSubject = null;
+								
+								String getTo = String.format("FOR r IN loddwhbench FILTER r._id == '%s' RETURN r", document.getAttribute("_to"));
+								DocumentEntity<BaseDocument> toEntity = arangoDriver.executeDocumentQuery(getTo, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class).getUniqueResult();
+								firstRelatedIdentifier = toEntity.getEntity().getAttribute("DCTERMS_IDENTIFIER").toString();
+								
+								HashMap<String, String> properties = (HashMap<String, String>)document.getAttribute("properties");
+								originalSubject = properties.get("subject");
+								
+								query = String.format("for e in GRAPH_EDGES('loddwhbench_graph', {DCTERMS_IDENTIFIER: '%s'}, {includeData: true, direction: 'outbound', edgeCollectionRestriction: 'loddwhbench_sharesSubject'}) return e", firstRelatedIdentifier);
+								DocumentCursor<BaseDocument> documentCursor2 = arangoDriver.executeDocumentQuery(query, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class);
+								for (DocumentEntity<BaseDocument> documentEntity2 : documentCursor2) {
+									BaseDocument document2 = documentEntity2.getEntity();
+									String firstRelatedSubject = null, secondRelatedIdentifier = null;
+									
+									HashMap<String, String> properties2 = (HashMap<String, String>)document2.getAttribute("properties");
+									firstRelatedSubject = properties2.get("subject");
+									
+									String getTo2 = String.format("FOR r IN loddwhbench FILTER r._id == '%s' RETURN r", document2.getAttribute("_to"));
+									DocumentEntity<BaseDocument> toEntity2 = arangoDriver.executeDocumentQuery(getTo2, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class).getUniqueResult();
+									secondRelatedIdentifier = toEntity2.getEntity().getAttribute("DCTERMS_IDENTIFIER").toString();
+									
+									//System.out.println(String.format("%s - %s - %s - %s - %s", originalIdentifier, originalSubject, firstRelatedIdentifier, firstRelatedSubject, secondRelatedIdentifier));
+									queryResult.push(originalIdentifier, originalSubject, firstRelatedIdentifier, firstRelatedSubject, secondRelatedIdentifier);
+								}
+							}
+						}
+						return queryResult;
 				}
 				break;
 				
@@ -436,8 +469,7 @@ public class ArangoDB implements Database {
 				break;
 		}
 		
-		//throw new RuntimeException("ArangoDB-query() finished without return");
-		return null;
+		throw new RuntimeException("ArangoDB-query() finished without return");
 	}
 
 }
