@@ -2,27 +2,15 @@ package database;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
-
-import org.bson.Document;
 
 import com.arangodb.ArangoConfigure;
 import com.arangodb.ArangoDriver;
 import com.arangodb.DocumentCursor;
-import com.arangodb.entity.CollectionEntity;
-
-import java.util.Iterator;
-import java.util.Map;
-
-import com.arangodb.ArangoException;
-import com.arangodb.CursorResultSet;
 import com.arangodb.entity.BaseDocument;
 import com.arangodb.entity.DocumentEntity;
 import com.arangodb.entity.EdgeDefinitionEntity;
-import com.arangodb.entity.GraphEntity;
-import com.arangodb.util.MapBuilder;
-
+import com.arangodb.util.AqlQueryOptions;
 import util.Codes;
 import util.Config;
 import util.DataObject;
@@ -56,12 +44,14 @@ public class ArangoDB implements Database {
 		arangoDb.setUp();
 		arangoDb.load(Dataset.hebis_10000_records);
 		
-		QueryScenario testScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES;
+		QueryScenario testScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY;
 		
 		arangoDb.prepare(testScenario);
 		QueryResult queryResult = arangoDb.query(testScenario);
 		
 		//System.out.println(queryResult);
+		arangoDb.prepare(QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES);
+		arangoDb.query(QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES);
 		
 		arangoDb.stop();
 	}
@@ -117,9 +107,17 @@ public class ArangoDB implements Database {
 		});
 		
 	}
-
+	
+	private AqlQueryOptions GetAqlQueryOptionsForLongRunningCursor(){
+		return new AqlQueryOptions().setCount(false).setFullCount(false).setTtl(60 * 60); // TTL in seconds, now 1 hour, doesn't matter if cursors are correctly closed after usage
+	}
+	
 	private boolean GraphLoaded = false;
-	private void InitializeDctermsSubjectsGraph() throws Exception{
+	private void InitializeDctermsSubjectsGraph() throws Exception{		
+//		System.out.println("Create index on DCTERMS_SUBJECT");
+//		arangoDriver.createIndex(Config.DATABASE, IndexType.HASH, false, "DCTERMS_SUBJECT");
+//		System.out.println("Finished create index on DCTERMS_SUBJECT");
+		
 		String graphName = Config.DATABASE + "_graph", edgeCollectionName = Config.DATABASE + "_sharesSubject";
 		
 		EdgeDefinitionEntity edgeDefinition = new EdgeDefinitionEntity();
@@ -135,21 +133,44 @@ public class ArangoDB implements Database {
 		arangoDriver.createGraph(graphName, edgeDefinitions, new ArrayList<String>(), true);
 		
 		// Now build relations over DCTERMS_SUBJECT
-		String query1 = "for r in loddwhbench filter has(r, 'DCTERMS_SUBJECT') && has(r, 'DCTERMS_IDENTIFIER') return r";
-		DocumentCursor<BaseDocument> documentCursor1 = arangoDriver.executeDocumentQuery(query1, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class);
-		for (DocumentEntity<BaseDocument> documentEntity1 : documentCursor1) {
+		String query1 = "for r in loddwhbench filter has(r, 'DCTERMS_SUBJECT') return r";
+		DocumentCursor<BaseDocument> documentCursor1 = arangoDriver.executeDocumentQuery(query1, null, GetAqlQueryOptionsForLongRunningCursor(), BaseDocument.class);
+		for (DocumentEntity<BaseDocument> documentEntity1 : documentCursor1) {			
 			BaseDocument document1 = documentEntity1.getEntity();
-			for(String subject : (ArrayList<String>) document1.getAttribute("DCTERMS_SUBJECT")){
-				String query2 = String.format("for r in loddwhbench filter has(r, 'DCTERMS_SUBJECT') && has(r, 'DCTERMS_IDENTIFIER') && '%s' in r.DCTERMS_SUBJECT && r._key != '%s' return r", subject, document1.getDocumentKey());
-				DocumentCursor<BaseDocument> documentCursor2 = arangoDriver.executeDocumentQuery(query2, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class);
-				for (DocumentEntity<BaseDocument> documentEntity2 : documentCursor2) {					
-					// Add edge for found relation
-					BaseDocument edgeValues = new BaseDocument();
-					edgeValues.addAttribute("subject", subject);					
-					arangoDriver.graphCreateEdge(graphName, edgeCollectionName, documentEntity1.getDocumentHandle(), documentEntity2.getDocumentHandle(), edgeValues, null);
+			
+			ArrayList<String> document1Subjects = (ArrayList<String>) document1.getAttribute("DCTERMS_SUBJECT");
+			
+			String bindArrayQueryByOr = "";
+			if(document1Subjects.size() > 0){
+				bindArrayQueryByOr += "&& (";
+				for(int i = 0; i < document1Subjects.size(); i++){
+					bindArrayQueryByOr += String.format("'%s' in r.DCTERMS_SUBJECT", document1Subjects.get(i));
+					if((i+1) < document1Subjects.size()) bindArrayQueryByOr += " || ";
+				}
+				bindArrayQueryByOr += ")";
+			}else{
+				continue;
+			}
+			
+			String query2 = String.format("for r in loddwhbench filter has(r, 'DCTERMS_SUBJECT') %s && r._key != '%s' return r", bindArrayQueryByOr, document1.getDocumentKey());
+			DocumentCursor<BaseDocument> documentCursor2 = arangoDriver.executeDocumentQuery(query2, null, GetAqlQueryOptionsForLongRunningCursor(), BaseDocument.class);
+			for (DocumentEntity<BaseDocument> documentEntity2 : documentCursor2) {
+				BaseDocument document2 = documentEntity2.getEntity();
+				
+				ArrayList<String> document2Subjects = (ArrayList<String>) document2.getAttribute("DCTERMS_SUBJECT");
+				
+				for (String doc1Subject : document1Subjects) {
+					if(document2Subjects.contains(doc1Subject)){
+						// Add edge for found relation
+						BaseDocument edgeValues = new BaseDocument();
+						edgeValues.addAttribute("subject", doc1Subject);
+						arangoDriver.graphCreateEdge(graphName, edgeCollectionName, documentEntity1.getDocumentHandle(), documentEntity2.getDocumentHandle(), edgeValues, null);
+					}
 				}
 			}
+			documentCursor2.close();
 		}
+		documentCursor1.close();
 		
 		GraphLoaded = true;
 	}
