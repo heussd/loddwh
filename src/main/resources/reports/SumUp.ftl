@@ -1,5 +1,5 @@
 
-## Evaluation Overview, all Databases, Test Series $TestSeries 
+## Evaluation Overview, all Databases, Test Series ${testserie}
 
 | QueryScenario | Phase |<#list databases as db> ${db} |</#list>
 | :-- | :-- |<#list databases as db> --: |</#list>

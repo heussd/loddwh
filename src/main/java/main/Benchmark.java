@@ -144,12 +144,11 @@ public class Benchmark {
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("<style style=\"text/css\">tr:hover{background: #FFFF00;}</style>\n\n");
-		sb.append(String.format("# Report for Testserie \"%s\"\n\n", testSerie.toString()));
 
-		sb.append(reports.MakeBenchmarkReport(benchmarkObjects));
+		sb.append(reports.MakeBenchmarkReport(benchmarkObjects, testSerie));
 		
 		for (BenchmarkObject benchmarkObject : benchmarkObjects) {
-			sb.append(reports.MakeBenchmarkObjectReport(benchmarkObject));
+			sb.append(reports.MakeBenchmarkObjectReport(benchmarkObject, testSerie));
 		}
 
 		sb.append(reports.MakeVerifyResultsReport(benchmarkObjects));

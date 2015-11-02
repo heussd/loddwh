@@ -6,22 +6,25 @@ import java.util.Hashtable;
 import java.util.List;
 
 import util.QueryScenario;
+import util.TestSeries;
 import main.BenchmarkObject;
 
 public class BenchmarkObjectReportModel {
 
-	public String Name;
+	public String Name, Version, Testserie;
 	public List<BenchmarkObjectReportModelRow> initialize, readOnly, notReadOnly;
 	
-	public BenchmarkObjectReportModel(BenchmarkObject benchmarkObject){
+	public BenchmarkObjectReportModel(BenchmarkObject benchmarkObject, TestSeries testSerie){
 		initialize = new ArrayList<BenchmarkObjectReportModelRow>();
 		readOnly = new ArrayList<BenchmarkObjectReportModelRow>();
 		notReadOnly = new ArrayList<BenchmarkObjectReportModelRow>();
+		Testserie = testSerie.toString();
 		BuildModel(benchmarkObject);
 	}
 	
 	private void BuildModel(BenchmarkObject benchmarkObject){
 		Name = benchmarkObject.getTitle();
+		Version = benchmarkObject.getDatabase().getVersion();
 		
 		initialize.add(new BenchmarkObjectReportModelRow("Set up", null, benchmarkObject.getSetUpTime(), null, null, null, 0));
 		initialize.add(new BenchmarkObjectReportModelRow("Load", null, benchmarkObject.getLoadTime(), null, null, null, 1));

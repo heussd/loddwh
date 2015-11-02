@@ -4,15 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import util.QueryScenario;
+import util.TestSeries;
 
 public class SumUpReportModel {
 
 	public List<String> databases;
 	public List<SumUpReportModelRow> entrys;
+	public String Testserie;
 	
-	public SumUpReportModel(List<BenchmarkObjectReportModel> dataModels){
+	public SumUpReportModel(List<BenchmarkObjectReportModel> dataModels, TestSeries testSerie){
 		databases = new ArrayList<String>();
 		entrys = new ArrayList<SumUpReportModelRow>();
+		Testserie = testSerie.toString();
 		BuildReport(dataModels);
 	}
 	

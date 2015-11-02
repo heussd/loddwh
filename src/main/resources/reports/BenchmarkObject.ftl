@@ -1,6 +1,6 @@
 -----
 
-## Evaluation Details for ${name}, Version $Version, Test Series $Testseries
+## Evaluation Details for ${name}, Version ${version}, Test Series ${testserie}
 
 | QueryScenario | Phase | First time | Average time | Min time | Max time |
 | :-- | :-- | --: | --: | --: | --: |

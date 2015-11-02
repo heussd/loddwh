@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import util.TestSeries;
 import main.BenchmarkObject;
 import freemarker.core.ParseException;
 import freemarker.template.Configuration;
@@ -31,12 +32,14 @@ public class Reports {
 	}
 	
 	
-	public String MakeBenchmarkObjectReport(BenchmarkObject benchmarkObject) throws Exception{
+	public String MakeBenchmarkObjectReport(BenchmarkObject benchmarkObject, TestSeries testSerie) throws Exception{
 				
-		BenchmarkObjectReportModel viewModel = new BenchmarkObjectReportModel(benchmarkObject);
+		BenchmarkObjectReportModel viewModel = new BenchmarkObjectReportModel(benchmarkObject, testSerie);
 	
 		Map<String, Object> root = new HashMap<>();
 		root.put("name", viewModel.Name);
+		root.put("version", viewModel.Version);
+		root.put("testserie", viewModel.Testserie);
 		root.put("initialize", new SimpleCollection(viewModel.initialize));
 		root.put("readOnly", new SimpleCollection(viewModel.readOnly));
 		root.put("notReadOnly", new SimpleCollection(viewModel.notReadOnly));
@@ -48,15 +51,16 @@ public class Reports {
 		return stringWriter.toString();
 	}
 	
-	public String MakeBenchmarkReport(List<BenchmarkObject> benchmarkObjects) throws Exception{
+	public String MakeBenchmarkReport(List<BenchmarkObject> benchmarkObjects, TestSeries testSerie) throws Exception{
 		List<BenchmarkObjectReportModel> dataModels = new ArrayList<BenchmarkObjectReportModel>();
 		for (BenchmarkObject benchmarkObject : benchmarkObjects) {
-			dataModels.add(new BenchmarkObjectReportModel(benchmarkObject));
+			dataModels.add(new BenchmarkObjectReportModel(benchmarkObject, testSerie));
 		}
 		
-		SumUpReportModel viewModel = new SumUpReportModel(dataModels);
+		SumUpReportModel viewModel = new SumUpReportModel(dataModels, testSerie);
 		
 		Map<String, Object> root = new HashMap<>();
+		root.put("testserie", viewModel.Testserie);
 		root.put("databases", new SimpleCollection(viewModel.databases));
 		root.put("entrys", new SimpleCollection(viewModel.entrys));
 		
