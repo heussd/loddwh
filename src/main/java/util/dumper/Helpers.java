@@ -430,8 +430,7 @@ public abstract class Helpers {
 
 		try {
 			command = Helpers.class.getResource("/shell/" + command).getFile();
-			System.out.println(command);
-			ProcessBuilder processBuilder = new ProcessBuilder("open", "-a", "Terminal.app", command);
+			ProcessBuilder processBuilder = new ProcessBuilder("open", "-j", "-g", "-a", "Terminal.app", command);
 			Process process = processBuilder.start();
 			Thread.sleep(waitSeconds * 1000);
 		} catch (Exception e) {

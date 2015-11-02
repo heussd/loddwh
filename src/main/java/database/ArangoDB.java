@@ -28,7 +28,7 @@ public class ArangoDB implements Database {
 
 	@Override
 	public String getVersion() {
-		return "Server 2.7.0 / Java Driver 2.6.8";
+		return "2.6.9 64bit -- ICU 54.1, V8 4.1.0.27, OpenSSL 1.0.2d 9 Jul 2015 / Java Driver 2.6.8";
 	}
 		
 	@Override
@@ -60,6 +60,9 @@ public class ArangoDB implements Database {
 
 	@Override
 	public void start() {
+		if (Config.THIS_IS_OSX)
+			Helpers.terminalLaunchScript("arangodb.sh", 20);
+		
 		ArangoConfigure configure = new ArangoConfigure();
 		configure.init();
 		arangoDriver = new ArangoDriver(configure);
@@ -67,6 +70,8 @@ public class ArangoDB implements Database {
 
 	@Override
 	public void stop() {
+		if (Config.THIS_IS_OSX)
+			Helpers.terminalLaunchScript("arangodb_stop.sh", 10);
 	}
 
 	@Override
@@ -97,7 +102,7 @@ public class ArangoDB implements Database {
 			try {
 				arangoDriver.createDocument(Config.DATABASE, arangoDoc);
 			} catch (Exception e) {
-				System.err.println("Konnte ein ArangoDocument nicht einfügen.");
+				System.err.println("Konnte ein ArangoDocument nicht einfï¿½gen.");
 				e.printStackTrace();
 			}
 			

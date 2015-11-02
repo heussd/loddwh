@@ -406,13 +406,13 @@ public class Virtuoso implements Database {
 
 	@Override
 	public void start() {
-		Helpers.terminalLaunchScript("virtuoso.sh", 12);
+		Helpers.terminalLaunchScript("virtuoso.sh", 20);
 	}
 
 	@Override
 	public void stop() {
-		// TODO Auto-generated method stub
-
+		if (Config.THIS_IS_OSX)
+			Helpers.terminalLaunchScript("virtuoso_stop.sh", 10);
 	}
 
 }
