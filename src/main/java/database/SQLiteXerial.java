@@ -34,6 +34,7 @@ public class SQLiteXerial extends Helpers implements Database {
 	private QueryScenario queryScenario;
 	private Templates templates;
 	private ArrayList<Dataset> lastLoadedDatasets = new ArrayList<>();
+	private boolean graphStructurePrepared = false;
 
 	public SQLiteXerial() {
 		// Produce some queries based on Config / Codes enums - do not prepare
@@ -158,33 +159,37 @@ public class SQLiteXerial extends Helpers implements Database {
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
-			connection.createStatement().executeUpdate("drop table if exists subjects");
-			connection.createStatement().executeUpdate("create table subjects (id text, subject text)");
+			if (!this.graphStructurePrepared ) {
+				connection.createStatement().executeUpdate("drop table if exists subjects");
+				connection.createStatement().executeUpdate("create table subjects (id text, subject text)");
 
-			for (Dataset lastLoadedDataset : lastLoadedDatasets) {
-				// Resolve multiple dcterms_subject in a new table
-				readRdf(lastLoadedDataset, dataObject -> {
-					try {
-						if (dataObject.get(Codes.DCTERMS_SUBJECT) != null) {
-							for (String oneSubject : (ArrayList<String>) dataObject.get(Codes.DCTERMS_SUBJECT)) {
-								connection.createStatement().executeUpdate("insert into subjects values ('" + dataObject.getId() + "','" + oneSubject + "')");
-							}
-						}
-					} catch (Exception e) {
-						throw new RuntimeException("Cannot insert", e);
-					}
-
-				} , counter -> {
-					if (counter % COMMIT_EVERY_N_RECORDS == 0)
+				for (Dataset lastLoadedDataset : lastLoadedDatasets) {
+					// Resolve multiple dcterms_subject in a new table
+					readRdf(lastLoadedDataset, dataObject -> {
 						try {
-							connection.commit();
+							if (dataObject.get(Codes.DCTERMS_SUBJECT) != null) {
+								for (String oneSubject : (ArrayList<String>) dataObject.get(Codes.DCTERMS_SUBJECT)) {
+									connection.createStatement()
+											.executeUpdate("insert into subjects values ('" + dataObject.getId() + "','" + oneSubject + "')");
+								}
+							}
 						} catch (Exception e) {
+							throw new RuntimeException("Cannot insert", e);
 						}
-				});
-			}
 
-			connection.createStatement().executeUpdate("create index if not exists idxid on subjects (id)");
-			connection.createStatement().executeUpdate("create index if not exists idxsubjects on subjects (subject)");
+					} , counter -> {
+						if (counter % COMMIT_EVERY_N_RECORDS == 0)
+							try {
+								connection.commit();
+							} catch (Exception e) {
+							}
+					});
+				}
+
+				connection.createStatement().executeUpdate("create index if not exists idxid on subjects (id)");
+				connection.createStatement().executeUpdate("create index if not exists idxsubjects on subjects (subject)");
+				this.graphStructurePrepared = true;
+			}
 			break;
 		case SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY:
 		case SCHEMA_CHANGE_REMOVE_RDF_TYPE:
@@ -229,7 +234,7 @@ public class SQLiteXerial extends Helpers implements Database {
 		} else if (queryScenario.queryResultType == Type.GRAPH) {
 			// Prepare IDs for ENTITY_RETRIEVAL scenarios
 
-			String query = "select DCTERMS_IDENTIFIER from justatable where dcterms_subject != null order by dcterms_medium, isbd_p1008, dcterm_contributor, dcterms_issued, dcterms_identifier limit";
+			String query = "select DCTERMS_IDENTIFIER from justatable where dcterms_subject not null order by dcterms_medium, isbd_p1008, dcterm_contributor, dcterms_issued, dcterms_identifier limit";
 			switch (queryScenario) {
 			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
 			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES:
@@ -241,7 +246,7 @@ public class SQLiteXerial extends Helpers implements Database {
 				break;
 			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
 			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
-				query += " 100;";
+				query += " 1;";
 				break;
 			default:
 				throw new RuntimeException("Dont know how to limit " + queryScenario);
@@ -255,7 +260,7 @@ public class SQLiteXerial extends Helpers implements Database {
 
 			// I have no idea why this does not work...
 			// preparedStatement.setString(1, Joiner.on(",").join(ids));
-			
+
 			String queryString = templates.resolve(queryScenario);
 			queryString += " where level0.id in (" + Joiner.on(",").join(ids) + ")";
 			preparedStatement = connection.prepareStatement(queryString);
@@ -340,17 +345,17 @@ public class SQLiteXerial extends Helpers implements Database {
 		// sqLiteXerial.load(Dataset.hebis_10000_records);
 		sqLiteXerial.load(Dataset.hebis_10000_records);
 
-		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES;
+		QueryScenario queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY;
 
 		sqLiteXerial.prepare(queryScenario);
 		QueryResult qR1 = sqLiteXerial.query(queryScenario);
 
-		queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES;
+		queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES;
 		sqLiteXerial.prepare(queryScenario);
 		QueryResult qR2 = sqLiteXerial.query(queryScenario);
 
-		System.out.println("R1: " + qR1.hashCode());
-		System.out.println("R2: " + qR2.hashCode());
+		System.out.println("R1: " + qR1);
+		System.out.println("R2: " + qR2);
 	}
 
 	@Override

@@ -29,6 +29,7 @@ public class PostgreSQL extends Helpers implements Database {
 	private ArrayList<PreparedStatement> scenarioStatements;
 	private QueryScenario queryScenario;
 	private Templates templates;
+	private boolean graphStructurePrepared = false;
 
 	@Override
 	public String getName() {
@@ -174,6 +175,18 @@ public class PostgreSQL extends Helpers implements Database {
 		case SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY:
 		case SCHEMA_CHANGE_REMOVE_RDF_TYPE:
 			break;
+		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
+		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES:
+		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES:
+		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
+		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
+		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
+			if (!this.graphStructurePrepared ) {
+				this.graphStructurePrepared = true;
+				// Fall through
+			} else {
+				break;
+			}
 		default:
 			statement.executeUpdate(templates.resolve(queryScenario + "_prepare"));
 		}
@@ -215,7 +228,7 @@ public class PostgreSQL extends Helpers implements Database {
 		} else if (queryScenario.queryResultType == Type.GRAPH) {
 			// Prepare IDs for ENTITY_RETRIEVAL scenarios
 
-			String query = "select DCTERMS_IDENTIFIER from justatable where dcterms_subject <> null order by dcterms_medium, isbd_p1008, dcterm_contributor, dcterms_issued, dcterms_identifier limit";
+			String query = "select DCTERMS_IDENTIFIER from justatable where dcterms_subject IS NOT null order by dcterms_medium, isbd_p1008, dcterm_contributor, dcterms_issued, dcterms_identifier limit";
 			switch (queryScenario) {
 			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
 			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES:
@@ -250,7 +263,7 @@ public class PostgreSQL extends Helpers implements Database {
 				queryString += " where level0.dcterms_identifier in (" + Joiner.on(",").join(ids) + ")";
 			}
 
-//			System.out.println(queryString);
+			// System.out.println(queryString);
 			preparedStatement = connection.prepareStatement(queryString);
 		}
 

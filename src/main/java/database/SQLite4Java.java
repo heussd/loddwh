@@ -34,6 +34,7 @@ public class SQLite4Java extends Helpers implements Database {
 	private Templates templates;
 	private SQLiteQueue queue;
 	private ArrayList<Dataset> lastLoadedDatasets = new ArrayList<>();
+	private boolean graphStructurePrepared = false;
 
 	public SQLite4Java() {
 		// Disable logging of sqlite4java
@@ -166,37 +167,40 @@ public class SQLite4Java extends Helpers implements Database {
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
-			connection.exec("drop table if exists subjects");
-			connection.exec("create table subjects (id text, subject text)");
-			connection.exec("create index if not exists idxid on subjects (id)");
-			connection.exec("create index if not exists idxsubjects on subjects (subject)");
+			if (!this.graphStructurePrepared) {
+				connection.exec("drop table if exists subjects");
+				connection.exec("create table subjects (id text, subject text)");
+				connection.exec("create index if not exists idxid on subjects (id)");
+				connection.exec("create index if not exists idxsubjects on subjects (subject)");
 
-			connection.exec("BEGIN");
+				connection.exec("BEGIN");
 
-			// Resolve multiple dcterms_subject in a new table
-			for (Dataset lastLoadedDataset : lastLoadedDatasets) {
-				readRdf(lastLoadedDataset, dataObject -> {
-					try {
-						if (dataObject.get(Codes.DCTERMS_SUBJECT) != null) {
-							for (String oneSubject : (ArrayList<String>) dataObject.get(Codes.DCTERMS_SUBJECT)) {
-								connection.exec("insert into subjects values ('" + dataObject.getId() + "','" + oneSubject + "')");
+				// Resolve multiple dcterms_subject in a new table
+				for (Dataset lastLoadedDataset : lastLoadedDatasets) {
+					readRdf(lastLoadedDataset, dataObject -> {
+						try {
+							if (dataObject.get(Codes.DCTERMS_SUBJECT) != null) {
+								for (String oneSubject : (ArrayList<String>) dataObject.get(Codes.DCTERMS_SUBJECT)) {
+									connection.exec("insert into subjects values ('" + dataObject.getId() + "','" + oneSubject + "')");
+								}
+							}
+						} catch (Exception e) {
+							throw new RuntimeException("Cannot insert", e);
+						}
+
+					} , counter -> {
+						if (counter % COMMIT_EVERY_N_RECORDS == 0) {
+							try {
+								connection.exec("COMMIT");
+								connection.exec("BEGIN");
+							} catch (Exception e) {
 							}
 						}
-					} catch (Exception e) {
-						throw new RuntimeException("Cannot insert", e);
-					}
-
-				} , counter -> {
-					if (counter % COMMIT_EVERY_N_RECORDS == 0) {
-						try {
-							connection.exec("COMMIT");
-							connection.exec("BEGIN");
-						} catch (Exception e) {
-						}
-					}
-				});
+					});
+				}
+				connection.exec("COMMIT");
+				this.graphStructurePrepared = true;
 			}
-			connection.exec("COMMIT");
 			break;
 		case SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY:
 		case SCHEMA_CHANGE_REMOVE_RDF_TYPE:
@@ -254,7 +258,7 @@ public class SQLite4Java extends Helpers implements Database {
 		} else if (queryScenario.queryResultType == Type.GRAPH) {
 			// Prepare IDs for ENTITY_RETRIEVAL scenarios
 
-			String query = "select DCTERMS_IDENTIFIER from justatable where dcterms_subject != null order by dcterms_medium, isbd_p1008, dcterm_contributor, dcterms_issued, dcterms_identifier limit";
+			String query = "select DCTERMS_IDENTIFIER from justatable where dcterms_subject not null order by dcterms_medium, isbd_p1008, dcterm_contributor, dcterms_issued, dcterms_identifier limit";
 			switch (queryScenario) {
 			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
 			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES:
@@ -266,7 +270,7 @@ public class SQLite4Java extends Helpers implements Database {
 				break;
 			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
 			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
-				query += " 100;";
+				query += " 1;";
 				break;
 			default:
 				throw new RuntimeException("Dont know how to limit " + queryScenario);
@@ -280,7 +284,7 @@ public class SQLite4Java extends Helpers implements Database {
 
 			// I have no idea why this does not work...
 			// preparedStatement.setString(1, Joiner.on(",").join(ids));
-			
+
 			String queryString = templates.resolve(queryScenario);
 			queryString += " where level0.id in (" + Joiner.on(",").join(ids) + ")";
 			preparedStatement = connection.prepare(queryString);
@@ -305,11 +309,21 @@ public class SQLite4Java extends Helpers implements Database {
 			switch (queryScenario.queryResultType) {
 			case GRAPH:
 				while (preparedStatement.step()) {
-					if (queryScenario == QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY)
+					switch (queryScenario) {
+					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
+					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES:
+					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES:
 						queryResult.push(preparedStatement.columnString(0), preparedStatement.columnString(1), preparedStatement.columnString(2));
-					else
+						break;
+					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
+					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
+					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
 						queryResult.push(preparedStatement.columnString(0), preparedStatement.columnString(1), preparedStatement.columnString(2),
 								preparedStatement.columnString(3), preparedStatement.columnString(4));
+						break;
+					default:
+						throw new RuntimeException("Unknown case");
+					}
 				}
 				break;
 			case TWO_COLUMNS:
