@@ -31,6 +31,10 @@ public abstract class Helpers {
 	public static String DoubleToString3Digits(double value) {
 		return new DecimalFormat("0.00").format(value);
 	}
+	
+	public static String DoubleToString4Digits(double value) {
+		return new DecimalFormat("0.000").format(value);
+	}
 
 	public static boolean isNumeric(String str) {
 		return str.matches("-?\\d+(\\.\\d+)?"); // match a number with optional

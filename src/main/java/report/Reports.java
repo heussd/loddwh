@@ -8,7 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import util.Dataset;
 import util.TestSeries;
+import util.dumper.Helpers;
 import main.BenchmarkObject;
 import freemarker.core.ParseException;
 import freemarker.template.Configuration;
@@ -45,6 +47,32 @@ public class Reports {
 		root.put("notReadOnly", new SimpleCollection(viewModel.notReadOnly));
 		
 		Template tmp = cfg.getTemplate("BenchmarkObject.ftl");
+		StringWriter stringWriter = new StringWriter();
+		tmp.process(root, stringWriter);
+		
+		return stringWriter.toString();
+	}
+	
+	public String MakeTestSeriesReport(TestSeries testSerie) throws Exception {
+		Map<String, Object> root = new HashMap<>();
+		root.put("name", testSerie.toString());
+		
+		ArrayList<TestSeriesInformationReportModelRow> datasets = new ArrayList<>();
+		for (Dataset dataset : testSerie.datasets) {
+			String size;
+			
+			try {
+				size = Helpers.DoubleToString4Digits((double)dataset.file.length() / 1024 / 1024) + " MB";
+			} catch (Exception e) {
+				size = "ERROR";
+			}
+			
+			datasets.add(new TestSeriesInformationReportModelRow(dataset, size));
+		}
+		
+		root.put("datasets", new SimpleCollection(datasets));
+		
+		Template tmp = cfg.getTemplate("TestSeriesInformation.ftl");
 		StringWriter stringWriter = new StringWriter();
 		tmp.process(root, stringWriter);
 		

@@ -147,6 +147,8 @@ public class Benchmark {
 
 		sb.append(reports.MakeBenchmarkReport(benchmarkObjects, testSerie));
 		
+		sb.append(reports.MakeTestSeriesReport(testSerie));
+		
 		for (BenchmarkObject benchmarkObject : benchmarkObjects) {
 			sb.append(reports.MakeBenchmarkObjectReport(benchmarkObject, testSerie));
 		}
