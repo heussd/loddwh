@@ -52,7 +52,7 @@ public class MongoDB implements Database {
 
 	@Override
 	public String getVersion() {
-		return "3.0.6 2008R2Plus SSL 64bit";
+		return "3.0.6";
 	}
 
 	@Override

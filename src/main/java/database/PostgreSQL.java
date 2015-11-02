@@ -33,12 +33,12 @@ public class PostgreSQL extends Helpers implements Database {
 
 	@Override
 	public String getName() {
-		return "PostgreSQL (Postgres.app)";
+		return "PostgreSQL";
 	}
 
 	@Override
 	public String getVersion() {
-		return "9.4.4 / PostGIS 2.1.7 / 9.4-1201-jdbc41";
+		return "PostgreSQL 9.4.4 on x86_64-apple-darwin14.3.0, compiled by Apple LLVM version 6.1.0 (clang-602.0.53) (based on LLVM 3.6.0svn), 64-bit / 9.4-1201-jdbc41";
 	}
 
 	public static void main(String[] args) throws Exception {

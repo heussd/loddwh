@@ -66,7 +66,7 @@ public class Fuseki extends Helpers implements Database {
 
 	@Override
 	public String getVersion() {
-		return "2.3.0";
+		return "2.3.0 2015-07-25T17:11:28+0000 / jena-libs 2.13.0";
 	}
 
 	@Override
