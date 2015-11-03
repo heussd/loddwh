@@ -3,6 +3,7 @@ package report;
 import java.util.ArrayList;
 import java.util.List;
 
+import util.Config;
 import util.dumper.Helpers;
 import freemarker.template.SimpleCollection;
 import freemarker.template.SimpleScalar;
@@ -15,14 +16,16 @@ public class SumUpReportModelRow implements TemplateHashModel {
 	private String QueryScenario, Phase;
 	private List<Double> AvgValues;
 	private int Sort;
+	private boolean targetCsv;
 
 	public SumUpReportModelRow(String queryScenario, String phase,
-			List<Double> avgValues, int sort) {
+			List<Double> avgValues, int sort, boolean targetCsv) {
 		super();
 		QueryScenario = queryScenario;
 		Phase = phase;
 		AvgValues = avgValues;
 		Sort = sort;
+		this.targetCsv = targetCsv;
 	}
 
 	@Override
@@ -35,12 +38,12 @@ public class SumUpReportModelRow implements TemplateHashModel {
 		case "avgvalues":
 			List<String> ret = new ArrayList<String>();
 			for (Double l : AvgValues) {
-				if(l == null || l == -1) ret.add("Error"); else ret.add(Helpers.DoubleToString3Digits(l) + " ms");
+				if(l == null || l == -1) ret.add("Error"); else ret.add(Helpers.DoubleToStringNDecimals(l, 2, !targetCsv && l >= Config.BORDER_FOR_SCIENTIFIC_NOTATION_REPORT_RESULT) + " ms");
 			}
 			return new SimpleCollection(ret);
 		case "lowest":
 			Double lowest = GetLowestAvgValue();
-			return new SimpleScalar(lowest == null ? "" : Helpers.DoubleToString3Digits(lowest) + " ms");
+			return new SimpleScalar(lowest == null ? "" : Helpers.DoubleToStringNDecimals(lowest, 2, !targetCsv && lowest >= Config.BORDER_FOR_SCIENTIFIC_NOTATION_REPORT_RESULT) + " ms");
 		}
 		return new SimpleScalar("Error");
 	}

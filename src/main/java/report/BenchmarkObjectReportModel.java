@@ -13,12 +13,14 @@ public class BenchmarkObjectReportModel {
 
 	public String Name, Version, Testserie;
 	public List<BenchmarkObjectReportModelRow> initialize, readOnly, notReadOnly;
+	private boolean targetCsv;
 	
-	public BenchmarkObjectReportModel(BenchmarkObject benchmarkObject, TestSeries testSerie){
+	public BenchmarkObjectReportModel(BenchmarkObject benchmarkObject, TestSeries testSerie, boolean targetCsv){
 		initialize = new ArrayList<BenchmarkObjectReportModelRow>();
 		readOnly = new ArrayList<BenchmarkObjectReportModelRow>();
 		notReadOnly = new ArrayList<BenchmarkObjectReportModelRow>();
 		Testserie = testSerie.toString();
+		this.targetCsv = targetCsv;
 		BuildModel(benchmarkObject);
 	}
 	
@@ -26,8 +28,8 @@ public class BenchmarkObjectReportModel {
 		Name = benchmarkObject.getTitle();
 		Version = benchmarkObject.getDatabase().getVersion();
 		
-		initialize.add(new BenchmarkObjectReportModelRow("Set up", null, benchmarkObject.getSetUpTime(), null, null, null, 0));
-		initialize.add(new BenchmarkObjectReportModelRow("Load", null, benchmarkObject.getLoadTime(), null, null, null, 1));
+		initialize.add(new BenchmarkObjectReportModelRow("Set up", null, benchmarkObject.getSetUpTime(), null, null, null, 0, targetCsv));
+		initialize.add(new BenchmarkObjectReportModelRow("Load", null, benchmarkObject.getLoadTime(), null, null, null, 1, targetCsv));
 		
 		int sort = 2;
 		for (QueryScenario queryScenario : QueryScenario.values()) {
@@ -36,9 +38,9 @@ public class BenchmarkObjectReportModel {
 			// Prepare
 			firstOrOne = benchmarkObject.getPrepareQueryScenarioResults().get(queryScenario);
 			if(queryScenario.isReadOnly)
-				readOnly.add(new BenchmarkObjectReportModelRow(queryScenario.toString(), "Prepare", firstOrOne, null, null, null, sort));
+				readOnly.add(new BenchmarkObjectReportModelRow(queryScenario.toString(), "Prepare", firstOrOne, null, null, null, sort, targetCsv));
 			else
-				notReadOnly.add(new BenchmarkObjectReportModelRow(queryScenario.toString(), "Prepare", firstOrOne, null, null, null, sort));
+				notReadOnly.add(new BenchmarkObjectReportModelRow(queryScenario.toString(), "Prepare", firstOrOne, null, null, null, sort, targetCsv));
 			sort++;
 			
 			// Query
@@ -48,9 +50,9 @@ public class BenchmarkObjectReportModel {
 			avg = GetAvg(queryScenario, benchmarkObject.getQueryQueryScenarioResults());
 			firstOrOne = GetFirstOrOne(queryScenario, benchmarkObject.getQueryQueryScenarioResults());
 			if(queryScenario.isReadOnly)
-				readOnly.add(new BenchmarkObjectReportModelRow(queryScenario.toString(), "Query", firstOrOne, avg, min, max, sort));
+				readOnly.add(new BenchmarkObjectReportModelRow(queryScenario.toString(), "Query", firstOrOne, avg, min, max, sort, targetCsv));
 			else
-				notReadOnly.add(new BenchmarkObjectReportModelRow(queryScenario.toString(), "Query", firstOrOne, avg, min, max, sort));
+				notReadOnly.add(new BenchmarkObjectReportModelRow(queryScenario.toString(), "Query", firstOrOne, avg, min, max, sort, targetCsv));
 			sort++;
 		}
 	}
@@ -95,7 +97,7 @@ public class BenchmarkObjectReportModel {
 			 teiler++;
 			 val += cur.get(queryScenario);
 		 }
-		if(teiler == 0) return -1; // TODO Praxis?
+		if(teiler == 0) return -1;
 		return val / teiler;
 	}
 }

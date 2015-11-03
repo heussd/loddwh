@@ -36,7 +36,7 @@ public class Reports {
 	
 	public String MakeBenchmarkObjectReport(BenchmarkObject benchmarkObject, TestSeries testSerie, String tocIndex, boolean asCsv) throws Exception{
 		
-		BenchmarkObjectReportModel viewModel = new BenchmarkObjectReportModel(benchmarkObject, testSerie);
+		BenchmarkObjectReportModel viewModel = new BenchmarkObjectReportModel(benchmarkObject, testSerie, asCsv);
 		
 		Map<String, Object> root = new HashMap<>();
 		root.put("name", viewModel.Name);
@@ -64,7 +64,7 @@ public class Reports {
 			String size;
 			
 			try {
-				size = Helpers.DoubleToString4Digits((double)dataset.file.length() / 1024 / 1024) + " MB";
+				size = Helpers.DoubleToStringNDecimals(((double)dataset.file.length() / 1024 / 1024), 3, false) + " MB";
 			} catch (Exception e) {
 				size = "ERROR";
 			}
@@ -84,10 +84,10 @@ public class Reports {
 	public String MakeBenchmarkReport(List<BenchmarkObject> benchmarkObjects, TestSeries testSerie, boolean asCsv) throws Exception{
 		List<BenchmarkObjectReportModel> dataModels = new ArrayList<BenchmarkObjectReportModel>();
 		for (BenchmarkObject benchmarkObject : benchmarkObjects) {
-			dataModels.add(new BenchmarkObjectReportModel(benchmarkObject, testSerie));
+			dataModels.add(new BenchmarkObjectReportModel(benchmarkObject, testSerie, asCsv));
 		}
 		
-		SumUpReportModel viewModel = new SumUpReportModel(dataModels, testSerie);
+		SumUpReportModel viewModel = new SumUpReportModel(dataModels, testSerie, asCsv);
 		
 		Map<String, Object> root = new HashMap<>();
 		root.put("testserie", viewModel.Testserie);

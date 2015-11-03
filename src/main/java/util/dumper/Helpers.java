@@ -32,14 +32,13 @@ public abstract class Helpers {
 		return value.replace(' ', '-').replace('.', '-');
 	}
 	
-	public static String DoubleToString3Digits(double value) {
-		return new DecimalFormat("0.00").format(value);
+	public static String DoubleToStringNDecimals(double value, int decimals, boolean transferToScientificNotation) {
+		String format = "0.";
+		for(int i = 0; i < decimals; i++) format += "0";
+		if(transferToScientificNotation){ format += "E0"; for(int i = 0; i < decimals; i++) format += "#"; }
+		return new DecimalFormat(format).format(value);
 	}
 	
-	public static String DoubleToString4Digits(double value) {
-		return new DecimalFormat("0.000").format(value);
-	}
-
 	public static boolean isNumeric(String str) {
 		return str.matches("-?\\d+(\\.\\d+)?"); // match a number with optional
 												// '-' and decimal.

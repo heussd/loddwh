@@ -27,4 +27,6 @@ public class Config extends DefaultObjectWrapper {
 	public static final String VIRTUOSO_ACCESSIBLE_DIRECTORY = THIS_IS_OSX ? "/usr/local/virtuoso-opensource/share/virtuoso/vad/" : "C:\\RDSTUDIES\\db\\virtuoso-opensource";
 	public static final String VIRTUOSO_ACCESSIBLE_DIRECTORY_RELATIVE_TO_VIRTUOSO_T_EXE = THIS_IS_OSX ? "/usr/local/virtuoso-opensource/share/virtuoso/vad/" : "..";
 	public static final Integer COMMIT_EVERY_N_RECORDS = 5000000;
+	
+	public static final Integer BORDER_FOR_SCIENTIFIC_NOTATION_REPORT_RESULT = 100000;
 }

@@ -1,5 +1,6 @@
 package report;
 
+import util.Config;
 import util.dumper.Helpers;
 import freemarker.template.SimpleNumber;
 import freemarker.template.SimpleScalar;
@@ -12,9 +13,10 @@ public class BenchmarkObjectReportModelRow implements TemplateHashModel {
 	public String QueryScenario, Phase;
 	public Double FirstOrOne, Avg, Min, Max;
 	public int Sort;
+	private boolean targetCsv;
 	
 	public BenchmarkObjectReportModelRow(String queryScenario, String phase,
-			Double firstOrOne, Double avg, Double min, Double max, int sort) {
+			Double firstOrOne, Double avg, Double min, Double max, int sort, boolean targetCsv) {
 		super();
 		QueryScenario = queryScenario;
 		Phase = phase;
@@ -23,8 +25,9 @@ public class BenchmarkObjectReportModelRow implements TemplateHashModel {
 		Min = min;
 		Max = max;
 		Sort = sort;
+		this.targetCsv = targetCsv;
 	}
-
+	
 	@Override
 	public TemplateModel get(String key) throws TemplateModelException {
 				
@@ -34,17 +37,17 @@ public class BenchmarkObjectReportModelRow implements TemplateHashModel {
 		case "phase":
 			return new SimpleScalar(Phase);
 		case "firstorone":
-			if(FirstOrOne == null || FirstOrOne == -1) return new SimpleScalar("Error"); else return new SimpleScalar(Helpers.DoubleToString3Digits(FirstOrOne) + " ms");// return new SimpleNumber(FirstOrOne);
+			if(FirstOrOne == null || FirstOrOne == -1) return new SimpleScalar("Error"); else return new SimpleScalar(Helpers.DoubleToStringNDecimals(FirstOrOne, 2, !targetCsv && FirstOrOne >= Config.BORDER_FOR_SCIENTIFIC_NOTATION_REPORT_RESULT) + " ms");
 		case "avg":
-			if(Avg == null || Avg == -1) return new SimpleScalar("Error"); else return new SimpleScalar(Helpers.DoubleToString3Digits(Avg) + " ms");// return new SimpleNumber(Avg);
+			if(Avg == null || Avg == -1) return new SimpleScalar("Error"); else return new SimpleScalar(Helpers.DoubleToStringNDecimals(Avg, 2, !targetCsv && Avg >= Config.BORDER_FOR_SCIENTIFIC_NOTATION_REPORT_RESULT) + " ms");
 		case "min":
-			if(Min == null || Min == -1) return new SimpleScalar("Error"); else return new SimpleScalar(Helpers.DoubleToString3Digits(Min) + " ms");// return new SimpleNumber(Min);
+			if(Min == null || Min == -1) return new SimpleScalar("Error"); else return new SimpleScalar(Helpers.DoubleToStringNDecimals(Min, 2, !targetCsv && Min >= Config.BORDER_FOR_SCIENTIFIC_NOTATION_REPORT_RESULT) + " ms");
 		case "max":
-			if(Max == null || Max == -1) return new SimpleScalar("Error"); else return new SimpleScalar(Helpers.DoubleToString3Digits(Max) + " ms");// return new SimpleNumber(Max);
+			if(Max == null || Max == -1) return new SimpleScalar("Error"); else return new SimpleScalar(Helpers.DoubleToStringNDecimals(Max, 2, !targetCsv && Max >= Config.BORDER_FOR_SCIENTIFIC_NOTATION_REPORT_RESULT) + " ms");
 		}
 		return new SimpleScalar("Error");
 	}
-
+	
 	@Override
 	public boolean isEmpty() throws TemplateModelException {
 		return false;

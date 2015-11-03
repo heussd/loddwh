@@ -11,11 +11,13 @@ public class SumUpReportModel {
 	public List<DatabaseReportObject> databases;
 	public List<SumUpReportModelRow> entrys;
 	public String Testserie;
+	private boolean targetCsv;
 	
-	public SumUpReportModel(List<BenchmarkObjectReportModel> dataModels, TestSeries testSerie){
+	public SumUpReportModel(List<BenchmarkObjectReportModel> dataModels, TestSeries testSerie, boolean targetCsv){
 		databases = new ArrayList<>();
 		entrys = new ArrayList<SumUpReportModelRow>();
 		Testserie = testSerie.toString();
+		this.targetCsv = targetCsv;
 		BuildReport(dataModels);
 	}
 	
@@ -31,7 +33,7 @@ public class SumUpReportModel {
 			BenchmarkObjectReportModel report = findFirstByName(benchmarkObjectReportModels, db.getName());
 			setUpVals.add(report.initialize.stream().filter(s -> s.QueryScenario.equals("Set up")).findFirst().get().FirstOrOne);
 		}
-		entrys.add(new SumUpReportModelRow("Set up", null, setUpVals, 0));
+		entrys.add(new SumUpReportModelRow("Set up", null, setUpVals, 0, targetCsv));
 		
 		// Load
 		List<Double> loadVals = new ArrayList<Double>();
@@ -39,7 +41,7 @@ public class SumUpReportModel {
 			BenchmarkObjectReportModel report = findFirstByName(benchmarkObjectReportModels, db.getName());
 			loadVals.add(report.initialize.stream().filter(s -> s.QueryScenario.equals("Load")).findFirst().get().FirstOrOne);
 		}
-		entrys.add(new SumUpReportModelRow("Load", null, loadVals, 1));
+		entrys.add(new SumUpReportModelRow("Load", null, loadVals, 1, targetCsv));
 		
 		// QueryScenarios
 		int sort = 2;
@@ -50,12 +52,12 @@ public class SumUpReportModel {
 				BenchmarkObjectReportModel report = findFirstByName(benchmarkObjectReportModels, db.getName());
 				List<BenchmarkObjectReportModelRow> target = queryScenario.isReadOnly ? report.readOnly : report.notReadOnly;
 				if(target.stream().noneMatch(s -> s.QueryScenario.equals(queryScenario.toString()) && s.Phase.equals("Prepare"))){
-					prepVals.add(null); // TODO
+					prepVals.add(null);
 					continue;
 				}
 				prepVals.add(target.stream().filter(s -> s.QueryScenario.equals(queryScenario.toString()) && s.Phase.equals("Prepare")).findFirst().get().FirstOrOne);
 			}
-			entrys.add(new SumUpReportModelRow(queryScenario.toString(), "Prepare", prepVals, sort));
+			entrys.add(new SumUpReportModelRow(queryScenario.toString(), "Prepare", prepVals, sort, targetCsv));
 			sort++;
 			
 			// Query
@@ -64,7 +66,7 @@ public class SumUpReportModel {
 				BenchmarkObjectReportModel report = findFirstByName(benchmarkObjectReportModels, db.getName());
 				List<BenchmarkObjectReportModelRow> target = queryScenario.isReadOnly ? report.readOnly : report.notReadOnly;
 				if(target.stream().noneMatch(s -> s.QueryScenario.equals(queryScenario.toString()) && s.Phase.equals("Query"))){
-					queryVals.add(null); // TODO
+					queryVals.add(null);
 					continue;
 				}
 				if(queryScenario.isReadOnly)
@@ -72,7 +74,7 @@ public class SumUpReportModel {
 				else
 					queryVals.add(target.stream().filter(s -> s.QueryScenario.equals(queryScenario.toString()) && s.Phase.equals("Query")).findFirst().get().FirstOrOne);
 			}
-			entrys.add(new SumUpReportModelRow(queryScenario.toString(), "Query", queryVals, sort));
+			entrys.add(new SumUpReportModelRow(queryScenario.toString(), "Query", queryVals, sort, targetCsv));
 			sort++;
 		}
 	}
