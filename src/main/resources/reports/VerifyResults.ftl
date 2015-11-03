@@ -1,6 +1,5 @@
------
 
-# Verify results
+## <a name="verifyresults"></a>[4\. Verify Results](#verifyresults)
 
 | QueryScenario |<#list databases as db> ${db} |</#list>
 | :-- |<#list databases as db> --: |</#list>

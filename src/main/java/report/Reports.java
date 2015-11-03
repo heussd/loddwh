@@ -34,14 +34,16 @@ public class Reports {
 	}
 	
 	
-	public String MakeBenchmarkObjectReport(BenchmarkObject benchmarkObject, TestSeries testSerie) throws Exception{
-				
+	public String MakeBenchmarkObjectReport(BenchmarkObject benchmarkObject, TestSeries testSerie, String tocIndex) throws Exception{
+		
 		BenchmarkObjectReportModel viewModel = new BenchmarkObjectReportModel(benchmarkObject, testSerie);
-	
+		
 		Map<String, Object> root = new HashMap<>();
 		root.put("name", viewModel.Name);
+		root.put("linkname", Helpers.GetLinkConformString(viewModel.Name));
 		root.put("version", viewModel.Version);
 		root.put("testserie", viewModel.Testserie);
+		root.put("tocindex", tocIndex);
 		root.put("initialize", new SimpleCollection(viewModel.initialize));
 		root.put("readOnly", new SimpleCollection(viewModel.readOnly));
 		root.put("notReadOnly", new SimpleCollection(viewModel.notReadOnly));
@@ -93,6 +95,17 @@ public class Reports {
 		root.put("entrys", new SimpleCollection(viewModel.entrys));
 		
 		Template tmp = cfg.getTemplate("SumUp.ftl");
+		StringWriter stringWriter = new StringWriter();
+		tmp.process(root, stringWriter);
+		
+		return stringWriter.toString();
+	}
+	
+	public String MakeTableOfContents(ArrayList<DatabaseReportObject> databases) throws Exception {
+		Map<String, Object> root = new HashMap<>();
+		root.put("databases", new SimpleCollection(databases));
+		
+		Template tmp = cfg.getTemplate("TableOfContents.ftl");
 		StringWriter stringWriter = new StringWriter();
 		tmp.process(root, stringWriter);
 		

@@ -28,6 +28,10 @@ import util.Dataset;
 
 public abstract class Helpers {
 
+	public static String GetLinkConformString(String value){
+		return value.replace(' ', '-').replace('.', '-');
+	}
+	
 	public static String DoubleToString3Digits(double value) {
 		return new DecimalFormat("0.00").format(value);
 	}

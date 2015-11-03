@@ -17,6 +17,7 @@ import database.PostgreSQL;
 import database.SQLite4Java;
 import database.SQLiteXerial;
 import database.Virtuoso;
+import report.DatabaseReportObject;
 import report.Reports;
 import util.Config;
 import util.Dataset;
@@ -147,10 +148,16 @@ public class Benchmark {
 
 		sb.append(reports.MakeBenchmarkReport(benchmarkObjects, testSerie));
 		
+		ArrayList<DatabaseReportObject> databases = new ArrayList<>();
+		for (BenchmarkObject benchmarkObject : benchmarkObjects) databases.add(new DatabaseReportObject(benchmarkObject.getTitle()));
+		sb.append(reports.MakeTableOfContents(databases));
+		
 		sb.append(reports.MakeTestSeriesReport(testSerie));
 		
+		int tocCount = 1;
 		for (BenchmarkObject benchmarkObject : benchmarkObjects) {
-			sb.append(reports.MakeBenchmarkObjectReport(benchmarkObject, testSerie));
+			sb.append(reports.MakeBenchmarkObjectReport(benchmarkObject, testSerie, String.valueOf(tocCount)));
+			tocCount++;
 		}
 
 		sb.append(reports.MakeVerifyResultsReport(benchmarkObjects));
