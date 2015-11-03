@@ -34,7 +34,7 @@ public class Reports {
 	}
 	
 	
-	public String MakeBenchmarkObjectReport(BenchmarkObject benchmarkObject, TestSeries testSerie, String tocIndex) throws Exception{
+	public String MakeBenchmarkObjectReport(BenchmarkObject benchmarkObject, TestSeries testSerie, String tocIndex, boolean asCsv) throws Exception{
 		
 		BenchmarkObjectReportModel viewModel = new BenchmarkObjectReportModel(benchmarkObject, testSerie);
 		
@@ -48,14 +48,14 @@ public class Reports {
 		root.put("readOnly", new SimpleCollection(viewModel.readOnly));
 		root.put("notReadOnly", new SimpleCollection(viewModel.notReadOnly));
 		
-		Template tmp = cfg.getTemplate("BenchmarkObject.ftl");
+		Template tmp = cfg.getTemplate("BenchmarkObject" + (asCsv ? ".csv" : "") + ".ftl");
 		StringWriter stringWriter = new StringWriter();
 		tmp.process(root, stringWriter);
 		
 		return stringWriter.toString();
 	}
 	
-	public String MakeTestSeriesReport(TestSeries testSerie) throws Exception {
+	public String MakeTestSeriesReport(TestSeries testSerie, boolean asCsv) throws Exception {
 		Map<String, Object> root = new HashMap<>();
 		root.put("name", testSerie.toString());
 		
@@ -74,14 +74,14 @@ public class Reports {
 		
 		root.put("datasets", new SimpleCollection(datasets));
 		
-		Template tmp = cfg.getTemplate("TestSeriesInformation.ftl");
+		Template tmp = cfg.getTemplate("TestSeriesInformation" + (asCsv ? ".csv" : "") + ".ftl");
 		StringWriter stringWriter = new StringWriter();
 		tmp.process(root, stringWriter);
 		
 		return stringWriter.toString();
 	}
 	
-	public String MakeBenchmarkReport(List<BenchmarkObject> benchmarkObjects, TestSeries testSerie) throws Exception{
+	public String MakeBenchmarkReport(List<BenchmarkObject> benchmarkObjects, TestSeries testSerie, boolean asCsv) throws Exception{
 		List<BenchmarkObjectReportModel> dataModels = new ArrayList<BenchmarkObjectReportModel>();
 		for (BenchmarkObject benchmarkObject : benchmarkObjects) {
 			dataModels.add(new BenchmarkObjectReportModel(benchmarkObject, testSerie));
@@ -94,7 +94,7 @@ public class Reports {
 		root.put("databases", new SimpleCollection(viewModel.databases));
 		root.put("entrys", new SimpleCollection(viewModel.entrys));
 		
-		Template tmp = cfg.getTemplate("SumUp.ftl");
+		Template tmp = cfg.getTemplate("SumUp" + (asCsv ? ".csv" : "") + ".ftl");
 		StringWriter stringWriter = new StringWriter();
 		tmp.process(root, stringWriter);
 		
@@ -112,14 +112,14 @@ public class Reports {
 		return stringWriter.toString();
 	}
 	
-	public String MakeVerifyResultsReport(List<BenchmarkObject> benchmarkObjects) throws Exception{
+	public String MakeVerifyResultsReport(List<BenchmarkObject> benchmarkObjects, boolean asCsv) throws Exception{
 		VerifyResultsReportModel viewModel = new VerifyResultsReportModel(benchmarkObjects);
 		
 		Map<String, Object> root = new HashMap<>();
 		root.put("databases", new SimpleCollection(viewModel.databases));
 		root.put("entrys", new SimpleCollection(viewModel.entrys));
 		
-		Template tmp = cfg.getTemplate("VerifyResults.ftl");
+		Template tmp = cfg.getTemplate("VerifyResults" + (asCsv ? ".csv" : "") + ".ftl");
 		StringWriter stringWriter = new StringWriter();
 		tmp.process(root, stringWriter);
 		

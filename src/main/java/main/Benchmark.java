@@ -146,21 +146,21 @@ public class Benchmark {
 		
 		sb.append("<style style=\"text/css\">tr:hover{background: #FFFF00;}</style>\n\n");
 
-		sb.append(reports.MakeBenchmarkReport(benchmarkObjects, testSerie));
+		sb.append(reports.MakeBenchmarkReport(benchmarkObjects, testSerie, false));
 		
 		ArrayList<DatabaseReportObject> databases = new ArrayList<>();
 		for (BenchmarkObject benchmarkObject : benchmarkObjects) databases.add(new DatabaseReportObject(benchmarkObject.getTitle()));
 		sb.append(reports.MakeTableOfContents(databases));
 		
-		sb.append(reports.MakeTestSeriesReport(testSerie));
+		sb.append(reports.MakeTestSeriesReport(testSerie, false));
 		
 		int tocCount = 1;
 		for (BenchmarkObject benchmarkObject : benchmarkObjects) {
-			sb.append(reports.MakeBenchmarkObjectReport(benchmarkObject, testSerie, String.valueOf(tocCount)));
+			sb.append(reports.MakeBenchmarkObjectReport(benchmarkObject, testSerie, String.valueOf(tocCount), false));
 			tocCount++;
 		}
 
-		sb.append(reports.MakeVerifyResultsReport(benchmarkObjects));
+		sb.append(reports.MakeVerifyResultsReport(benchmarkObjects, false));
 
 		String filename = String.format("Results-Testserie_%s", testSerie.toString());
 		FileUtils.writeStringToFile(new File(Config.WHERE_THE_RESULTS_AT + filename + ".md"), sb.toString());
@@ -169,7 +169,22 @@ public class Benchmark {
 		String htmlResult = pdp.markdownToHtml(sb.toString());
 		FileUtils.writeStringToFile(new File(Config.WHERE_THE_RESULTS_AT + filename + ".html"), htmlResult);
 		
+		makeCsvReports(testSerie, benchmarkObjects);
+		
 		System.out.println("Wrote Report for Testserie " + testSerie.toString());
+	}
+	
+	private static void makeCsvReports(TestSeries testSerie, List<BenchmarkObject> benchmarkObjects) throws Exception {
+		Reports reports = new Reports();
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append(reports.MakeBenchmarkReport(benchmarkObjects, testSerie, true));
+		sb.append(reports.MakeTestSeriesReport(testSerie, true));
+		for (BenchmarkObject benchmarkObject : benchmarkObjects) sb.append(reports.MakeBenchmarkObjectReport(benchmarkObject, testSerie, null, true));
+		sb.append(reports.MakeVerifyResultsReport(benchmarkObjects, true));
+		
+		String filename = String.format("Results-Testserie_%s", testSerie.toString());
+		FileUtils.writeStringToFile(new File(Config.WHERE_THE_RESULTS_AT + filename + ".csv"), sb.toString());
 	}
 
 }
