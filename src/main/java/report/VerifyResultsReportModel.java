@@ -8,24 +8,24 @@ import main.BenchmarkObject;
 
 public class VerifyResultsReportModel {
 
-	public List<String> databases;
+	public List<DatabaseReportObject> databases;
 	public List<VerifyResultsReportModelRow> entrys;
 	
 	public VerifyResultsReportModel(List<BenchmarkObject> dataModels){
-		databases = new ArrayList<String>();
+		databases = new ArrayList<>();
 		entrys = new ArrayList<VerifyResultsReportModelRow>();
 		BuildReport(dataModels);
 	}
 	
 	private void BuildReport(List<BenchmarkObject> dataModels){
 		for (BenchmarkObject benchmarkObject : dataModels) {
-			databases.add(benchmarkObject.getTitle());
+			databases.add(new DatabaseReportObject(benchmarkObject.getTitle()));
 		}
 		
 		for (QueryScenario queryScenario : QueryScenario.values()) {
 			List<Integer> hashCodes = new ArrayList<Integer>();
-			for (String db : databases) {
-				BenchmarkObject bmo = findFirstByName(dataModels, db);
+			for (DatabaseReportObject db : databases) {
+				BenchmarkObject bmo = findFirstByName(dataModels, db.getName());
 				
 				if(bmo.getQueryResults().containsKey(queryScenario) && bmo.getQueryResults().get(queryScenario) != null)
 					hashCodes.add(bmo.getQueryResults().get(queryScenario).hashCode());
