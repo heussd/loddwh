@@ -29,4 +29,5 @@ public class Config extends DefaultObjectWrapper {
 	public static final Integer COMMIT_EVERY_N_RECORDS = 5000000;
 	
 	public static final Integer BORDER_FOR_SCIENTIFIC_NOTATION_REPORT_RESULT = 100000;
+	public static final Integer BORDER_FOR_QUERYEXECUTION_TIME_IN_MS = 2000000;
 }

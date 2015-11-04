@@ -85,7 +85,14 @@ public class Benchmark {
 								queryStart = System.nanoTime();
 								result = db.query(queryScenario);
 								queryEnd = System.nanoTime();
-								setResultInResultset(execution, queryScenario, nanoExecutionTimeInMilliseconds(queryStart, queryEnd), benchmarkObject.getQueryQueryScenarioResults());
+								
+								double executionTime = nanoExecutionTimeInMilliseconds(queryStart, queryEnd);
+								setResultInResultset(execution, queryScenario, executionTime, benchmarkObject.getQueryQueryScenarioResults());
+								
+								if((execution+1) <= executions && executionTime >= Config.BORDER_FOR_QUERYEXECUTION_TIME_IN_MS){
+									System.out.println(String.format("Testserie %s, %s: QueryScenario %s took too long (over %sms) to finish at execution %s. Cancelling the remaining executions.", testSerie.toString(), db.getName(), queryScenario.toString(), Config.BORDER_FOR_QUERYEXECUTION_TIME_IN_MS, execution));
+									break;
+								}
 							}
 							
 							benchmarkObject.getQueryResults().put(queryScenario, result);							
