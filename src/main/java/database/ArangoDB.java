@@ -44,14 +44,12 @@ public class ArangoDB implements Database {
 		arangoDb.setUp();
 		arangoDb.load(Dataset.hebis_10000_records);
 		
-		QueryScenario testScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY;
+		QueryScenario testScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES;
 		
 		arangoDb.prepare(testScenario);
 		QueryResult queryResult = arangoDb.query(testScenario);
 		
 		//System.out.println(queryResult);
-		arangoDb.prepare(QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES);
-		arangoDb.query(QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES);
 		
 		arangoDb.stop();
 	}
@@ -118,64 +116,41 @@ public class ArangoDB implements Database {
 	}
 	
 	private boolean GraphLoaded = false;
-	private void InitializeDctermsSubjectsGraph() throws Exception{		
-//		System.out.println("Create index on DCTERMS_SUBJECT");
-//		arangoDriver.createIndex(Config.DATABASE, IndexType.HASH, false, "DCTERMS_SUBJECT");
-//		System.out.println("Finished create index on DCTERMS_SUBJECT");
+	private void InitializeDctermsSubjectsGraph() throws Exception{
+		String graphName = Config.DATABASE + "_graph", edgeCollectionName = Config.DATABASE + "_hasSubject", subjectsCollection = Config.DATABASE + "_subjects";
 		
-		String graphName = Config.DATABASE + "_graph", edgeCollectionName = Config.DATABASE + "_sharesSubject";
-		
+		arangoDriver.createCollection(subjectsCollection);
 		EdgeDefinitionEntity edgeDefinition = new EdgeDefinitionEntity();
 		edgeDefinition.setCollection(edgeCollectionName);
-		
 		List<String> from = new ArrayList<>(), to = new ArrayList<>();
-		from.add(Config.DATABASE); to.add(Config.DATABASE);
+		from.add(Config.DATABASE); to.add(subjectsCollection);
 		edgeDefinition.setFrom(from); edgeDefinition.setTo(to);
-		
 		List<EdgeDefinitionEntity> edgeDefinitions = new ArrayList<>();
 		edgeDefinitions.add(edgeDefinition);
-		
 		arangoDriver.createGraph(graphName, edgeDefinitions, new ArrayList<String>(), true);
 		
-		// Now build relations over DCTERMS_SUBJECT
-		String query1 = "for r in loddwhbench filter has(r, 'DCTERMS_SUBJECT') return r";
-		DocumentCursor<BaseDocument> documentCursor1 = arangoDriver.executeDocumentQuery(query1, null, GetAqlQueryOptionsForLongRunningCursor(), BaseDocument.class);
-		for (DocumentEntity<BaseDocument> documentEntity1 : documentCursor1) {			
-			BaseDocument document1 = documentEntity1.getEntity();
+		String getAllRelevantQuery = "for e in loddwhbench filter has(e, 'DCTERMS_SUBJECT') return { 'id' : e._id, 'DCTERMS_SUBJECT' : e.DCTERMS_SUBJECT }";
+		DocumentCursor<BaseDocument> getAllRelevantCursor = arangoDriver.executeDocumentQuery(getAllRelevantQuery, null, GetAqlQueryOptionsForLongRunningCursor(), BaseDocument.class);
+		HashMap<String, String> existingSubjects = new HashMap<>(); // Map Subject => DocumentHandle (temporarily saving to prevent additional queries)
+		for(DocumentEntity<BaseDocument> relevantDocument : getAllRelevantCursor){
+			BaseDocument document = relevantDocument.getEntity();
 			
-			ArrayList<String> document1Subjects = (ArrayList<String>) document1.getAttribute("DCTERMS_SUBJECT");
+			String documentHandle = document.getAttribute("id").toString();
+			ArrayList<String> documentSubjects = (ArrayList<String>) document.getAttribute("DCTERMS_SUBJECT");
 			
-			String bindArrayQueryByOr = "";
-			if(document1Subjects.size() > 0){
-				bindArrayQueryByOr += "&& (";
-				for(int i = 0; i < document1Subjects.size(); i++){
-					bindArrayQueryByOr += String.format("'%s' in r.DCTERMS_SUBJECT", document1Subjects.get(i));
-					if((i+1) < document1Subjects.size()) bindArrayQueryByOr += " || ";
+			for (String subject : documentSubjects) {
+				if(!existingSubjects.containsKey(subject)){
+					BaseDocument arangoDoc = new BaseDocument();
+					arangoDoc.addAttribute("subject", subject);
+					DocumentEntity<BaseDocument> newSubjectDocument = arangoDriver.createDocument(subjectsCollection, arangoDoc);
+					existingSubjects.put(subject, newSubjectDocument.getDocumentHandle());
 				}
-				bindArrayQueryByOr += ")";
-			}else{
-				continue;
-			}
-			
-			String query2 = String.format("for r in loddwhbench filter has(r, 'DCTERMS_SUBJECT') %s && r._key != '%s' return r", bindArrayQueryByOr, document1.getDocumentKey());
-			DocumentCursor<BaseDocument> documentCursor2 = arangoDriver.executeDocumentQuery(query2, null, GetAqlQueryOptionsForLongRunningCursor(), BaseDocument.class);
-			for (DocumentEntity<BaseDocument> documentEntity2 : documentCursor2) {
-				BaseDocument document2 = documentEntity2.getEntity();
 				
-				ArrayList<String> document2Subjects = (ArrayList<String>) document2.getAttribute("DCTERMS_SUBJECT");
-				
-				for (String doc1Subject : document1Subjects) {
-					if(document2Subjects.contains(doc1Subject)){
-						// Add edge for found relation
-						BaseDocument edgeValues = new BaseDocument();
-						edgeValues.addAttribute("subject", doc1Subject);
-						arangoDriver.graphCreateEdge(graphName, edgeCollectionName, documentEntity1.getDocumentHandle(), documentEntity2.getDocumentHandle(), edgeValues, null);
-					}
-				}
+				String subjectHandle = existingSubjects.get(subject);
+				arangoDriver.graphCreateEdge(graphName, edgeCollectionName, documentHandle, subjectHandle, null, null);
 			}
-			documentCursor2.close();
 		}
-		documentCursor1.close();
+		getAllRelevantCursor.close();
 		
 		GraphLoaded = true;
 	}
@@ -302,7 +277,7 @@ public class ArangoDB implements Database {
 						for (DocumentEntity<BaseDocument> documentEntity : documentCursor) {
 							queryResult.push(BuildDataObjectFromDocument(documentEntity.getEntity()));
 						}
-						return queryResult;						
+						return queryResult;
 						
 					case ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY:
 					case ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES:
@@ -320,30 +295,30 @@ public class ArangoDB implements Database {
 				
 				
 				
-				
 			case GRAPH:
 				switch(queryScenario){
 					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
 					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES:
 					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES:
 						for (String dcterms_identifier : EntityRetrievalAndGraphScenariosDcTermsIdentifiers) {
-							query = String.format("for e in GRAPH_EDGES('loddwhbench_graph', {DCTERMS_IDENTIFIER: '%s'}, {includeData: true, direction: 'outbound', edgeCollectionRestriction: 'loddwhbench_sharesSubject'}) return e", dcterms_identifier);
+							query = String.format("for e in GRAPH_NEIGHBORS('loddwhbench_graph', {DCTERMS_IDENTIFIER: '%s'}, {direction: 'outbound', includeData: true}) return e", dcterms_identifier);
 							documentCursor = arangoDriver.executeDocumentQuery(query, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class);
-							
-							for (DocumentEntity<BaseDocument> documentEntity : documentCursor) {
-								BaseDocument document = documentEntity.getEntity();
+							for(DocumentEntity<BaseDocument> documentEntity : documentCursor){
+								BaseDocument subjectDocument = documentEntity.getEntity();
+								String sharedSubject = subjectDocument.getAttribute("subject").toString();
 								
-								String originalIdentifier = dcterms_identifier, relatedIdentifier = null, originalSubject = null;
-								
-								String getTo = String.format("FOR r IN loddwhbench FILTER r._id == '%s' RETURN r", document.getAttribute("_to"));
-								DocumentEntity<BaseDocument> toEntity = arangoDriver.executeDocumentQuery(getTo, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class).getUniqueResult();
-								relatedIdentifier = toEntity.getEntity().getAttribute("DCTERMS_IDENTIFIER").toString();
-								
-								HashMap<String, String> properties = (HashMap<String, String>)document.getAttribute("properties");
-								originalSubject = properties.get("subject");
-								
-								queryResult.push(originalIdentifier, originalSubject, relatedIdentifier);
+								String innerQuery = String.format("for e in GRAPH_NEIGHBORS('loddwhbench_graph', {_id: '%s'}, {direction: 'inbound', includeData: true}) return { 'DCTERMS_IDENTIFIER': e.DCTERMS_IDENTIFIER }", documentEntity.getDocumentHandle());
+								DocumentCursor<BaseDocument> innerCursor = arangoDriver.executeDocumentQuery(innerQuery, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class);
+								for(DocumentEntity<BaseDocument> documentEntity2 : innerCursor){
+									String relatedDctermsIdentifier = documentEntity2.getEntity().getAttribute("DCTERMS_IDENTIFIER").toString();
+									if(!dcterms_identifier.equals(relatedDctermsIdentifier)){
+										queryResult.push(dcterms_identifier, sharedSubject, relatedDctermsIdentifier);
+										//System.out.println(String.format("%s => %s <= %s", dcterms_identifier, sharedSubject, relatedDctermsIdentifier));
+									}
+								}
+								innerCursor.close();
 							}
+							documentCursor.close();
 						}
 						return queryResult;
 						
@@ -352,38 +327,44 @@ public class ArangoDB implements Database {
 					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
 					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
 						for (String dcterms_identifier : EntityRetrievalAndGraphScenariosDcTermsIdentifiers) {
-							query = String.format("for e in GRAPH_EDGES('loddwhbench_graph', {DCTERMS_IDENTIFIER: '%s'}, {includeData: true, direction: 'outbound', edgeCollectionRestriction: 'loddwhbench_sharesSubject'}) return e", dcterms_identifier);
+							query = String.format("for e in GRAPH_NEIGHBORS('loddwhbench_graph', {DCTERMS_IDENTIFIER: '%s'}, {direction: 'outbound', includeData: true}) return e", dcterms_identifier);
 							documentCursor = arangoDriver.executeDocumentQuery(query, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class);
-							
-							for (DocumentEntity<BaseDocument> documentEntity : documentCursor) {
-								BaseDocument document = documentEntity.getEntity();
+							for(DocumentEntity<BaseDocument> documentEntity : documentCursor){
+								BaseDocument subjectDocument = documentEntity.getEntity();
+								String sharedSubject = subjectDocument.getAttribute("subject").toString();
 								
-								String originalIdentifier = dcterms_identifier, firstRelatedIdentifier = null, originalSubject = null;
-								
-								String getTo = String.format("FOR r IN loddwhbench FILTER r._id == '%s' RETURN r", document.getAttribute("_to"));
-								DocumentEntity<BaseDocument> toEntity = arangoDriver.executeDocumentQuery(getTo, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class).getUniqueResult();
-								firstRelatedIdentifier = toEntity.getEntity().getAttribute("DCTERMS_IDENTIFIER").toString();
-								
-								HashMap<String, String> properties = (HashMap<String, String>)document.getAttribute("properties");
-								originalSubject = properties.get("subject");
-								
-								query = String.format("for e in GRAPH_EDGES('loddwhbench_graph', {DCTERMS_IDENTIFIER: '%s'}, {includeData: true, direction: 'outbound', edgeCollectionRestriction: 'loddwhbench_sharesSubject'}) return e", firstRelatedIdentifier);
-								DocumentCursor<BaseDocument> documentCursor2 = arangoDriver.executeDocumentQuery(query, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class);
-								for (DocumentEntity<BaseDocument> documentEntity2 : documentCursor2) {
-									BaseDocument document2 = documentEntity2.getEntity();
-									String firstRelatedSubject = null, secondRelatedIdentifier = null;
+								String innerQuery = String.format("for e in GRAPH_NEIGHBORS('loddwhbench_graph', {_id: '%s'}, {direction: 'inbound', includeData: true}) return { 'DCTERMS_IDENTIFIER': e.DCTERMS_IDENTIFIER, 'id': e._id }", documentEntity.getDocumentHandle());
+								DocumentCursor<BaseDocument> innerCursor = arangoDriver.executeDocumentQuery(innerQuery, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class);
+								for(DocumentEntity<BaseDocument> documentEntity2 : innerCursor){
+									String relatedHandle = documentEntity2.getEntity().getAttribute("id").toString();									
+									String relatedDctermsIdentifier = documentEntity2.getEntity().getAttribute("DCTERMS_IDENTIFIER").toString();
 									
-									HashMap<String, String> properties2 = (HashMap<String, String>)document2.getAttribute("properties");
-									firstRelatedSubject = properties2.get("subject");
+									if(dcterms_identifier.equals(relatedDctermsIdentifier)) continue;
 									
-									String getTo2 = String.format("FOR r IN loddwhbench FILTER r._id == '%s' RETURN r", document2.getAttribute("_to"));
-									DocumentEntity<BaseDocument> toEntity2 = arangoDriver.executeDocumentQuery(getTo2, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class).getUniqueResult();
-									secondRelatedIdentifier = toEntity2.getEntity().getAttribute("DCTERMS_IDENTIFIER").toString();
-									
-									//System.out.println(String.format("%s - %s - %s - %s - %s", originalIdentifier, originalSubject, firstRelatedIdentifier, firstRelatedSubject, secondRelatedIdentifier));
-									queryResult.push(originalIdentifier, originalSubject, firstRelatedIdentifier, firstRelatedSubject, secondRelatedIdentifier);
+									String secondInnerQuery = String.format("for e in GRAPH_NEIGHBORS('loddwhbench_graph', {_id: '%s'}, {direction: 'outbound', includeData: true}) return e", relatedHandle);
+									DocumentCursor<BaseDocument> secondInnerCursor = arangoDriver.executeDocumentQuery(secondInnerQuery, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class);
+									for(DocumentEntity<BaseDocument> documentEntity3 : secondInnerCursor){
+										String secondSharedSubject = documentEntity3.getEntity().getAttribute("subject").toString();
+										
+										//if(sharedSubject.equals(secondSharedSubject)) continue;
+										
+										String thirdInnerQuery = String.format("for e in GRAPH_NEIGHBORS('loddwhbench_graph', {_id: '%s'}, {direction: 'inbound', includeData: true}) return { 'DCTERMS_IDENTIFIER': e.DCTERMS_IDENTIFIER }", documentEntity3.getDocumentHandle());
+										DocumentCursor<BaseDocument> thirdInnerCursor = arangoDriver.executeDocumentQuery(thirdInnerQuery, null, arangoDriver.getDefaultAqlQueryOptions(), BaseDocument.class);
+										for(DocumentEntity<BaseDocument> documentEntity4 : thirdInnerCursor){
+											String secondRelatedDctermsIdentifier = documentEntity4.getEntity().getAttribute("DCTERMS_IDENTIFIER").toString();
+											
+											if(relatedDctermsIdentifier.equals(secondRelatedDctermsIdentifier)) continue;
+											
+											queryResult.push(dcterms_identifier, sharedSubject, relatedDctermsIdentifier, secondSharedSubject, secondRelatedDctermsIdentifier);
+											System.out.println(String.format("%s => %s <= %s => %s <= %s", dcterms_identifier, sharedSubject, relatedDctermsIdentifier, secondSharedSubject, secondRelatedDctermsIdentifier));
+										}
+										thirdInnerCursor.close();
+									}
+									secondInnerCursor.close();
 								}
+								innerCursor.close();
 							}
+							documentCursor.close();
 						}
 						return queryResult;
 				}
