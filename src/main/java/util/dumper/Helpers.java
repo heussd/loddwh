@@ -35,7 +35,7 @@ public abstract class Helpers {
 	public static String DoubleToStringNDecimals(double value, int decimals, boolean transferToScientificNotation) {
 		String format = "0.";
 		for(int i = 0; i < decimals; i++) format += "0";
-		if(transferToScientificNotation){ format += "E0"; for(int i = 0; i < decimals; i++) format += "#"; }
+		if(transferToScientificNotation){ format += "E0"; }
 		return new DecimalFormat(format).format(value);
 	}
 	
