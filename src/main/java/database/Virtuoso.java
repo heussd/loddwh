@@ -265,21 +265,22 @@ public class Virtuoso implements Database {
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES:
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES:
-		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
-		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
-		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES: {
+		// case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
+		// case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
+		// case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
+		{
 			String query = templates.resolve("GRAPH_LIKE_prepare");
 			switch (queryScenario) {
-			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
+//			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECCTS_2HOPS_100_ENTITIES:
 			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES:
 				query += " limit 100";
 				break;
 			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES:
-			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
+//			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
 				query += " limit 10";
 				break;
 			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
-			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
+//			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECCTS_2HOPS_ONE_ENTITY:
 				query += " limit 100";
 				break;
 			default:
@@ -300,8 +301,7 @@ public class Virtuoso implements Database {
 				break;
 			}
 
-			scenarioStatements
-					.add(connection.prepareStatement("sparql " + templates.resolve(templateName).replaceAll("##ids##", Joiner.on(",").join(ids))));
+			scenarioStatements.add(connection.prepareStatement("sparql " + templates.resolve(templateName).replaceAll("##ids##", Joiner.on(",").join(ids))));
 			break;
 		}
 		case SCHEMA_CHANGE_MIGRATE_RDF_TYPE:

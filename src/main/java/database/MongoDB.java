@@ -113,16 +113,16 @@ public class MongoDB implements Database {
 		Document findFilter = new Document();
 		if (queryScenario == QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY
 				|| queryScenario == QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES
-				|| queryScenario == QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES
-				|| queryScenario == QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY
-				|| queryScenario == QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES
-				|| queryScenario == QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES)
+				|| queryScenario == QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES)
+//				|| queryScenario == QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY
+//				|| queryScenario == QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES
+//				|| queryScenario == QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES)
 			findFilter = new Document("DCTERMS_SUBJECT", new Document("$exists", true));
 
 		switch (queryScenario) {
 		case ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY:
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
-		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
+//		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
 			EntityRetrievalAndGraphScenariosDcTermsIdentifiers.clear();
 			FindIterable<Document> prepEntOne = collection.find(findFilter).sort(new Document("DCTERMS_MEDIUM", 1).append("ISBD_P1008", 1)
 					.append("DCTERM_CONTRIBUTOR", 1).append("DCTERMS_ISSUED", 1).append("DCTERMS_IDENTIFIER", 1)).limit(1);
@@ -136,7 +136,7 @@ public class MongoDB implements Database {
 
 		case ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES:
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES:
-		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
+//		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
 			EntityRetrievalAndGraphScenariosDcTermsIdentifiers.clear();
 			FindIterable<Document> prepEntTen = collection.find(findFilter).sort(new Document("DCTERMS_MEDIUM", 1).append("ISBD_P1008", 1)
 					.append("DCTERM_CONTRIBUTOR", 1).append("DCTERMS_ISSUED", 1).append("DCTERMS_IDENTIFIER", 1)).limit(10);
@@ -150,7 +150,7 @@ public class MongoDB implements Database {
 
 		case ENTITY_RETRIEVAL_BY_ID_100_ENTITIES:
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES:
-		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
+//		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
 			EntityRetrievalAndGraphScenariosDcTermsIdentifiers.clear();
 			FindIterable<Document> prepEntHun = collection.find(findFilter).sort(new Document("DCTERMS_MEDIUM", 1).append("ISBD_P1008", 1)
 					.append("DCTERM_CONTRIBUTOR", 1).append("DCTERMS_ISSUED", 1).append("DCTERMS_IDENTIFIER", 1)).limit(100);
@@ -346,39 +346,39 @@ public class MongoDB implements Database {
 					});
 				}
 				return queryResult;
-			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
-			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
-			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
-				for (String dc_ident : EntityRetrievalAndGraphScenariosDcTermsIdentifiers) {
-					FindIterable<Document> findIter2Hops = collection
-							.find(new Document("DCTERMS_SUBJECT", new Document("$exists", true)).append("DCTERMS_IDENTIFIER", dc_ident));
-					findIter2Hops.forEach(new Block<Document>() {
-						@Override
-						public void apply(Document arg0) {
-							for (String subject : (ArrayList<String>) arg0.get("DCTERMS_SUBJECT")) {
-								FindIterable<Document> findIter2 = collection
-										.find(new Document("DCTERMS_SUBJECT", subject).append("_id", new Document("$ne", arg0.getObjectId("_id"))));
-								findIter2.forEach(new Block<Document>() {
-									@Override
-									public void apply(Document arg1) {
-										for (String subject2 : (ArrayList<String>) arg1.get("DCTERMS_SUBJECT")) {
-											FindIterable<Document> findIter3 = collection.find(
-													new Document("DCTERMS_SUBJECT", subject2).append("_id", new Document("$ne", arg1.getObjectId("_id"))));
-											findIter3.forEach(new Block<Document>() {
-												@Override
-												public void apply(Document arg2) {
-													queryResult.push(arg0.getString("DCTERMS_IDENTIFIER"), subject, arg1.getString("DCTERMS_IDENTIFIER"),
-															subject2, arg2.getString("DCTERMS_IDENTIFIER"));
-												}
-											});
-										}
-									}
-								});
-							}
-						}
-					});
-				}
-				return queryResult;
+//			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
+//			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
+//			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
+//				for (String dc_ident : EntityRetrievalAndGraphScenariosDcTermsIdentifiers) {
+//					FindIterable<Document> findIter2Hops = collection
+//							.find(new Document("DCTERMS_SUBJECT", new Document("$exists", true)).append("DCTERMS_IDENTIFIER", dc_ident));
+//					findIter2Hops.forEach(new Block<Document>() {
+//						@Override
+//						public void apply(Document arg0) {
+//							for (String subject : (ArrayList<String>) arg0.get("DCTERMS_SUBJECT")) {
+//								FindIterable<Document> findIter2 = collection
+//										.find(new Document("DCTERMS_SUBJECT", subject).append("_id", new Document("$ne", arg0.getObjectId("_id"))));
+//								findIter2.forEach(new Block<Document>() {
+//									@Override
+//									public void apply(Document arg1) {
+//										for (String subject2 : (ArrayList<String>) arg1.get("DCTERMS_SUBJECT")) {
+//											FindIterable<Document> findIter3 = collection.find(
+//													new Document("DCTERMS_SUBJECT", subject2).append("_id", new Document("$ne", arg1.getObjectId("_id"))));
+//											findIter3.forEach(new Block<Document>() {
+//												@Override
+//												public void apply(Document arg2) {
+//													queryResult.push(arg0.getString("DCTERMS_IDENTIFIER"), subject, arg1.getString("DCTERMS_IDENTIFIER"),
+//															subject2, arg2.getString("DCTERMS_IDENTIFIER"));
+//												}
+//											});
+//										}
+//									}
+//								});
+//							}
+//						}
+//					});
+//				}
+//				return queryResult;
 			}
 			break;
 

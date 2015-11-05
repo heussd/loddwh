@@ -28,13 +28,13 @@ import util.TestSeries;
 public class Benchmark {
 
 	public static void main(String[] args) throws Exception {
-		
+
 		List<TestSeries> testSeries = new ArrayList<>();
 		testSeries.add(TestSeries.TINY);
-//		testSeries.add(TestSeries.SMALL);
-//		testSeries.add(TestSeries.MEDIUM);
-//		testSeries.add(TestSeries.LARGE);
-		
+		// testSeries.add(TestSeries.SMALL);
+		// testSeries.add(TestSeries.MEDIUM);
+		// testSeries.add(TestSeries.LARGE);
+
 		List<Database> testDatabases = new ArrayList<>();
 		testDatabases.add(new SQLite4Java());
 		testDatabases.add(new SQLiteXerial());
@@ -43,41 +43,40 @@ public class Benchmark {
 		testDatabases.add(new MongoDB());
 		testDatabases.add(new Virtuoso());
 		testDatabases.add(new Fuseki());
-//		
-		
-		
+
 		for (TestSeries testSerie : testSeries) {
 			List<BenchmarkObject> benchmarkObjects = new ArrayList<>();
 			for (Database database : testDatabases) {
 				benchmarkObjects.add(new BenchmarkObject(database));
 			}
-			
+
 			for (BenchmarkObject benchmarkObject : benchmarkObjects) {
 				Database db = benchmarkObject.getDatabase();
 				long setUpStart, setUpEnd, loadStart, loadEnd;
-				
+
 				try {
 					db.start();
 					db.clean();
-					
+
 					setUpStart = System.nanoTime();
 					db.setUp();
 					setUpEnd = System.nanoTime();
-					
+
 					loadStart = System.nanoTime();
 					for (Dataset dataset : testSerie.datasets) {
 						db.load(dataset);
 					}
-					loadEnd = System.nanoTime();					
-					
+					loadEnd = System.nanoTime();
+
 					for (QueryScenario queryScenario : QueryScenario.values()) {
 						try {
 							long prepareStart, prepareEnd;
-	
+							System.out.println(queryScenario);
+
 							prepareStart = System.nanoTime();
 							db.prepare(queryScenario);
 							prepareEnd = System.nanoTime();
-							
+
 							int executions = queryScenario.isReadOnly ? Config.QUERYSCENARIO_EXECUTIONS : 1;
 							QueryResult result = null;
 							for (int execution = 1; execution <= executions; execution++) {
@@ -85,53 +84,57 @@ public class Benchmark {
 								queryStart = System.nanoTime();
 								result = db.query(queryScenario);
 								queryEnd = System.nanoTime();
-								
+
 								double executionTime = nanoExecutionTimeInMilliseconds(queryStart, queryEnd);
 								setResultInResultset(execution, queryScenario, executionTime, benchmarkObject.getQueryQueryScenarioResults());
-								
-								if((execution+1) <= executions && executionTime >= Config.BORDER_FOR_QUERYEXECUTION_TIME_IN_MS){
-									System.out.println(String.format("Testserie %s, %s: QueryScenario %s took too long (over %sms) to finish at execution %s. Cancelling the remaining executions.", testSerie.toString(), db.getName(), queryScenario.toString(), Config.BORDER_FOR_QUERYEXECUTION_TIME_IN_MS, execution));
+
+								if ((execution + 1) <= executions && executionTime >= Config.BORDER_FOR_QUERYEXECUTION_TIME_IN_MS) {
+									System.out.println(String.format(
+											"Testserie %s, %s: QueryScenario %s took too long (over %sms) to finish at execution %s. Cancelling the remaining executions.",
+											testSerie.toString(), db.getName(), queryScenario.toString(), Config.BORDER_FOR_QUERYEXECUTION_TIME_IN_MS,
+											execution));
 									break;
 								}
 							}
-							
-							benchmarkObject.getQueryResults().put(queryScenario, result);							
+
+							benchmarkObject.getQueryResults().put(queryScenario, result);
 							benchmarkObject.getPrepareQueryScenarioResults().put(queryScenario, nanoExecutionTimeInMilliseconds(prepareStart, prepareEnd));
-							
+
 						} catch (Exception e) {
 							// Abort only current QueryScenario
 							benchmarkObject.InvalidateQueryScenarioResults(queryScenario);
-							
+
 							System.err.println("Fehler bei " + benchmarkObject.getTitle() + ", " + queryScenario);
 							e.printStackTrace(System.err);
-							
+
 							continue;
 						}
 					}
-					
+
 					db.stop();
-					
+
 					benchmarkObject.setSetUpTime(nanoExecutionTimeInMilliseconds(setUpStart, setUpEnd));
 					benchmarkObject.setLoadTime(nanoExecutionTimeInMilliseconds(loadStart, loadEnd));
-					
+
 				} catch (Exception e) {
 					// Abort only current BenchmarkObject
 					benchmarkObject.InvalidateBenchmarkResults();
-	
+
 					System.err.println("Fehler bei " + benchmarkObject.getTitle());
 					e.printStackTrace(System.err);
-	
+
 					continue;
 				}
-	
+
 				System.out.println("Done with " + benchmarkObject);
 			}
-	
+
 			makeReports(testSerie, benchmarkObjects);
 		}
 	}
 
-	private static void setResultInResultset(int execution, QueryScenario queryScenario, double result, Hashtable<Integer, Hashtable<QueryScenario, Double>> resultSet) {
+	private static void setResultInResultset(int execution, QueryScenario queryScenario, double result,
+			Hashtable<Integer, Hashtable<QueryScenario, Double>> resultSet) {
 		if (resultSet.containsKey(execution)) {
 			Hashtable<QueryScenario, Double> r = resultSet.get(execution);
 			r.put(queryScenario, result);
@@ -143,24 +146,25 @@ public class Benchmark {
 	}
 
 	private static double nanoExecutionTimeInMilliseconds(long start, long end) {
-		double result = (double)(end - start) / (double)1000000;
+		double result = (double) (end - start) / (double) 1000000;
 		return result;
 	}
 
 	private static void makeReports(TestSeries testSerie, List<BenchmarkObject> benchmarkObjects) throws Exception {
 		Reports reports = new Reports();
 		StringBuilder sb = new StringBuilder();
-		
+
 		sb.append("<style style=\"text/css\">tr:hover{background: #FFFF00;}</style>\n\n");
 
 		sb.append(reports.MakeBenchmarkReport(benchmarkObjects, testSerie, false));
-		
+
 		ArrayList<DatabaseReportObject> databases = new ArrayList<>();
-		for (BenchmarkObject benchmarkObject : benchmarkObjects) databases.add(new DatabaseReportObject(benchmarkObject.getTitle()));
+		for (BenchmarkObject benchmarkObject : benchmarkObjects)
+			databases.add(new DatabaseReportObject(benchmarkObject.getTitle()));
 		sb.append(reports.MakeTableOfContents(databases));
-		
+
 		sb.append(reports.MakeTestSeriesReport(testSerie, false));
-		
+
 		int tocCount = 1;
 		for (BenchmarkObject benchmarkObject : benchmarkObjects) {
 			sb.append(reports.MakeBenchmarkObjectReport(benchmarkObject, testSerie, String.valueOf(tocCount), false));
@@ -175,21 +179,22 @@ public class Benchmark {
 		PegDownProcessor pdp = new PegDownProcessor(Extensions.ALL);
 		String htmlResult = pdp.markdownToHtml(sb.toString());
 		FileUtils.writeStringToFile(new File(Config.WHERE_THE_RESULTS_AT + filename + ".html"), htmlResult);
-		
+
 		makeCsvReports(testSerie, benchmarkObjects);
-		
+
 		System.out.println("Wrote Report for Testserie " + testSerie.toString());
 	}
-	
+
 	private static void makeCsvReports(TestSeries testSerie, List<BenchmarkObject> benchmarkObjects) throws Exception {
 		Reports reports = new Reports();
 		StringBuilder sb = new StringBuilder();
-		
+
 		sb.append(reports.MakeBenchmarkReport(benchmarkObjects, testSerie, true));
 		sb.append(reports.MakeTestSeriesReport(testSerie, true));
-		for (BenchmarkObject benchmarkObject : benchmarkObjects) sb.append(reports.MakeBenchmarkObjectReport(benchmarkObject, testSerie, null, true));
+		for (BenchmarkObject benchmarkObject : benchmarkObjects)
+			sb.append(reports.MakeBenchmarkObjectReport(benchmarkObject, testSerie, null, true));
 		sb.append(reports.MakeVerifyResultsReport(benchmarkObjects, true));
-		
+
 		String filename = String.format("Results-Testserie_%s", testSerie.toString());
 		FileUtils.writeStringToFile(new File(Config.WHERE_THE_RESULTS_AT + filename + ".csv"), sb.toString());
 	}

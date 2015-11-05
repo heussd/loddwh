@@ -112,7 +112,7 @@ public enum QueryScenario {
 	 * During query: For each record, find records that share a DCTERMS_SUBJECT, find records that share a DCTERMS-SUBJECT with those, and return: original.dcterms_identifier,
 	 * original.dcterms_subject, firstrelated.dcterms_identifier, firstrelated.dcterms_subject, secondrelated.dcterms_identifier.
 	 */
-	GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY(QueryResult.Type.GRAPH),
+//	GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY(QueryResult.Type.GRAPH),
 
 	/**
 	 * During prepare: Retrieve the first 10 dcterms_identifier-values from a list of all entities that have dcterms_subjects (ergo dcterms_subjects != 0), ordered by
@@ -120,7 +120,7 @@ public enum QueryScenario {
 	 * During query: For each record, find records that share a DCTERMS_SUBJECT, find records that share a DCTERMS-SUBJECT with those, and return: original.dcterms_identifier,
 	 * original.dcterms_subject, firstrelated.dcterms_identifier, firstrelated.dcterms_subject, secondrelated.dcterms_identifier.
 	 */
-	GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES(QueryResult.Type.GRAPH),
+//	GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES(QueryResult.Type.GRAPH),
 
 	/**
 	 * During prepare: Retrieve the first 100 dcterms_identifier-values from a list of all entities that have dcterms_subjects (ergo dcterms_subjects != 0), ordered by
@@ -128,7 +128,7 @@ public enum QueryScenario {
 	 * During query: For each record, find records that share a DCTERMS_SUBJECT, find records that share a DCTERMS-SUBJECT with those, and return: original.dcterms_identifier,
 	 * original.dcterms_subject, firstrelated.dcterms_identifier, firstrelated.dcterms_subject, secondrelated.dcterms_identifier.
 	 */
-	GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES(QueryResult.Type.GRAPH),
+//	GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES(QueryResult.Type.GRAPH),
 
 	/**
 	 * Create a new property for every record, defaulting to "cheesecake".
