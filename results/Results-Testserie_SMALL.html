@@ -5,508 +5,442 @@
       <th align="left">QueryScenario </th>
       <th align="left">Phase </th>
       <th align="right"><a href="#sqlite4java">sqlite4java</a> </th>
-      <th align="right"><a href="#SQLite-JDBC-Xerial">SQLite JDBC Xerial</a> </th>
+      <th align="right"><a href="#SQLite-Xerial">SQLite-Xerial</a> </th>
       <th align="right"><a href="#PostgreSQL">PostgreSQL</a> </th>
       <th align="right"><a href="#ArangoDB">ArangoDB</a> </th>
       <th align="right"><a href="#MongoDB">MongoDB</a> </th>
       <th align="right"><a href="#Virtuoso">Virtuoso</a> </th>
-      <th align="right"><a href="#Apache-Jena-Fuseki">Apache Jena Fuseki</a> </th>
+      <th align="right"><a href="#Fuseki">Fuseki</a> </th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td align="left">Set up </td>
       <td align="left"> </td>
-      <td align="right">21.70 ms </td>
-      <td align="right">75.81 ms </td>
-      <td align="right">246.86 ms </td>
-      <td align="right">177.50 ms </td>
-      <td align="right">3.92 ms </td>
-      <td align="right">1.70 ms </td>
+      <td align="right">21.56 ms </td>
+      <td align="right">74.34 ms </td>
+      <td align="right">246.76 ms </td>
+      <td align="right">231.04 ms </td>
+      <td align="right">3.83 ms </td>
+      <td align="right">1.37 ms </td>
       <td align="right"><strong>0.00 ms</strong> </td>
     </tr>
     <tr>
       <td align="left">Load </td>
       <td align="left"> </td>
-      <td align="right">21382.58 ms </td>
-      <td align="right">23774.85 ms </td>
-      <td align="right">29561.50 ms </td>
-      <td align="right">38814.88 ms </td>
-      <td align="right">28661.05 ms </td>
-      <td align="right"><strong>7975.68 ms</strong> </td>
-      <td align="right">33159.97 ms </td>
+      <td align="right">20849.12 ms </td>
+      <td align="right">19345.09 ms </td>
+      <td align="right">27159.76 ms </td>
+      <td align="right">42961.93 ms </td>
+      <td align="right">31103.94 ms </td>
+      <td align="right"><strong>7798.13 ms</strong> </td>
+      <td align="right">30028.31 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0"> 320.64 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 398.30 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> <strong>197.61 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> 1939.54 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 589.37 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 1960.34 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 2985.94 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 353.43 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 360.99 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> <strong>204.45 ms</strong></font> </td>
+      <td align="right"><font color="#C0C0C0"> 1736.13 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 614.16 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 2002.52 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 2913.98 ms</font> </td>
     </tr>
     <tr>
       <td align="left">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY </td>
       <td align="left">Query </td>
-      <td align="right">0.43 ms </td>
-      <td align="right"><strong>0.15 ms</strong> </td>
-      <td align="right">1.11 ms </td>
-      <td align="right">154.66 ms </td>
-      <td align="right">43.74 ms </td>
-      <td align="right">256.77 ms </td>
-      <td align="right">31.02 ms </td>
+      <td align="right">0.38 ms </td>
+      <td align="right"><strong>0.14 ms</strong> </td>
+      <td align="right">1.29 ms </td>
+      <td align="right">133.07 ms </td>
+      <td align="right">42.11 ms </td>
+      <td align="right">271.76 ms </td>
+      <td align="right">29.25 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0"> <strong>144.38 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> 424.25 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 170.81 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 1997.48 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 540.28 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 150.40 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 2232.61 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 182.63 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 454.08 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 196.94 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 1709.74 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 525.35 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> <strong>154.45 ms</strong></font> </td>
+      <td align="right"><font color="#C0C0C0"> 2373.82 ms</font> </td>
     </tr>
     <tr>
       <td align="left">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">1.02 ms </td>
-      <td align="right"><strong>0.43 ms</strong> </td>
-      <td align="right">1.37 ms </td>
-      <td align="right">1363.17 ms </td>
-      <td align="right">428.22 ms </td>
-      <td align="right">4336.16 ms </td>
-      <td align="right">38.82 ms </td>
+      <td align="right">1.18 ms </td>
+      <td align="right"><strong>0.47 ms</strong> </td>
+      <td align="right">1.44 ms </td>
+      <td align="right">1465.11 ms </td>
+      <td align="right">409.23 ms </td>
+      <td align="right">4453.55 ms </td>
+      <td align="right">44.80 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_100_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0"> 173.50 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 477.63 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> <strong>173.02 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> 1767.00 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 539.85 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 173.62 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 2753.79 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 198.90 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 469.54 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 202.50 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 1939.03 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 532.01 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> <strong>180.35 ms</strong></font> </td>
+      <td align="right"><font color="#C0C0C0"> 2680.30 ms</font> </td>
     </tr>
     <tr>
       <td align="left">ENTITY_RETRIEVAL_BY_ID_100_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">2.33 ms </td>
-      <td align="right"><strong>1.68 ms</strong> </td>
-      <td align="right">4.20 ms </td>
-      <td align="right">14161.28 ms </td>
-      <td align="right">4261.10 ms </td>
-      <td align="right">36864.24 ms </td>
-      <td align="right">140.95 ms </td>
+      <td align="right">2.43 ms </td>
+      <td align="right"><strong>2.05 ms</strong> </td>
+      <td align="right">3.88 ms </td>
+      <td align="right">14364.12 ms </td>
+      <td align="right">4132.37 ms </td>
+      <td align="right">39474.63 ms </td>
+      <td align="right">134.98 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0"> 5.58 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 197.72 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 86.40 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 4.21 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 204.64 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 92.88 ms</font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> 2.21 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 1.39 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 1.51 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 0.54 ms</font> </td>
     </tr>
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10 </td>
       <td align="left">Query </td>
-      <td align="right">132.84 ms </td>
-      <td align="right">28.91 ms </td>
-      <td align="right">42.37 ms </td>
-      <td align="right">179.52 ms </td>
-      <td align="right">92.65 ms </td>
-      <td align="right"><strong>20.82 ms</strong> </td>
-      <td align="right">144.67 ms </td>
+      <td align="right">144.11 ms </td>
+      <td align="right">31.55 ms </td>
+      <td align="right">52.07 ms </td>
+      <td align="right">149.97 ms </td>
+      <td align="right">84.51 ms </td>
+      <td align="right"><strong>21.84 ms</strong> </td>
+      <td align="right">151.47 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0"> 0.58 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 198.71 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 109.61 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 0.61 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 228.76 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 97.19 ms</font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> 2.04 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 1.30 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 1.31 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 0.48 ms</font> </td>
     </tr>
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100 </td>
       <td align="left">Query </td>
-      <td align="right">136.93 ms </td>
-      <td align="right">32.21 ms </td>
-      <td align="right">38.89 ms </td>
-      <td align="right">160.84 ms </td>
-      <td align="right">89.25 ms </td>
-      <td align="right"><strong>23.08 ms</strong> </td>
-      <td align="right">81.19 ms </td>
+      <td align="right">146.79 ms </td>
+      <td align="right">36.38 ms </td>
+      <td align="right">44.58 ms </td>
+      <td align="right">158.12 ms </td>
+      <td align="right">83.55 ms </td>
+      <td align="right"><strong>25.41 ms</strong> </td>
+      <td align="right">95.40 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0"> 0.51 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 197.48 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 83.51 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 0.55 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 237.02 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 103.40 ms</font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> 1.68 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 1.47 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 1.36 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 0.38 ms</font> </td>
     </tr>
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL </td>
       <td align="left">Query </td>
-      <td align="right">146.33 ms </td>
-      <td align="right"><strong>41.15 ms</strong> </td>
-      <td align="right">48.97 ms </td>
-      <td align="right">327.44 ms </td>
-      <td align="right">118.40 ms </td>
-      <td align="right">104.99 ms </td>
-      <td align="right">402.22 ms </td>
+      <td align="right">154.48 ms </td>
+      <td align="right"><strong>47.66 ms</strong> </td>
+      <td align="right">56.50 ms </td>
+      <td align="right">318.55 ms </td>
+      <td align="right">109.42 ms </td>
+      <td align="right">112.43 ms </td>
+      <td align="right">408.97 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_TOP10</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
       <td align="right"><font color="#C0C0C0"> 0.72 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 399.68 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 219.59 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 429.58 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 245.67 ms</font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> 2.45 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 1.30 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 1.36 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 0.36 ms</font> </td>
     </tr>
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_TOP10 </td>
       <td align="left">Query </td>
-      <td align="right">162.60 ms </td>
-      <td align="right">251.76 ms </td>
-      <td align="right"><strong>53.87 ms</strong> </td>
-      <td align="right">409.03 ms </td>
-      <td align="right">125.73 ms </td>
-      <td align="right">240.39 ms </td>
-      <td align="right">154.57 ms </td>
+      <td align="right">168.23 ms </td>
+      <td align="right">264.40 ms </td>
+      <td align="right"><strong>58.98 ms</strong> </td>
+      <td align="right">364.87 ms </td>
+      <td align="right">116.41 ms </td>
+      <td align="right">261.79 ms </td>
+      <td align="right">165.84 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_TOP100</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0"> 0.73 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 470.14 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 234.94 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 0.58 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 453.85 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 263.86 ms</font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> 2.36 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 1.19 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 1.34 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 0.40 ms</font> </td>
     </tr>
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_TOP100 </td>
       <td align="left">Query </td>
-      <td align="right">162.09 ms </td>
-      <td align="right">240.35 ms </td>
-      <td align="right"><strong>46.53 ms</strong> </td>
-      <td align="right">413.82 ms </td>
-      <td align="right">123.67 ms </td>
-      <td align="right">242.08 ms </td>
-      <td align="right">142.99 ms </td>
+      <td align="right">168.51 ms </td>
+      <td align="right">247.89 ms </td>
+      <td align="right"><strong>51.86 ms</strong> </td>
+      <td align="right">378.55 ms </td>
+      <td align="right">116.18 ms </td>
+      <td align="right">250.12 ms </td>
+      <td align="right">122.57 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_ALL</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0"> 0.62 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 422.20 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 215.99 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 0.57 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 471.32 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 249.04 ms</font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> 3.16 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 1.20 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 1.42 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 0.39 ms</font> </td>
     </tr>
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_ALL </td>
       <td align="left">Query </td>
-      <td align="right">164.41 ms </td>
-      <td align="right">238.57 ms </td>
-      <td align="right"><strong>48.23 ms</strong> </td>
-      <td align="right">407.93 ms </td>
-      <td align="right">122.06 ms </td>
-      <td align="right">243.35 ms </td>
-      <td align="right">118.31 ms </td>
+      <td align="right">182.58 ms </td>
+      <td align="right">272.27 ms </td>
+      <td align="right"><strong>53.95 ms</strong> </td>
+      <td align="right">381.14 ms </td>
+      <td align="right">114.40 ms </td>
+      <td align="right">246.36 ms </td>
+      <td align="right">132.98 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_STUDIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0"> 0.57 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 366.70 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 180.29 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 1630.43 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 0.69 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 436.95 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 188.55 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 1510.34 ms</font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> 8.45 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 1.20 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 7.13 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 0.33 ms</font> </td>
     </tr>
     <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_STUDIES </td>
       <td align="left">Query </td>
-      <td align="right">216.61 ms </td>
-      <td align="right">319.81 ms </td>
-      <td align="right"><strong>138.21 ms</strong> </td>
-      <td align="right">165.84 ms </td>
-      <td align="right">233.07 ms </td>
-      <td align="right">14545.11 ms </td>
-      <td align="right">6996.53 ms </td>
+      <td align="right">248.58 ms </td>
+      <td align="right">311.39 ms </td>
+      <td align="right"><strong>139.14 ms</strong> </td>
+      <td align="right">158.06 ms </td>
+      <td align="right">236.37 ms </td>
+      <td align="right">15792.11 ms </td>
+      <td align="right">7171.26 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0"> 0.49 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 2.45 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 124.19 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 0.56 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 2.38 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 125.66 ms</font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> 8.48 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 7.62 ms</font> </td>
       <td align="right"><font color="#C0C0C0"> Error</font> </td>
     </tr>
     <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES </td>
       <td align="left">Query </td>
-      <td align="right">1447.01 ms </td>
-      <td align="right">1462.69 ms </td>
-      <td align="right">1065.76 ms </td>
-      <td align="right">3449.29 ms </td>
-      <td align="right"><strong>610.97 ms</strong> </td>
-      <td align="right">305588.89 ms </td>
+      <td align="right">1178.36 ms </td>
+      <td align="right">1284.46 ms </td>
+      <td align="right">1181.40 ms </td>
+      <td align="right">3352.16 ms </td>
+      <td align="right"><strong>546.13 ms</strong> </td>
+      <td align="right">3.07E5 ms </td>
       <td align="right">Error </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0"> 0.68 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 2.03 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 274.32 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 0.87 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 2.26 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 299.31 ms</font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> 10.91 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 1.92 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 7.65 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 0.61 ms</font> </td>
     </tr>
     <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES </td>
       <td align="left">Query </td>
-      <td align="right">243.75 ms </td>
-      <td align="right">364.56 ms </td>
-      <td align="right"><strong>134.37 ms</strong> </td>
-      <td align="right">764.23 ms </td>
-      <td align="right">277.23 ms </td>
-      <td align="right">13502.34 ms </td>
-      <td align="right">456853.40 ms </td>
+      <td align="right">303.15 ms </td>
+      <td align="right">344.34 ms </td>
+      <td align="right"><strong>136.66 ms</strong> </td>
+      <td align="right">713.34 ms </td>
+      <td align="right">268.44 ms </td>
+      <td align="right">15488.42 ms </td>
+      <td align="right">4.38E5 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0"> 16688.60 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 17713.52 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 164.16 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 6172707.04 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 84.20 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> <strong>80.26 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> 20630.04 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 18315.80 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 18350.46 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 202.51 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 19536.94 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> <strong>78.87 ms</strong></font> </td>
+      <td align="right"><font color="#C0C0C0"> 82.35 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 18662.59 ms</font> </td>
     </tr>
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY </td>
       <td align="left">Query </td>
-      <td align="right"><strong>0.14 ms</strong> </td>
-      <td align="right">0.20 ms </td>
-      <td align="right">8.74 ms </td>
-      <td align="right">82.78 ms </td>
-      <td align="right">313.94 ms </td>
-      <td align="right">6.14 ms </td>
-      <td align="right">2821.66 ms </td>
+      <td align="right"><strong>0.15 ms</strong> </td>
+      <td align="right">0.17 ms </td>
+      <td align="right">8.59 ms </td>
+      <td align="right">74.79 ms </td>
+      <td align="right">287.32 ms </td>
+      <td align="right">6.40 ms </td>
+      <td align="right">2457.82 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0"> 81.93 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 113.28 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 70.55 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 920.61 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 83.03 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> <strong>39.78 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> 14140.41 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 88.01 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 92.41 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 72.38 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 993.71 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 81.16 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> <strong>39.19 ms</strong></font> </td>
+      <td align="right"><font color="#C0C0C0"> 11960.95 ms</font> </td>
     </tr>
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">0.46 ms </td>
+      <td align="right">0.48 ms </td>
       <td align="right"><strong>0.45 ms</strong> </td>
-      <td align="right">5.78 ms </td>
-      <td align="right">688.50 ms </td>
-      <td align="right">3291.15 ms </td>
-      <td align="right">0.50 ms </td>
-      <td align="right">10.21 ms </td>
+      <td align="right">6.29 ms </td>
+      <td align="right">698.38 ms </td>
+      <td align="right">3385.69 ms </td>
+      <td align="right">0.48 ms </td>
+      <td align="right">25.05 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0"> 79.15 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 102.29 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 71.17 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 936.66 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 94.05 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> <strong>67.27 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> 13465.68 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 90.52 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 94.58 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 76.19 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 1720.48 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 88.97 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> <strong>63.04 ms</strong></font> </td>
+      <td align="right"><font color="#C0C0C0"> 11444.82 ms</font> </td>
     </tr>
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">16.18 ms </td>
-      <td align="right">12.00 ms </td>
-      <td align="right">7.15 ms </td>
-      <td align="right">8669.14 ms </td>
-      <td align="right">43337.02 ms </td>
-      <td align="right"><strong>5.98 ms</strong> </td>
-      <td align="right">1719.90 ms </td>
-    </tr>
-    <tr>
-      <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY</font> </td>
-      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0"> 78.57 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 104.94 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> <strong>68.89 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> 990.82 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 91.47 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> Error</font> </td>
-      <td align="right"><font color="#C0C0C0"> 12964.62 ms</font> </td>
-    </tr>
-    <tr>
-      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY </td>
-      <td align="left">Query </td>
-      <td align="right">2.12 ms </td>
-      <td align="right"><strong>1.84 ms</strong> </td>
-      <td align="right">132.79 ms </td>
-      <td align="right">2165.55 ms </td>
-      <td align="right">9993.38 ms </td>
-      <td align="right">Error </td>
-      <td align="right">15.41 ms </td>
-    </tr>
-    <tr>
-      <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES</font> </td>
-      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0"> 79.01 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 98.03 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> <strong>70.78 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> 977.48 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 88.40 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> Error</font> </td>
-      <td align="right"><font color="#C0C0C0"> 11951.35 ms</font> </td>
-    </tr>
-    <tr>
-      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES </td>
-      <td align="left">Query </td>
-      <td align="right">6.64 ms </td>
-      <td align="right"><strong>4.59 ms</strong> </td>
-      <td align="right">9.31 ms </td>
-      <td align="right">8542.68 ms </td>
-      <td align="right">40625.32 ms </td>
-      <td align="right">Error </td>
-      <td align="right">5.19 ms </td>
-    </tr>
-    <tr>
-      <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES</font> </td>
-      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0"> 81.11 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 89.39 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> <strong>72.37 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> 945.57 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 91.45 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> Error</font> </td>
-      <td align="right"><font color="#C0C0C0"> 12699.98 ms</font> </td>
-    </tr>
-    <tr>
-      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES </td>
-      <td align="left">Query </td>
-      <td align="right">7039.58 ms </td>
-      <td align="right">4964.42 ms </td>
-      <td align="right">131.08 ms </td>
-      <td align="right">908971.09 ms </td>
-      <td align="right">2573406.52 ms </td>
-      <td align="right">Error </td>
-      <td align="right"><strong>10.36 ms</strong> </td>
+      <td align="right">15.84 ms </td>
+      <td align="right">11.47 ms </td>
+      <td align="right">7.13 ms </td>
+      <td align="right">6961.73 ms </td>
+      <td align="right">44399.59 ms </td>
+      <td align="right"><strong>6.22 ms</strong> </td>
+      <td align="right">1508.94 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0"> 3.72 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 1.81 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 9.40 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 3.85 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 2.78 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 9.22 ms</font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> 2.06 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 1.23 ms</font> </td>
       <td align="right"><font color="#C0C0C0"> Error</font> </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY </td>
       <td align="left">Query </td>
-      <td align="right">1.57 ms </td>
-      <td align="right"><strong>1.33 ms</strong> </td>
-      <td align="right">737.69 ms </td>
-      <td align="right">6586.05 ms </td>
-      <td align="right">654.63 ms </td>
-      <td align="right">16499.27 ms </td>
+      <td align="right"><strong>1.48 ms</strong> </td>
+      <td align="right">2.39 ms </td>
+      <td align="right">819.81 ms </td>
+      <td align="right">7020.43 ms </td>
+      <td align="right">620.83 ms </td>
+      <td align="right">18972.43 ms </td>
       <td align="right">Error </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_INTRODUCE_STRING_OP</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0"> 0.54 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 195.92 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 156.34 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 0.52 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 213.42 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 165.57 ms</font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> 193.40 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 2.94 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 199.03 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 1.12 ms</font> </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_INTRODUCE_STRING_OP </td>
       <td align="left">Query </td>
-      <td align="right"><strong>0.74 ms</strong> </td>
-      <td align="right">3.00 ms </td>
-      <td align="right">5155.81 ms </td>
-      <td align="right">7763.62 ms </td>
-      <td align="right">9988.88 ms </td>
-      <td align="right">458.55 ms </td>
-      <td align="right">9977.31 ms </td>
+      <td align="right">2.22 ms </td>
+      <td align="right"><strong>0.83 ms</strong> </td>
+      <td align="right">5096.88 ms </td>
+      <td align="right">6941.50 ms </td>
+      <td align="right">9929.10 ms </td>
+      <td align="right">602.48 ms </td>
+      <td align="right">9026.97 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_MIGRATE_RDF_TYPE</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0"> 0.51 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 1.38 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 177.67 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 0.54 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 1.23 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 205.61 ms</font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> 7.39 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 5.07 ms</font> </td>
       <td align="right"><font color="#C0C0C0"> Error</font> </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_MIGRATE_RDF_TYPE </td>
       <td align="left">Query </td>
-      <td align="right"><strong>0.72 ms</strong> </td>
-      <td align="right">0.78 ms </td>
-      <td align="right">15660.68 ms </td>
-      <td align="right">31251.96 ms </td>
-      <td align="right">2061.26 ms </td>
-      <td align="right">109558.52 ms </td>
+      <td align="right">1.59 ms </td>
+      <td align="right"><strong>0.59 ms</strong> </td>
+      <td align="right">15138.06 ms </td>
+      <td align="right">29271.22 ms </td>
+      <td align="right">2426.79 ms </td>
+      <td align="right">1.08E5 ms </td>
       <td align="right">Error </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_REMOVE_RDF_TYPE</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0"> 0.63 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 1.06 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 11.58 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 0.61 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 1.22 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 9.89 ms</font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> 0.01 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 1.83 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
+      <td align="right"><font color="#C0C0C0"> 1.17 ms</font> </td>
       <td align="right"><font color="#C0C0C0"> Error</font> </td>
     </tr>
     <tr>
@@ -514,99 +448,99 @@
       <td align="left">Query </td>
       <td align="right"><strong>0.02 ms</strong> </td>
       <td align="right"><strong>0.02 ms</strong> </td>
-      <td align="right">3.53 ms </td>
-      <td align="right">6515.42 ms </td>
-      <td align="right">430.67 ms </td>
-      <td align="right">0.20 ms </td>
+      <td align="right">21.20 ms </td>
+      <td align="right">5863.15 ms </td>
+      <td align="right">483.13 ms </td>
+      <td align="right">0.17 ms </td>
       <td align="right">Error </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
       <td align="right"><font color="#C0C0C0"> 0.26 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 168.89 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 182.05 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 171.27 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 196.70 ms</font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> 1.74 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 0.99 ms</font> </td>
       <td align="right"><font color="#C0C0C0"> Error</font> </td>
     </tr>
     <tr>
       <td align="left">UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM </td>
       <td align="left">Query </td>
-      <td align="right">835.96 ms </td>
-      <td align="right">1123.45 ms </td>
-      <td align="right">4988.73 ms </td>
-      <td align="right">7227.30 ms </td>
-      <td align="right"><strong>368.98 ms</strong> </td>
-      <td align="right">3447.05 ms </td>
+      <td align="right">844.94 ms </td>
+      <td align="right">1211.39 ms </td>
+      <td align="right">2350.89 ms </td>
+      <td align="right">6793.59 ms </td>
+      <td align="right"><strong>409.18 ms</strong> </td>
+      <td align="right">4461.88 ms </td>
       <td align="right">Error </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">UPDATE_HIGH_SELECTIVITY_NON_ISSUED</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0"> 0.46 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 206.65 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 207.34 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 0.63 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 228.54 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 199.73 ms</font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> 2.62 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 19.91 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 0.01 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 1.66 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 19.82 ms</font> </td>
     </tr>
     <tr>
       <td align="left">UPDATE_HIGH_SELECTIVITY_NON_ISSUED </td>
       <td align="left">Query </td>
-      <td align="right">115.21 ms </td>
-      <td align="right"><strong>36.07 ms</strong> </td>
-      <td align="right">137.15 ms </td>
-      <td align="right">1138.32 ms </td>
-      <td align="right">47.46 ms </td>
-      <td align="right">309.74 ms </td>
-      <td align="right">192036.15 ms </td>
+      <td align="right">115.88 ms </td>
+      <td align="right"><strong>36.50 ms</strong> </td>
+      <td align="right">95.77 ms </td>
+      <td align="right">1065.73 ms </td>
+      <td align="right">58.78 ms </td>
+      <td align="right">413.01 ms </td>
+      <td align="right">1.70E5 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">DELETE_LOW_SELECTIVITY_PAPER_MEDIUM</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0"> 0.47 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 221.32 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 160.36 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 0.48 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 227.60 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 181.72 ms</font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
       <td align="right"><font color="#C0C0C0"> Error</font> </td>
-      <td align="right"><font color="#C0C0C0"> 6.99 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 0.86 ms</font> </td>
     </tr>
     <tr>
       <td align="left">DELETE_LOW_SELECTIVITY_PAPER_MEDIUM </td>
       <td align="left">Query </td>
-      <td align="right">503.25 ms </td>
-      <td align="right">1944.02 ms </td>
-      <td align="right">583.41 ms </td>
-      <td align="right">881.44 ms </td>
-      <td align="right">412.68 ms </td>
+      <td align="right">556.65 ms </td>
+      <td align="right">1994.22 ms </td>
+      <td align="right">433.93 ms </td>
+      <td align="right">833.39 ms </td>
+      <td align="right">502.26 ms </td>
       <td align="right">Error </td>
-      <td align="right"><strong>6.27 ms</strong> </td>
+      <td align="right"><strong>5.22 ms</strong> </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">DELETE_HIGH_SELECTIVIY_NON_ISSUED</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
       <td align="right"><font color="#C0C0C0"> 0.47 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 21.15 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 97.88 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 25.13 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 127.07 ms</font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
       <td align="right"><font color="#C0C0C0"> <strong>0.00 ms</strong></font> </td>
-      <td align="right"><font color="#C0C0C0"> 922.31 ms</font> </td>
-      <td align="right"><font color="#C0C0C0"> 1.00 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 1098.13 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 0.73 ms</font> </td>
     </tr>
     <tr>
       <td align="left">DELETE_HIGH_SELECTIVIY_NON_ISSUED </td>
       <td align="left">Query </td>
-      <td align="right">13.81 ms </td>
-      <td align="right">16.31 ms </td>
-      <td align="right"><strong>3.90 ms</strong> </td>
-      <td align="right">18.45 ms </td>
-      <td align="right">5.98 ms </td>
-      <td align="right">11019.60 ms </td>
-      <td align="right">4.15 ms </td>
+      <td align="right">15.90 ms </td>
+      <td align="right">13.53 ms </td>
+      <td align="right"><strong>2.28 ms</strong> </td>
+      <td align="right">23.80 ms </td>
+      <td align="right">6.38 ms </td>
+      <td align="right">13757.44 ms </td>
+      <td align="right">3.84 ms </td>
     </tr>
   </tbody>
 </table><h1><a name="toc"></a><a href="#toc">Table of contents</a></h1>
@@ -616,12 +550,12 @@
   <li>Evaluation Details
   <ol>
     <li><a href="#sqlite4java">sqlite4java</a></li>
-    <li><a href="#SQLite-JDBC-Xerial">SQLite JDBC Xerial</a></li>
+    <li><a href="#SQLite-Xerial">SQLite-Xerial</a></li>
     <li><a href="#PostgreSQL">PostgreSQL</a></li>
     <li><a href="#ArangoDB">ArangoDB</a></li>
     <li><a href="#MongoDB">MongoDB</a></li>
     <li><a href="#Virtuoso">Virtuoso</a></li>
-    <li><a href="#Apache-Jena-Fuseki">Apache Jena Fuseki</a></li>
+    <li><a href="#Fuseki">Fuseki</a></li>
   </ol></li>
   <li><a href="#verifyresults">Verify Results</a></li>
 </ol><h2><a name="testseriesinformation"></a><a href="#testseriesinformation">2. Test Series Datasets</a></h2>
@@ -653,16 +587,16 @@
   <tbody>
     <tr>
       <td align="left" colspan="2">Set up </td>
-      <td align="right">21.70 ms </td>
+      <td align="right">21.56 ms </td>
     </tr>
     <tr>
       <td align="left" colspan="2">Load </td>
-      <td align="right">21382.58 ms </td>
+      <td align="right">20849.12 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">320.64 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">353.43 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -670,15 +604,15 @@
     <tr>
       <td align="left">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY </td>
       <td align="left">Query </td>
-      <td align="right">1.09 ms </td>
-      <td align="right">0.43 ms </td>
+      <td align="right">0.93 ms </td>
+      <td align="right">0.38 ms </td>
       <td align="right">0.12 ms </td>
-      <td align="right">1.09 ms </td>
+      <td align="right">0.93 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">144.38 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">182.63 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -686,15 +620,15 @@
     <tr>
       <td align="left">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">0.81 ms </td>
-      <td align="right">1.02 ms </td>
-      <td align="right">0.53 ms </td>
-      <td align="right">0.81 ms </td>
+      <td align="right">0.80 ms </td>
+      <td align="right">1.18 ms </td>
+      <td align="right">0.80 ms </td>
+      <td align="right">1.32 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_100_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">173.50 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">198.90 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -702,15 +636,15 @@
     <tr>
       <td align="left">ENTITY_RETRIEVAL_BY_ID_100_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">2.70 ms </td>
-      <td align="right">2.33 ms </td>
-      <td align="right">2.02 ms </td>
-      <td align="right">2.70 ms </td>
+      <td align="right">2.65 ms </td>
+      <td align="right">2.43 ms </td>
+      <td align="right">1.96 ms </td>
+      <td align="right">2.65 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">5.58 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">4.21 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -718,15 +652,15 @@
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10 </td>
       <td align="left">Query </td>
-      <td align="right">132.86 ms </td>
-      <td align="right">132.84 ms </td>
-      <td align="right">132.71 ms </td>
-      <td align="right">132.86 ms </td>
+      <td align="right">146.11 ms </td>
+      <td align="right">144.11 ms </td>
+      <td align="right">146.11 ms </td>
+      <td align="right">146.52 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">0.58 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">0.61 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -734,15 +668,15 @@
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100 </td>
       <td align="left">Query </td>
-      <td align="right">136.86 ms </td>
-      <td align="right">136.93 ms </td>
-      <td align="right">135.54 ms </td>
-      <td align="right">136.86 ms </td>
+      <td align="right">154.32 ms </td>
+      <td align="right">146.79 ms </td>
+      <td align="right">147.23 ms </td>
+      <td align="right">154.32 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">0.51 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">0.55 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -750,10 +684,10 @@
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL </td>
       <td align="left">Query </td>
-      <td align="right">146.64 ms </td>
-      <td align="right">146.33 ms </td>
-      <td align="right">145.14 ms </td>
-      <td align="right">146.64 ms </td>
+      <td align="right">154.75 ms </td>
+      <td align="right">154.48 ms </td>
+      <td align="right">151.24 ms </td>
+      <td align="right">154.75 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_TOP10</font> </td>
@@ -766,15 +700,15 @@
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_TOP10 </td>
       <td align="left">Query </td>
-      <td align="right">159.46 ms </td>
-      <td align="right">162.60 ms </td>
-      <td align="right">159.46 ms </td>
-      <td align="right">171.95 ms </td>
+      <td align="right">174.29 ms </td>
+      <td align="right">168.23 ms </td>
+      <td align="right">163.15 ms </td>
+      <td align="right">174.29 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_TOP100</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">0.73 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">0.58 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -782,29 +716,13 @@
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_TOP100 </td>
       <td align="left">Query </td>
-      <td align="right">159.72 ms </td>
-      <td align="right">162.09 ms </td>
-      <td align="right">159.72 ms </td>
-      <td align="right">166.97 ms </td>
+      <td align="right">168.68 ms </td>
+      <td align="right">168.51 ms </td>
+      <td align="right">167.62 ms </td>
+      <td align="right">168.68 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_ALL</font> </td>
-      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">0.62 ms</font> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-    </tr>
-    <tr>
-      <td align="left">AGGREGATE_ISSUES_PER_DECADE_ALL </td>
-      <td align="left">Query </td>
-      <td align="right">168.34 ms </td>
-      <td align="right">164.41 ms </td>
-      <td align="right">167.62 ms </td>
-      <td align="right">168.34 ms </td>
-    </tr>
-    <tr>
-      <td align="left"><font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_STUDIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
       <td align="right"><font color="#C0C0C0">0.57 ms</font> </td>
       <td align="right"> </td>
@@ -812,17 +730,33 @@
       <td align="right"> </td>
     </tr>
     <tr>
+      <td align="left">AGGREGATE_ISSUES_PER_DECADE_ALL </td>
+      <td align="left">Query </td>
+      <td align="right">174.83 ms </td>
+      <td align="right">182.58 ms </td>
+      <td align="right">174.83 ms </td>
+      <td align="right">182.16 ms </td>
+    </tr>
+    <tr>
+      <td align="left"><font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_STUDIES</font> </td>
+      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
+      <td align="right"><font color="#C0C0C0">0.69 ms</font> </td>
+      <td align="right"> </td>
+      <td align="right"> </td>
+      <td align="right"> </td>
+    </tr>
+    <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_STUDIES </td>
       <td align="left">Query </td>
-      <td align="right">214.70 ms </td>
-      <td align="right">216.61 ms </td>
-      <td align="right">210.94 ms </td>
-      <td align="right">214.70 ms </td>
+      <td align="right">257.59 ms </td>
+      <td align="right">248.58 ms </td>
+      <td align="right">247.15 ms </td>
+      <td align="right">257.59 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">0.49 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">0.56 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -830,15 +764,15 @@
     <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES </td>
       <td align="left">Query </td>
-      <td align="right">1586.94 ms </td>
-      <td align="right">1447.01 ms </td>
-      <td align="right">1096.93 ms </td>
-      <td align="right">1586.94 ms </td>
+      <td align="right">1140.58 ms </td>
+      <td align="right">1178.36 ms </td>
+      <td align="right">1140.58 ms </td>
+      <td align="right">1199.77 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">0.68 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">0.87 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -846,15 +780,15 @@
     <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES </td>
       <td align="left">Query </td>
-      <td align="right">245.42 ms </td>
-      <td align="right">243.75 ms </td>
-      <td align="right">242.57 ms </td>
-      <td align="right">245.42 ms </td>
+      <td align="right">307.60 ms </td>
+      <td align="right">303.15 ms </td>
+      <td align="right">304.24 ms </td>
+      <td align="right">307.60 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">16688.60 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">18315.80 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -862,15 +796,15 @@
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY </td>
       <td align="left">Query </td>
-      <td align="right">0.24 ms </td>
-      <td align="right">0.14 ms </td>
-      <td align="right">0.09 ms </td>
-      <td align="right">0.24 ms </td>
+      <td align="right">0.27 ms </td>
+      <td align="right">0.15 ms </td>
+      <td align="right">0.10 ms </td>
+      <td align="right">0.27 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">81.93 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">88.01 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -878,15 +812,15 @@
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">0.62 ms </td>
-      <td align="right">0.46 ms </td>
-      <td align="right">0.39 ms </td>
-      <td align="right">0.62 ms </td>
+      <td align="right">0.65 ms </td>
+      <td align="right">0.48 ms </td>
+      <td align="right">0.40 ms </td>
+      <td align="right">0.65 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">79.15 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">90.52 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -894,93 +828,45 @@
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">17.92 ms </td>
-      <td align="right">16.18 ms </td>
-      <td align="right">14.39 ms </td>
-      <td align="right">17.92 ms </td>
-    </tr>
-    <tr>
-      <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY</font> </td>
-      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">78.57 ms</font> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-    </tr>
-    <tr>
-      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY </td>
-      <td align="left">Query </td>
-      <td align="right">2.27 ms </td>
-      <td align="right">2.12 ms </td>
-      <td align="right">2.07 ms </td>
-      <td align="right">2.27 ms </td>
-    </tr>
-    <tr>
-      <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES</font> </td>
-      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">79.01 ms</font> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-    </tr>
-    <tr>
-      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES </td>
-      <td align="left">Query </td>
-      <td align="right">5.39 ms </td>
-      <td align="right">6.64 ms </td>
-      <td align="right">5.39 ms </td>
-      <td align="right">7.33 ms </td>
-    </tr>
-    <tr>
-      <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES</font> </td>
-      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">81.11 ms</font> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-    </tr>
-    <tr>
-      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES </td>
-      <td align="left">Query </td>
-      <td align="right">5257.44 ms </td>
-      <td align="right">7039.58 ms </td>
-      <td align="right">5257.44 ms </td>
-      <td align="right">7986.39 ms </td>
+      <td align="right">16.62 ms </td>
+      <td align="right">15.84 ms </td>
+      <td align="right">15.35 ms </td>
+      <td align="right">16.62 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">3.72 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">3.85 ms</font> </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY </td>
       <td align="left">Query </td>
-      <td align="right">1.57 ms </td>
+      <td align="right">1.48 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_INTRODUCE_STRING_OP</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">0.54 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">0.52 ms</font> </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_INTRODUCE_STRING_OP </td>
       <td align="left">Query </td>
-      <td align="right">0.74 ms </td>
+      <td align="right">2.22 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_MIGRATE_RDF_TYPE</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">0.51 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">0.54 ms</font> </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_MIGRATE_RDF_TYPE </td>
       <td align="left">Query </td>
-      <td align="right">0.72 ms </td>
+      <td align="right">1.59 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_REMOVE_RDF_TYPE</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">0.63 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">0.61 ms</font> </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_REMOVE_RDF_TYPE </td>
@@ -995,27 +881,27 @@
     <tr>
       <td align="left">UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM </td>
       <td align="left">Query </td>
-      <td align="right">835.96 ms </td>
+      <td align="right">844.94 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">UPDATE_HIGH_SELECTIVITY_NON_ISSUED</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">0.46 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">0.63 ms</font> </td>
     </tr>
     <tr>
       <td align="left">UPDATE_HIGH_SELECTIVITY_NON_ISSUED </td>
       <td align="left">Query </td>
-      <td align="right">115.21 ms </td>
+      <td align="right">115.88 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">DELETE_LOW_SELECTIVITY_PAPER_MEDIUM</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">0.47 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">0.48 ms</font> </td>
     </tr>
     <tr>
       <td align="left">DELETE_LOW_SELECTIVITY_PAPER_MEDIUM </td>
       <td align="left">Query </td>
-      <td align="right">503.25 ms </td>
+      <td align="right">556.65 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">DELETE_HIGH_SELECTIVIY_NON_ISSUED</font> </td>
@@ -1025,10 +911,10 @@
     <tr>
       <td align="left">DELETE_HIGH_SELECTIVIY_NON_ISSUED </td>
       <td align="left">Query </td>
-      <td align="right">13.81 ms </td>
+      <td align="right">15.90 ms </td>
     </tr>
   </tbody>
-</table><h2><a name="SQLite-JDBC-Xerial"></a><a href="#SQLite-JDBC-Xerial">3.2. Evaluation Details for SQLite JDBC Xerial, Version 3.8.11, Test Series SMALL</a></h2>
+</table><h2><a name="SQLite-Xerial"></a><a href="#SQLite-Xerial">3.2. Evaluation Details for SQLite-Xerial, Version 3.8.11, Test Series SMALL</a></h2>
 <table>
   <thead>
     <tr>
@@ -1043,16 +929,16 @@
   <tbody>
     <tr>
       <td align="left" colspan="2">Set up </td>
-      <td align="right">75.81 ms </td>
+      <td align="right">74.34 ms </td>
     </tr>
     <tr>
       <td align="left" colspan="2">Load </td>
-      <td align="right">23774.85 ms </td>
+      <td align="right">19345.09 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">398.30 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">360.99 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1060,15 +946,15 @@
     <tr>
       <td align="left">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY </td>
       <td align="left">Query </td>
-      <td align="right">0.31 ms </td>
-      <td align="right">0.15 ms </td>
-      <td align="right">0.07 ms </td>
-      <td align="right">0.31 ms </td>
+      <td align="right">0.28 ms </td>
+      <td align="right">0.14 ms </td>
+      <td align="right">0.09 ms </td>
+      <td align="right">0.28 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">424.25 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">454.08 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1076,15 +962,15 @@
     <tr>
       <td align="left">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">0.49 ms </td>
-      <td align="right">0.43 ms </td>
-      <td align="right">0.49 ms </td>
-      <td align="right">0.49 ms </td>
+      <td align="right">0.54 ms </td>
+      <td align="right">0.47 ms </td>
+      <td align="right">0.51 ms </td>
+      <td align="right">0.54 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_100_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">477.63 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">469.54 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1092,15 +978,15 @@
     <tr>
       <td align="left">ENTITY_RETRIEVAL_BY_ID_100_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">1.91 ms </td>
-      <td align="right">1.68 ms </td>
-      <td align="right">1.60 ms </td>
-      <td align="right">1.91 ms </td>
+      <td align="right">2.43 ms </td>
+      <td align="right">2.05 ms </td>
+      <td align="right">2.05 ms </td>
+      <td align="right">2.43 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">197.72 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">204.64 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1108,15 +994,15 @@
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10 </td>
       <td align="left">Query </td>
-      <td align="right">30.37 ms </td>
-      <td align="right">28.91 ms </td>
-      <td align="right">28.20 ms </td>
-      <td align="right">30.37 ms </td>
+      <td align="right">35.53 ms </td>
+      <td align="right">31.55 ms </td>
+      <td align="right">27.88 ms </td>
+      <td align="right">35.53 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">198.71 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">228.76 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1124,15 +1010,15 @@
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100 </td>
       <td align="left">Query </td>
-      <td align="right">34.48 ms </td>
-      <td align="right">32.21 ms </td>
-      <td align="right">31.19 ms </td>
-      <td align="right">34.48 ms </td>
+      <td align="right">36.52 ms </td>
+      <td align="right">36.38 ms </td>
+      <td align="right">36.52 ms </td>
+      <td align="right">37.57 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">197.48 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">237.02 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1140,15 +1026,15 @@
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL </td>
       <td align="left">Query </td>
-      <td align="right">41.77 ms </td>
-      <td align="right">41.15 ms </td>
-      <td align="right">40.98 ms </td>
-      <td align="right">41.77 ms </td>
+      <td align="right">50.71 ms </td>
+      <td align="right">47.66 ms </td>
+      <td align="right">44.46 ms </td>
+      <td align="right">50.71 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_TOP10</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">399.68 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">429.58 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1156,15 +1042,15 @@
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_TOP10 </td>
       <td align="left">Query </td>
-      <td align="right">257.89 ms </td>
-      <td align="right">251.76 ms </td>
-      <td align="right">257.89 ms </td>
-      <td align="right">266.39 ms </td>
+      <td align="right">265.88 ms </td>
+      <td align="right">264.40 ms </td>
+      <td align="right">260.40 ms </td>
+      <td align="right">265.88 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_TOP100</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">470.14 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">453.85 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1172,15 +1058,15 @@
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_TOP100 </td>
       <td align="left">Query </td>
-      <td align="right">251.29 ms </td>
-      <td align="right">240.35 ms </td>
-      <td align="right">243.91 ms </td>
-      <td align="right">251.29 ms </td>
+      <td align="right">247.45 ms </td>
+      <td align="right">247.89 ms </td>
+      <td align="right">247.45 ms </td>
+      <td align="right">248.23 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_ALL</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">422.20 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">471.32 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1188,15 +1074,15 @@
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_ALL </td>
       <td align="left">Query </td>
-      <td align="right">247.04 ms </td>
-      <td align="right">238.57 ms </td>
-      <td align="right">213.64 ms </td>
-      <td align="right">247.04 ms </td>
+      <td align="right">284.25 ms </td>
+      <td align="right">272.27 ms </td>
+      <td align="right">267.48 ms </td>
+      <td align="right">284.25 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_STUDIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">366.70 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">436.95 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1204,15 +1090,15 @@
     <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_STUDIES </td>
       <td align="left">Query </td>
-      <td align="right">325.54 ms </td>
-      <td align="right">319.81 ms </td>
-      <td align="right">306.04 ms </td>
-      <td align="right">325.54 ms </td>
+      <td align="right">336.99 ms </td>
+      <td align="right">311.39 ms </td>
+      <td align="right">291.42 ms </td>
+      <td align="right">336.99 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">2.45 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">2.38 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1220,15 +1106,15 @@
     <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES </td>
       <td align="left">Query </td>
-      <td align="right">1411.59 ms </td>
-      <td align="right">1462.69 ms </td>
-      <td align="right">1411.59 ms </td>
-      <td align="right">1499.90 ms </td>
+      <td align="right">1306.61 ms </td>
+      <td align="right">1284.46 ms </td>
+      <td align="right">1273.79 ms </td>
+      <td align="right">1306.61 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">2.03 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">2.26 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1236,15 +1122,15 @@
     <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES </td>
       <td align="left">Query </td>
-      <td align="right">346.47 ms </td>
-      <td align="right">364.56 ms </td>
-      <td align="right">346.47 ms </td>
-      <td align="right">364.39 ms </td>
+      <td align="right">345.83 ms </td>
+      <td align="right">344.34 ms </td>
+      <td align="right">336.43 ms </td>
+      <td align="right">345.83 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">17713.52 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">18350.46 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1252,15 +1138,15 @@
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY </td>
       <td align="left">Query </td>
-      <td align="right">0.35 ms </td>
-      <td align="right">0.20 ms </td>
-      <td align="right">0.13 ms </td>
-      <td align="right">0.35 ms </td>
+      <td align="right">0.30 ms </td>
+      <td align="right">0.17 ms </td>
+      <td align="right">0.12 ms </td>
+      <td align="right">0.30 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">113.28 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">92.41 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1268,15 +1154,15 @@
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">0.53 ms </td>
+      <td align="right">0.58 ms </td>
       <td align="right">0.45 ms </td>
-      <td align="right">0.34 ms </td>
-      <td align="right">0.53 ms </td>
+      <td align="right">0.36 ms </td>
+      <td align="right">0.58 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">102.29 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">94.58 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1284,93 +1170,45 @@
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">13.48 ms </td>
-      <td align="right">12.00 ms </td>
-      <td align="right">11.95 ms </td>
-      <td align="right">13.48 ms </td>
-    </tr>
-    <tr>
-      <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY</font> </td>
-      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">104.94 ms</font> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-    </tr>
-    <tr>
-      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY </td>
-      <td align="left">Query </td>
-      <td align="right">2.05 ms </td>
-      <td align="right">1.84 ms </td>
-      <td align="right">1.76 ms </td>
-      <td align="right">2.05 ms </td>
-    </tr>
-    <tr>
-      <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES</font> </td>
-      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">98.03 ms</font> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-    </tr>
-    <tr>
-      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES </td>
-      <td align="left">Query </td>
-      <td align="right">4.87 ms </td>
-      <td align="right">4.59 ms </td>
-      <td align="right">4.73 ms </td>
-      <td align="right">4.87 ms </td>
-    </tr>
-    <tr>
-      <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES</font> </td>
-      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">89.39 ms</font> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-    </tr>
-    <tr>
-      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES </td>
-      <td align="left">Query </td>
-      <td align="right">5354.10 ms </td>
-      <td align="right">4964.42 ms </td>
-      <td align="right">5354.10 ms </td>
-      <td align="right">5918.47 ms </td>
+      <td align="right">13.15 ms </td>
+      <td align="right">11.47 ms </td>
+      <td align="right">10.69 ms </td>
+      <td align="right">13.15 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">1.81 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">2.78 ms</font> </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY </td>
       <td align="left">Query </td>
-      <td align="right">1.33 ms </td>
+      <td align="right">2.39 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_INTRODUCE_STRING_OP</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">195.92 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">213.42 ms</font> </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_INTRODUCE_STRING_OP </td>
       <td align="left">Query </td>
-      <td align="right">3.00 ms </td>
+      <td align="right">0.83 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_MIGRATE_RDF_TYPE</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">1.38 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">1.23 ms</font> </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_MIGRATE_RDF_TYPE </td>
       <td align="left">Query </td>
-      <td align="right">0.78 ms </td>
+      <td align="right">0.59 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_REMOVE_RDF_TYPE</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">1.06 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">1.22 ms</font> </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_REMOVE_RDF_TYPE </td>
@@ -1380,42 +1218,42 @@
     <tr>
       <td align="left"><font color="#C0C0C0">UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">168.89 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">171.27 ms</font> </td>
     </tr>
     <tr>
       <td align="left">UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM </td>
       <td align="left">Query </td>
-      <td align="right">1123.45 ms </td>
+      <td align="right">1211.39 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">UPDATE_HIGH_SELECTIVITY_NON_ISSUED</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">206.65 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">228.54 ms</font> </td>
     </tr>
     <tr>
       <td align="left">UPDATE_HIGH_SELECTIVITY_NON_ISSUED </td>
       <td align="left">Query </td>
-      <td align="right">36.07 ms </td>
+      <td align="right">36.50 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">DELETE_LOW_SELECTIVITY_PAPER_MEDIUM</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">221.32 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">227.60 ms</font> </td>
     </tr>
     <tr>
       <td align="left">DELETE_LOW_SELECTIVITY_PAPER_MEDIUM </td>
       <td align="left">Query </td>
-      <td align="right">1944.02 ms </td>
+      <td align="right">1994.22 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">DELETE_HIGH_SELECTIVIY_NON_ISSUED</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">21.15 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">25.13 ms</font> </td>
     </tr>
     <tr>
       <td align="left">DELETE_HIGH_SELECTIVIY_NON_ISSUED </td>
       <td align="left">Query </td>
-      <td align="right">16.31 ms </td>
+      <td align="right">13.53 ms </td>
     </tr>
   </tbody>
 </table><h2><a name="PostgreSQL"></a><a href="#PostgreSQL">3.3. Evaluation Details for PostgreSQL, Version PostgreSQL 9.4.4 on x86_64-apple-darwin14.3.0, compiled by Apple LLVM version 6.1.0 (clang-602.0.53) (based on LLVM 3.6.0svn), 64-bit / 9.4-1201-jdbc41, Test Series SMALL</a></h2>
@@ -1433,16 +1271,16 @@
   <tbody>
     <tr>
       <td align="left" colspan="2">Set up </td>
-      <td align="right">246.86 ms </td>
+      <td align="right">246.76 ms </td>
     </tr>
     <tr>
       <td align="left" colspan="2">Load </td>
-      <td align="right">29561.50 ms </td>
+      <td align="right">27159.76 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">197.61 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">204.45 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1450,15 +1288,15 @@
     <tr>
       <td align="left">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY </td>
       <td align="left">Query </td>
-      <td align="right">2.26 ms </td>
-      <td align="right">1.11 ms </td>
-      <td align="right">0.48 ms </td>
-      <td align="right">2.26 ms </td>
+      <td align="right">2.61 ms </td>
+      <td align="right">1.29 ms </td>
+      <td align="right">0.68 ms </td>
+      <td align="right">2.61 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">170.81 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">196.94 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1466,15 +1304,15 @@
     <tr>
       <td align="left">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">2.26 ms </td>
-      <td align="right">1.37 ms </td>
-      <td align="right">1.09 ms </td>
-      <td align="right">2.26 ms </td>
+      <td align="right">2.37 ms </td>
+      <td align="right">1.44 ms </td>
+      <td align="right">1.06 ms </td>
+      <td align="right">2.37 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_100_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">173.02 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">202.50 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1482,15 +1320,15 @@
     <tr>
       <td align="left">ENTITY_RETRIEVAL_BY_ID_100_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">6.08 ms </td>
-      <td align="right">4.20 ms </td>
-      <td align="right">3.46 ms </td>
-      <td align="right">6.08 ms </td>
+      <td align="right">4.94 ms </td>
+      <td align="right">3.88 ms </td>
+      <td align="right">3.37 ms </td>
+      <td align="right">4.94 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">86.40 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">92.88 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1498,15 +1336,15 @@
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10 </td>
       <td align="left">Query </td>
-      <td align="right">51.80 ms </td>
-      <td align="right">42.37 ms </td>
-      <td align="right">31.59 ms </td>
-      <td align="right">51.80 ms </td>
+      <td align="right">72.56 ms </td>
+      <td align="right">52.07 ms </td>
+      <td align="right">43.88 ms </td>
+      <td align="right">72.56 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">109.61 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">97.19 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1514,15 +1352,15 @@
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100 </td>
       <td align="left">Query </td>
-      <td align="right">49.67 ms </td>
-      <td align="right">38.89 ms </td>
-      <td align="right">34.94 ms </td>
-      <td align="right">49.67 ms </td>
+      <td align="right">54.77 ms </td>
+      <td align="right">44.58 ms </td>
+      <td align="right">36.40 ms </td>
+      <td align="right">54.77 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">83.51 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">103.40 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1530,15 +1368,15 @@
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL </td>
       <td align="left">Query </td>
-      <td align="right">62.57 ms </td>
-      <td align="right">48.97 ms </td>
-      <td align="right">43.13 ms </td>
-      <td align="right">62.57 ms </td>
+      <td align="right">71.48 ms </td>
+      <td align="right">56.50 ms </td>
+      <td align="right">48.25 ms </td>
+      <td align="right">71.48 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_TOP10</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">219.59 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">245.67 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1546,15 +1384,15 @@
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_TOP10 </td>
       <td align="left">Query </td>
-      <td align="right">63.94 ms </td>
-      <td align="right">53.87 ms </td>
-      <td align="right">48.05 ms </td>
-      <td align="right">63.94 ms </td>
+      <td align="right">72.44 ms </td>
+      <td align="right">58.98 ms </td>
+      <td align="right">54.43 ms </td>
+      <td align="right">72.44 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_TOP100</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">234.94 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">263.86 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1562,15 +1400,15 @@
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_TOP100 </td>
       <td align="left">Query </td>
-      <td align="right">59.07 ms </td>
-      <td align="right">46.53 ms </td>
-      <td align="right">38.77 ms </td>
-      <td align="right">59.07 ms </td>
+      <td align="right">66.42 ms </td>
+      <td align="right">51.86 ms </td>
+      <td align="right">40.92 ms </td>
+      <td align="right">66.42 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_ALL</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">215.99 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">249.04 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1578,15 +1416,15 @@
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_ALL </td>
       <td align="left">Query </td>
-      <td align="right">58.52 ms </td>
-      <td align="right">48.23 ms </td>
-      <td align="right">43.37 ms </td>
-      <td align="right">58.52 ms </td>
+      <td align="right">57.28 ms </td>
+      <td align="right">53.95 ms </td>
+      <td align="right">53.47 ms </td>
+      <td align="right">57.28 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_STUDIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">180.29 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">188.55 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1594,15 +1432,15 @@
     <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_STUDIES </td>
       <td align="left">Query </td>
-      <td align="right">152.05 ms </td>
-      <td align="right">138.21 ms </td>
-      <td align="right">136.82 ms </td>
-      <td align="right">152.05 ms </td>
+      <td align="right">152.40 ms </td>
+      <td align="right">139.14 ms </td>
+      <td align="right">135.08 ms </td>
+      <td align="right">152.40 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">124.19 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">125.66 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1610,15 +1448,15 @@
     <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES </td>
       <td align="left">Query </td>
-      <td align="right">1027.96 ms </td>
-      <td align="right">1065.76 ms </td>
-      <td align="right">1003.59 ms </td>
-      <td align="right">1027.96 ms </td>
+      <td align="right">1110.00 ms </td>
+      <td align="right">1181.40 ms </td>
+      <td align="right">1110.00 ms </td>
+      <td align="right">1270.36 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">274.32 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">299.31 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1626,15 +1464,15 @@
     <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES </td>
       <td align="left">Query </td>
-      <td align="right">146.26 ms </td>
-      <td align="right">134.37 ms </td>
-      <td align="right">125.71 ms </td>
-      <td align="right">146.26 ms </td>
+      <td align="right">152.09 ms </td>
+      <td align="right">136.66 ms </td>
+      <td align="right">131.05 ms </td>
+      <td align="right">152.09 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">164.16 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">202.51 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1642,15 +1480,15 @@
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY </td>
       <td align="left">Query </td>
-      <td align="right">11.20 ms </td>
-      <td align="right">8.74 ms </td>
-      <td align="right">7.65 ms </td>
-      <td align="right">11.20 ms </td>
+      <td align="right">11.42 ms </td>
+      <td align="right">8.59 ms </td>
+      <td align="right">7.28 ms </td>
+      <td align="right">11.42 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">70.55 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">72.38 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1658,15 +1496,15 @@
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">6.70 ms </td>
-      <td align="right">5.78 ms </td>
-      <td align="right">4.83 ms </td>
-      <td align="right">6.70 ms </td>
+      <td align="right">6.75 ms </td>
+      <td align="right">6.29 ms </td>
+      <td align="right">5.73 ms </td>
+      <td align="right">6.75 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">71.17 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">76.19 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1674,138 +1512,90 @@
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">7.79 ms </td>
-      <td align="right">7.15 ms </td>
-      <td align="right">6.77 ms </td>
-      <td align="right">7.79 ms </td>
-    </tr>
-    <tr>
-      <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY</font> </td>
-      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">68.89 ms</font> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-    </tr>
-    <tr>
-      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY </td>
-      <td align="left">Query </td>
-      <td align="right">133.86 ms </td>
-      <td align="right">132.79 ms </td>
-      <td align="right">133.86 ms </td>
-      <td align="right">135.88 ms </td>
-    </tr>
-    <tr>
-      <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES</font> </td>
-      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">70.78 ms</font> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-    </tr>
-    <tr>
-      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES </td>
-      <td align="left">Query </td>
-      <td align="right">10.86 ms </td>
-      <td align="right">9.31 ms </td>
-      <td align="right">8.47 ms </td>
-      <td align="right">10.86 ms </td>
-    </tr>
-    <tr>
-      <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES</font> </td>
-      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">72.37 ms</font> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-    </tr>
-    <tr>
-      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES </td>
-      <td align="left">Query </td>
-      <td align="right">135.34 ms </td>
-      <td align="right">131.08 ms </td>
-      <td align="right">127.90 ms </td>
-      <td align="right">135.34 ms </td>
+      <td align="right">7.81 ms </td>
+      <td align="right">7.13 ms </td>
+      <td align="right">6.99 ms </td>
+      <td align="right">7.81 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">9.40 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">9.22 ms</font> </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY </td>
       <td align="left">Query </td>
-      <td align="right">737.69 ms </td>
+      <td align="right">819.81 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_INTRODUCE_STRING_OP</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">156.34 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">165.57 ms</font> </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_INTRODUCE_STRING_OP </td>
       <td align="left">Query </td>
-      <td align="right">5155.81 ms </td>
+      <td align="right">5096.88 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_MIGRATE_RDF_TYPE</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">177.67 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">205.61 ms</font> </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_MIGRATE_RDF_TYPE </td>
       <td align="left">Query </td>
-      <td align="right">15660.68 ms </td>
+      <td align="right">15138.06 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_REMOVE_RDF_TYPE</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">11.58 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">9.89 ms</font> </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_REMOVE_RDF_TYPE </td>
       <td align="left">Query </td>
-      <td align="right">3.53 ms </td>
+      <td align="right">21.20 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">182.05 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">196.70 ms</font> </td>
     </tr>
     <tr>
       <td align="left">UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM </td>
       <td align="left">Query </td>
-      <td align="right">4988.73 ms </td>
+      <td align="right">2350.89 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">UPDATE_HIGH_SELECTIVITY_NON_ISSUED</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">207.34 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">199.73 ms</font> </td>
     </tr>
     <tr>
       <td align="left">UPDATE_HIGH_SELECTIVITY_NON_ISSUED </td>
       <td align="left">Query </td>
-      <td align="right">137.15 ms </td>
+      <td align="right">95.77 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">DELETE_LOW_SELECTIVITY_PAPER_MEDIUM</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">160.36 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">181.72 ms</font> </td>
     </tr>
     <tr>
       <td align="left">DELETE_LOW_SELECTIVITY_PAPER_MEDIUM </td>
       <td align="left">Query </td>
-      <td align="right">583.41 ms </td>
+      <td align="right">433.93 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">DELETE_HIGH_SELECTIVIY_NON_ISSUED</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">97.88 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">127.07 ms</font> </td>
     </tr>
     <tr>
       <td align="left">DELETE_HIGH_SELECTIVIY_NON_ISSUED </td>
       <td align="left">Query </td>
-      <td align="right">3.90 ms </td>
+      <td align="right">2.28 ms </td>
     </tr>
   </tbody>
 </table><h2><a name="ArangoDB"></a><a href="#ArangoDB">3.4. Evaluation Details for ArangoDB, Version 2.6.9 64bit &ndash; ICU 54.1, V8 4.1.0.27, OpenSSL 1.0.2d 9 Jul 2015 / Java Driver 2.6.8, Test Series SMALL</a></h2>
@@ -1823,16 +1613,16 @@
   <tbody>
     <tr>
       <td align="left" colspan="2">Set up </td>
-      <td align="right">177.50 ms </td>
+      <td align="right">231.04 ms </td>
     </tr>
     <tr>
       <td align="left" colspan="2">Load </td>
-      <td align="right">38814.88 ms </td>
+      <td align="right">42961.93 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">1939.54 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">1736.13 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1840,15 +1630,15 @@
     <tr>
       <td align="left">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY </td>
       <td align="left">Query </td>
-      <td align="right">157.65 ms </td>
-      <td align="right">154.66 ms </td>
-      <td align="right">148.84 ms </td>
-      <td align="right">157.65 ms </td>
+      <td align="right">132.43 ms </td>
+      <td align="right">133.07 ms </td>
+      <td align="right">132.43 ms </td>
+      <td align="right">134.45 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">1997.48 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">1709.74 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1856,15 +1646,15 @@
     <tr>
       <td align="left">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">1362.48 ms </td>
-      <td align="right">1363.17 ms </td>
-      <td align="right">1362.48 ms </td>
-      <td align="right">1382.32 ms </td>
+      <td align="right">1471.95 ms </td>
+      <td align="right">1465.11 ms </td>
+      <td align="right">1471.95 ms </td>
+      <td align="right">1501.92 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_100_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">1767.00 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">1939.03 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1872,10 +1662,10 @@
     <tr>
       <td align="left">ENTITY_RETRIEVAL_BY_ID_100_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">14751.96 ms </td>
-      <td align="right">14161.28 ms </td>
-      <td align="right">13944.24 ms </td>
-      <td align="right">14751.96 ms </td>
+      <td align="right">14929.83 ms </td>
+      <td align="right">14364.12 ms </td>
+      <td align="right">13863.97 ms </td>
+      <td align="right">14929.83 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10</font> </td>
@@ -1888,10 +1678,10 @@
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10 </td>
       <td align="left">Query </td>
-      <td align="right">181.17 ms </td>
-      <td align="right">179.52 ms </td>
-      <td align="right">177.75 ms </td>
-      <td align="right">181.17 ms </td>
+      <td align="right">150.42 ms </td>
+      <td align="right">149.97 ms </td>
+      <td align="right">150.42 ms </td>
+      <td align="right">150.94 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100</font> </td>
@@ -1904,10 +1694,10 @@
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100 </td>
       <td align="left">Query </td>
-      <td align="right">158.93 ms </td>
-      <td align="right">160.84 ms </td>
-      <td align="right">158.93 ms </td>
-      <td align="right">164.82 ms </td>
+      <td align="right">154.46 ms </td>
+      <td align="right">158.12 ms </td>
+      <td align="right">154.46 ms </td>
+      <td align="right">157.39 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL</font> </td>
@@ -1920,10 +1710,10 @@
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL </td>
       <td align="left">Query </td>
-      <td align="right">362.41 ms </td>
-      <td align="right">327.44 ms </td>
-      <td align="right">322.46 ms </td>
-      <td align="right">362.41 ms </td>
+      <td align="right">344.02 ms </td>
+      <td align="right">318.55 ms </td>
+      <td align="right">321.16 ms </td>
+      <td align="right">344.02 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_TOP10</font> </td>
@@ -1936,10 +1726,10 @@
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_TOP10 </td>
       <td align="left">Query </td>
-      <td align="right">426.30 ms </td>
-      <td align="right">409.03 ms </td>
-      <td align="right">385.92 ms </td>
-      <td align="right">426.30 ms </td>
+      <td align="right">382.09 ms </td>
+      <td align="right">364.87 ms </td>
+      <td align="right">351.16 ms </td>
+      <td align="right">382.09 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_TOP100</font> </td>
@@ -1952,10 +1742,10 @@
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_TOP100 </td>
       <td align="left">Query </td>
-      <td align="right">418.68 ms </td>
-      <td align="right">413.82 ms </td>
-      <td align="right">400.46 ms </td>
-      <td align="right">418.68 ms </td>
+      <td align="right">372.10 ms </td>
+      <td align="right">378.55 ms </td>
+      <td align="right">372.10 ms </td>
+      <td align="right">398.54 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_ALL</font> </td>
@@ -1968,15 +1758,15 @@
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_ALL </td>
       <td align="left">Query </td>
-      <td align="right">402.58 ms </td>
-      <td align="right">407.93 ms </td>
-      <td align="right">402.58 ms </td>
-      <td align="right">418.22 ms </td>
+      <td align="right">380.24 ms </td>
+      <td align="right">381.14 ms </td>
+      <td align="right">374.00 ms </td>
+      <td align="right">380.24 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_STUDIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">1630.43 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">1510.34 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -1984,10 +1774,10 @@
     <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_STUDIES </td>
       <td align="left">Query </td>
-      <td align="right">173.22 ms </td>
-      <td align="right">165.84 ms </td>
-      <td align="right">159.52 ms </td>
-      <td align="right">173.22 ms </td>
+      <td align="right">163.85 ms </td>
+      <td align="right">158.06 ms </td>
+      <td align="right">160.65 ms </td>
+      <td align="right">163.85 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES</font> </td>
@@ -2000,10 +1790,10 @@
     <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES </td>
       <td align="left">Query </td>
-      <td align="right">3525.46 ms </td>
-      <td align="right">3449.29 ms </td>
-      <td align="right">3415.68 ms </td>
-      <td align="right">3525.46 ms </td>
+      <td align="right">3455.69 ms </td>
+      <td align="right">3352.16 ms </td>
+      <td align="right">3268.40 ms </td>
+      <td align="right">3455.69 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES</font> </td>
@@ -2016,15 +1806,15 @@
     <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES </td>
       <td align="left">Query </td>
-      <td align="right">780.11 ms </td>
-      <td align="right">764.23 ms </td>
-      <td align="right">750.16 ms </td>
-      <td align="right">780.11 ms </td>
+      <td align="right">743.39 ms </td>
+      <td align="right">713.34 ms </td>
+      <td align="right">706.27 ms </td>
+      <td align="right">743.39 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">6172707.04 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">19536.94 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -2032,15 +1822,15 @@
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY </td>
       <td align="left">Query </td>
-      <td align="right">96.03 ms </td>
-      <td align="right">82.78 ms </td>
-      <td align="right">79.42 ms </td>
-      <td align="right">96.03 ms </td>
+      <td align="right">85.86 ms </td>
+      <td align="right">74.79 ms </td>
+      <td align="right">68.04 ms </td>
+      <td align="right">85.86 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">920.61 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">993.71 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -2048,15 +1838,15 @@
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">699.00 ms </td>
-      <td align="right">688.50 ms </td>
-      <td align="right">690.13 ms </td>
-      <td align="right">699.00 ms </td>
+      <td align="right">693.88 ms </td>
+      <td align="right">698.38 ms </td>
+      <td align="right">689.34 ms </td>
+      <td align="right">693.88 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">936.66 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">1720.48 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -2064,58 +1854,10 @@
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">8636.47 ms </td>
-      <td align="right">8669.14 ms </td>
-      <td align="right">8557.38 ms </td>
-      <td align="right">8636.47 ms </td>
-    </tr>
-    <tr>
-      <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY</font> </td>
-      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">990.82 ms</font> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-    </tr>
-    <tr>
-      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY </td>
-      <td align="left">Query </td>
-      <td align="right">2168.64 ms </td>
-      <td align="right">2165.55 ms </td>
-      <td align="right">2168.64 ms </td>
-      <td align="right">2185.45 ms </td>
-    </tr>
-    <tr>
-      <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES</font> </td>
-      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">977.48 ms</font> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-    </tr>
-    <tr>
-      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES </td>
-      <td align="left">Query </td>
-      <td align="right">8518.48 ms </td>
-      <td align="right">8542.68 ms </td>
-      <td align="right">8518.48 ms </td>
-      <td align="right">8555.07 ms </td>
-    </tr>
-    <tr>
-      <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES</font> </td>
-      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">945.57 ms</font> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-    </tr>
-    <tr>
-      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES </td>
-      <td align="left">Query </td>
-      <td align="right">907910.10 ms </td>
-      <td align="right">908971.09 ms </td>
-      <td align="right">907910.10 ms </td>
-      <td align="right">914952.22 ms </td>
+      <td align="right">6810.10 ms </td>
+      <td align="right">6961.73 ms </td>
+      <td align="right">6810.10 ms </td>
+      <td align="right">7057.71 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY</font> </td>
@@ -2125,7 +1867,7 @@
     <tr>
       <td align="left">SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY </td>
       <td align="left">Query </td>
-      <td align="right">6586.05 ms </td>
+      <td align="right">7020.43 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_INTRODUCE_STRING_OP</font> </td>
@@ -2135,7 +1877,7 @@
     <tr>
       <td align="left">SCHEMA_CHANGE_INTRODUCE_STRING_OP </td>
       <td align="left">Query </td>
-      <td align="right">7763.62 ms </td>
+      <td align="right">6941.50 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_MIGRATE_RDF_TYPE</font> </td>
@@ -2145,7 +1887,7 @@
     <tr>
       <td align="left">SCHEMA_CHANGE_MIGRATE_RDF_TYPE </td>
       <td align="left">Query </td>
-      <td align="right">31251.96 ms </td>
+      <td align="right">29271.22 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_REMOVE_RDF_TYPE</font> </td>
@@ -2155,7 +1897,7 @@
     <tr>
       <td align="left">SCHEMA_CHANGE_REMOVE_RDF_TYPE </td>
       <td align="left">Query </td>
-      <td align="right">6515.42 ms </td>
+      <td align="right">5863.15 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM</font> </td>
@@ -2165,7 +1907,7 @@
     <tr>
       <td align="left">UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM </td>
       <td align="left">Query </td>
-      <td align="right">7227.30 ms </td>
+      <td align="right">6793.59 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">UPDATE_HIGH_SELECTIVITY_NON_ISSUED</font> </td>
@@ -2175,7 +1917,7 @@
     <tr>
       <td align="left">UPDATE_HIGH_SELECTIVITY_NON_ISSUED </td>
       <td align="left">Query </td>
-      <td align="right">1138.32 ms </td>
+      <td align="right">1065.73 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">DELETE_LOW_SELECTIVITY_PAPER_MEDIUM</font> </td>
@@ -2185,7 +1927,7 @@
     <tr>
       <td align="left">DELETE_LOW_SELECTIVITY_PAPER_MEDIUM </td>
       <td align="left">Query </td>
-      <td align="right">881.44 ms </td>
+      <td align="right">833.39 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">DELETE_HIGH_SELECTIVIY_NON_ISSUED</font> </td>
@@ -2195,7 +1937,7 @@
     <tr>
       <td align="left">DELETE_HIGH_SELECTIVIY_NON_ISSUED </td>
       <td align="left">Query </td>
-      <td align="right">18.45 ms </td>
+      <td align="right">23.80 ms </td>
     </tr>
   </tbody>
 </table><h2><a name="MongoDB"></a><a href="#MongoDB">3.5. Evaluation Details for MongoDB, Version 3.0.6, Test Series SMALL</a></h2>
@@ -2213,16 +1955,16 @@
   <tbody>
     <tr>
       <td align="left" colspan="2">Set up </td>
-      <td align="right">3.92 ms </td>
+      <td align="right">3.83 ms </td>
     </tr>
     <tr>
       <td align="left" colspan="2">Load </td>
-      <td align="right">28661.05 ms </td>
+      <td align="right">31103.94 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">589.37 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">614.16 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -2230,15 +1972,15 @@
     <tr>
       <td align="left">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY </td>
       <td align="left">Query </td>
-      <td align="right">48.39 ms </td>
-      <td align="right">43.74 ms </td>
-      <td align="right">40.76 ms </td>
-      <td align="right">48.39 ms </td>
+      <td align="right">43.77 ms </td>
+      <td align="right">42.11 ms </td>
+      <td align="right">39.27 ms </td>
+      <td align="right">43.77 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">540.28 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">525.35 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -2246,15 +1988,15 @@
     <tr>
       <td align="left">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">423.33 ms </td>
-      <td align="right">428.22 ms </td>
-      <td align="right">423.33 ms </td>
-      <td align="right">430.66 ms </td>
+      <td align="right">407.63 ms </td>
+      <td align="right">409.23 ms </td>
+      <td align="right">407.63 ms </td>
+      <td align="right">419.96 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_100_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">539.85 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">532.01 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -2262,10 +2004,10 @@
     <tr>
       <td align="left">ENTITY_RETRIEVAL_BY_ID_100_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">4254.90 ms </td>
-      <td align="right">4261.10 ms </td>
-      <td align="right">4254.90 ms </td>
-      <td align="right">4265.67 ms </td>
+      <td align="right">4158.55 ms </td>
+      <td align="right">4132.37 ms </td>
+      <td align="right">4129.76 ms </td>
+      <td align="right">4158.55 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10</font> </td>
@@ -2278,10 +2020,10 @@
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10 </td>
       <td align="left">Query </td>
-      <td align="right">102.03 ms </td>
-      <td align="right">92.65 ms </td>
-      <td align="right">90.22 ms </td>
-      <td align="right">102.03 ms </td>
+      <td align="right">89.46 ms </td>
+      <td align="right">84.51 ms </td>
+      <td align="right">84.96 ms </td>
+      <td align="right">89.46 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100</font> </td>
@@ -2294,10 +2036,10 @@
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100 </td>
       <td align="left">Query </td>
-      <td align="right">88.44 ms </td>
-      <td align="right">89.25 ms </td>
-      <td align="right">88.44 ms </td>
-      <td align="right">89.38 ms </td>
+      <td align="right">83.37 ms </td>
+      <td align="right">83.55 ms </td>
+      <td align="right">83.37 ms </td>
+      <td align="right">83.79 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL</font> </td>
@@ -2310,10 +2052,10 @@
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL </td>
       <td align="left">Query </td>
-      <td align="right">125.38 ms </td>
-      <td align="right">118.40 ms </td>
-      <td align="right">115.79 ms </td>
-      <td align="right">125.38 ms </td>
+      <td align="right">113.50 ms </td>
+      <td align="right">109.42 ms </td>
+      <td align="right">109.61 ms </td>
+      <td align="right">113.50 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_TOP10</font> </td>
@@ -2326,10 +2068,10 @@
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_TOP10 </td>
       <td align="left">Query </td>
-      <td align="right">126.09 ms </td>
-      <td align="right">125.73 ms </td>
-      <td align="right">124.95 ms </td>
-      <td align="right">126.09 ms </td>
+      <td align="right">112.61 ms </td>
+      <td align="right">116.41 ms </td>
+      <td align="right">112.61 ms </td>
+      <td align="right">120.12 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_TOP100</font> </td>
@@ -2342,10 +2084,10 @@
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_TOP100 </td>
       <td align="left">Query </td>
-      <td align="right">127.95 ms </td>
-      <td align="right">123.67 ms </td>
-      <td align="right">121.83 ms </td>
-      <td align="right">127.95 ms </td>
+      <td align="right">115.81 ms </td>
+      <td align="right">116.18 ms </td>
+      <td align="right">114.67 ms </td>
+      <td align="right">115.81 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_ALL</font> </td>
@@ -2358,10 +2100,10 @@
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_ALL </td>
       <td align="left">Query </td>
-      <td align="right">123.75 ms </td>
-      <td align="right">122.06 ms </td>
-      <td align="right">122.09 ms </td>
-      <td align="right">123.75 ms </td>
+      <td align="right">118.94 ms </td>
+      <td align="right">114.40 ms </td>
+      <td align="right">112.55 ms </td>
+      <td align="right">118.94 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_STUDIES</font> </td>
@@ -2374,10 +2116,10 @@
     <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_STUDIES </td>
       <td align="left">Query </td>
-      <td align="right">235.28 ms </td>
-      <td align="right">233.07 ms </td>
-      <td align="right">234.61 ms </td>
-      <td align="right">235.28 ms </td>
+      <td align="right">236.57 ms </td>
+      <td align="right">236.37 ms </td>
+      <td align="right">224.41 ms </td>
+      <td align="right">236.57 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES</font> </td>
@@ -2390,10 +2132,10 @@
     <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES </td>
       <td align="left">Query </td>
-      <td align="right">543.46 ms </td>
-      <td align="right">610.97 ms </td>
-      <td align="right">543.46 ms </td>
-      <td align="right">740.80 ms </td>
+      <td align="right">548.57 ms </td>
+      <td align="right">546.13 ms </td>
+      <td align="right">532.74 ms </td>
+      <td align="right">548.57 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES</font> </td>
@@ -2406,15 +2148,15 @@
     <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES </td>
       <td align="left">Query </td>
-      <td align="right">274.85 ms </td>
-      <td align="right">277.23 ms </td>
-      <td align="right">274.85 ms </td>
-      <td align="right">275.47 ms </td>
+      <td align="right">266.63 ms </td>
+      <td align="right">268.44 ms </td>
+      <td align="right">266.63 ms </td>
+      <td align="right">271.61 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">84.20 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">78.87 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -2422,15 +2164,15 @@
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY </td>
       <td align="left">Query </td>
-      <td align="right">312.29 ms </td>
-      <td align="right">313.94 ms </td>
-      <td align="right">312.29 ms </td>
-      <td align="right">315.96 ms </td>
+      <td align="right">283.56 ms </td>
+      <td align="right">287.32 ms </td>
+      <td align="right">283.56 ms </td>
+      <td align="right">286.14 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">83.03 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">81.16 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -2438,15 +2180,15 @@
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">3278.03 ms </td>
-      <td align="right">3291.15 ms </td>
-      <td align="right">3278.03 ms </td>
-      <td align="right">3294.75 ms </td>
+      <td align="right">3202.81 ms </td>
+      <td align="right">3385.69 ms </td>
+      <td align="right">3202.81 ms </td>
+      <td align="right">3313.78 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">94.05 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">88.97 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -2454,58 +2196,10 @@
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">42511.65 ms </td>
-      <td align="right">43337.02 ms </td>
-      <td align="right">42511.65 ms </td>
-      <td align="right">43961.64 ms </td>
-    </tr>
-    <tr>
-      <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY</font> </td>
-      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">91.47 ms</font> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-    </tr>
-    <tr>
-      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY </td>
-      <td align="left">Query </td>
-      <td align="right">10018.54 ms </td>
-      <td align="right">9993.38 ms </td>
-      <td align="right">10018.54 ms </td>
-      <td align="right">10125.02 ms </td>
-    </tr>
-    <tr>
-      <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES</font> </td>
-      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">88.40 ms</font> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-    </tr>
-    <tr>
-      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES </td>
-      <td align="left">Query </td>
-      <td align="right">40508.18 ms </td>
-      <td align="right">40625.32 ms </td>
-      <td align="right">40508.18 ms </td>
-      <td align="right">40687.61 ms </td>
-    </tr>
-    <tr>
-      <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES</font> </td>
-      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">91.45 ms</font> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-    </tr>
-    <tr>
-      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES </td>
-      <td align="left">Query </td>
-      <td align="right">2604215.87 ms </td>
-      <td align="right">2573406.52 ms </td>
-      <td align="right">2604215.87 ms </td>
-      <td align="right">2615779.39 ms </td>
+      <td align="right">44245.95 ms </td>
+      <td align="right">44399.59 ms </td>
+      <td align="right">44245.95 ms </td>
+      <td align="right">45608.54 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY</font> </td>
@@ -2515,7 +2209,7 @@
     <tr>
       <td align="left">SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY </td>
       <td align="left">Query </td>
-      <td align="right">654.63 ms </td>
+      <td align="right">620.83 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_INTRODUCE_STRING_OP</font> </td>
@@ -2525,7 +2219,7 @@
     <tr>
       <td align="left">SCHEMA_CHANGE_INTRODUCE_STRING_OP </td>
       <td align="left">Query </td>
-      <td align="right">9988.88 ms </td>
+      <td align="right">9929.10 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_MIGRATE_RDF_TYPE</font> </td>
@@ -2535,17 +2229,17 @@
     <tr>
       <td align="left">SCHEMA_CHANGE_MIGRATE_RDF_TYPE </td>
       <td align="left">Query </td>
-      <td align="right">2061.26 ms </td>
+      <td align="right">2426.79 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_REMOVE_RDF_TYPE</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">0.01 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">0.00 ms</font> </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_REMOVE_RDF_TYPE </td>
       <td align="left">Query </td>
-      <td align="right">430.67 ms </td>
+      <td align="right">483.13 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM</font> </td>
@@ -2555,17 +2249,17 @@
     <tr>
       <td align="left">UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM </td>
       <td align="left">Query </td>
-      <td align="right">368.98 ms </td>
+      <td align="right">409.18 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">UPDATE_HIGH_SELECTIVITY_NON_ISSUED</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">0.00 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">0.01 ms</font> </td>
     </tr>
     <tr>
       <td align="left">UPDATE_HIGH_SELECTIVITY_NON_ISSUED </td>
       <td align="left">Query </td>
-      <td align="right">47.46 ms </td>
+      <td align="right">58.78 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">DELETE_LOW_SELECTIVITY_PAPER_MEDIUM</font> </td>
@@ -2575,7 +2269,7 @@
     <tr>
       <td align="left">DELETE_LOW_SELECTIVITY_PAPER_MEDIUM </td>
       <td align="left">Query </td>
-      <td align="right">412.68 ms </td>
+      <td align="right">502.26 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">DELETE_HIGH_SELECTIVIY_NON_ISSUED</font> </td>
@@ -2585,7 +2279,7 @@
     <tr>
       <td align="left">DELETE_HIGH_SELECTIVIY_NON_ISSUED </td>
       <td align="left">Query </td>
-      <td align="right">5.98 ms </td>
+      <td align="right">6.38 ms </td>
     </tr>
   </tbody>
 </table><h2><a name="Virtuoso"></a><a href="#Virtuoso">3.6. Evaluation Details for Virtuoso, Version 07.20.3214 / Virtuoso JDBC 4.1, Test Series SMALL</a></h2>
@@ -2603,16 +2297,16 @@
   <tbody>
     <tr>
       <td align="left" colspan="2">Set up </td>
-      <td align="right">1.70 ms </td>
+      <td align="right">1.37 ms </td>
     </tr>
     <tr>
       <td align="left" colspan="2">Load </td>
-      <td align="right">7975.68 ms </td>
+      <td align="right">7798.13 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">1960.34 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">2002.52 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -2620,15 +2314,15 @@
     <tr>
       <td align="left">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY </td>
       <td align="left">Query </td>
-      <td align="right">259.68 ms </td>
-      <td align="right">256.77 ms </td>
-      <td align="right">259.29 ms </td>
-      <td align="right">259.68 ms </td>
+      <td align="right">260.36 ms </td>
+      <td align="right">271.76 ms </td>
+      <td align="right">260.36 ms </td>
+      <td align="right">275.20 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">150.40 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">154.45 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -2636,15 +2330,15 @@
     <tr>
       <td align="left">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">4324.08 ms </td>
-      <td align="right">4336.16 ms </td>
-      <td align="right">4308.86 ms </td>
-      <td align="right">4324.08 ms </td>
+      <td align="right">4457.22 ms </td>
+      <td align="right">4453.55 ms </td>
+      <td align="right">4429.21 ms </td>
+      <td align="right">4457.22 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_100_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">173.62 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">180.35 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -2652,15 +2346,15 @@
     <tr>
       <td align="left">ENTITY_RETRIEVAL_BY_ID_100_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">37032.50 ms </td>
-      <td align="right">36864.24 ms </td>
-      <td align="right">36887.44 ms </td>
-      <td align="right">37032.50 ms </td>
+      <td align="right">39887.19 ms </td>
+      <td align="right">39474.63 ms </td>
+      <td align="right">37939.16 ms </td>
+      <td align="right">39887.19 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">2.21 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">1.51 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -2668,15 +2362,15 @@
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10 </td>
       <td align="left">Query </td>
-      <td align="right">21.07 ms </td>
-      <td align="right">20.82 ms </td>
-      <td align="right">19.74 ms </td>
-      <td align="right">21.07 ms </td>
+      <td align="right">20.94 ms </td>
+      <td align="right">21.84 ms </td>
+      <td align="right">20.94 ms </td>
+      <td align="right">21.78 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">2.04 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">1.31 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -2684,15 +2378,15 @@
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100 </td>
       <td align="left">Query </td>
-      <td align="right">23.29 ms </td>
-      <td align="right">23.08 ms </td>
-      <td align="right">22.62 ms </td>
-      <td align="right">23.29 ms </td>
+      <td align="right">23.83 ms </td>
+      <td align="right">25.41 ms </td>
+      <td align="right">23.83 ms </td>
+      <td align="right">27.76 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">1.68 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">1.36 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -2700,15 +2394,15 @@
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL </td>
       <td align="left">Query </td>
-      <td align="right">114.98 ms </td>
-      <td align="right">104.99 ms </td>
-      <td align="right">99.22 ms </td>
-      <td align="right">114.98 ms </td>
+      <td align="right">122.98 ms </td>
+      <td align="right">112.43 ms </td>
+      <td align="right">105.72 ms </td>
+      <td align="right">122.98 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_TOP10</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">2.45 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">1.36 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -2716,15 +2410,15 @@
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_TOP10 </td>
       <td align="left">Query </td>
-      <td align="right">248.07 ms </td>
-      <td align="right">240.39 ms </td>
-      <td align="right">238.35 ms </td>
-      <td align="right">248.07 ms </td>
+      <td align="right">269.33 ms </td>
+      <td align="right">261.79 ms </td>
+      <td align="right">258.16 ms </td>
+      <td align="right">269.33 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_TOP100</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">2.36 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">1.34 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -2732,15 +2426,15 @@
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_TOP100 </td>
       <td align="left">Query </td>
-      <td align="right">246.03 ms </td>
-      <td align="right">242.08 ms </td>
-      <td align="right">242.14 ms </td>
-      <td align="right">246.03 ms </td>
+      <td align="right">251.52 ms </td>
+      <td align="right">250.12 ms </td>
+      <td align="right">251.52 ms </td>
+      <td align="right">257.28 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_ALL</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">3.16 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">1.42 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -2748,15 +2442,15 @@
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_ALL </td>
       <td align="left">Query </td>
-      <td align="right">240.24 ms </td>
-      <td align="right">243.35 ms </td>
-      <td align="right">240.24 ms </td>
-      <td align="right">242.68 ms </td>
+      <td align="right">252.49 ms </td>
+      <td align="right">246.36 ms </td>
+      <td align="right">243.51 ms </td>
+      <td align="right">252.49 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_STUDIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">8.45 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">7.13 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -2764,15 +2458,15 @@
     <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_STUDIES </td>
       <td align="left">Query </td>
-      <td align="right">14498.74 ms </td>
-      <td align="right">14545.11 ms </td>
-      <td align="right">14498.74 ms </td>
-      <td align="right">14530.88 ms </td>
+      <td align="right">15199.07 ms </td>
+      <td align="right">15792.11 ms </td>
+      <td align="right">15199.07 ms </td>
+      <td align="right">16316.86 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">8.48 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">7.62 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -2780,15 +2474,15 @@
     <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES </td>
       <td align="left">Query </td>
-      <td align="right">303392.13 ms </td>
-      <td align="right">305588.89 ms </td>
-      <td align="right">303392.13 ms </td>
-      <td align="right">307498.40 ms </td>
+      <td align="right">3.18E5 ms </td>
+      <td align="right">3.07E5 ms </td>
+      <td align="right">2.93E5 ms </td>
+      <td align="right">3.18E5 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">10.91 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">7.65 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -2796,15 +2490,15 @@
     <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES </td>
       <td align="left">Query </td>
-      <td align="right">13572.11 ms </td>
-      <td align="right">13502.34 ms </td>
-      <td align="right">13394.75 ms </td>
-      <td align="right">13572.11 ms </td>
+      <td align="right">15226.33 ms </td>
+      <td align="right">15488.42 ms </td>
+      <td align="right">15226.33 ms </td>
+      <td align="right">15511.81 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">80.26 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">82.35 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -2812,15 +2506,15 @@
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY </td>
       <td align="left">Query </td>
-      <td align="right">6.41 ms </td>
-      <td align="right">6.14 ms </td>
-      <td align="right">5.98 ms </td>
-      <td align="right">6.41 ms </td>
+      <td align="right">7.05 ms </td>
+      <td align="right">6.40 ms </td>
+      <td align="right">5.91 ms </td>
+      <td align="right">7.05 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">39.78 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">39.19 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -2828,15 +2522,15 @@
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">0.56 ms </td>
-      <td align="right">0.50 ms </td>
-      <td align="right">0.49 ms </td>
-      <td align="right">0.56 ms </td>
+      <td align="right">0.52 ms </td>
+      <td align="right">0.48 ms </td>
+      <td align="right">0.45 ms </td>
+      <td align="right">0.52 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">67.27 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">63.04 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -2844,118 +2538,70 @@
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">6.15 ms </td>
-      <td align="right">5.98 ms </td>
-      <td align="right">6.07 ms </td>
-      <td align="right">6.15 ms </td>
-    </tr>
-    <tr>
-      <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY</font> </td>
-      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">Error</font> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-    </tr>
-    <tr>
-      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY </td>
-      <td align="left">Query </td>
-      <td align="right">Error </td>
-      <td align="right">Error </td>
-      <td align="right">Error </td>
-      <td align="right">Error </td>
-    </tr>
-    <tr>
-      <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES</font> </td>
-      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">Error</font> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-    </tr>
-    <tr>
-      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES </td>
-      <td align="left">Query </td>
-      <td align="right">Error </td>
-      <td align="right">Error </td>
-      <td align="right">Error </td>
-      <td align="right">Error </td>
-    </tr>
-    <tr>
-      <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES</font> </td>
-      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">Error</font> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-    </tr>
-    <tr>
-      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES </td>
-      <td align="left">Query </td>
-      <td align="right">Error </td>
-      <td align="right">Error </td>
-      <td align="right">Error </td>
-      <td align="right">Error </td>
+      <td align="right">6.38 ms </td>
+      <td align="right">6.22 ms </td>
+      <td align="right">6.23 ms </td>
+      <td align="right">6.38 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">2.06 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">1.23 ms</font> </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY </td>
       <td align="left">Query </td>
-      <td align="right">16499.27 ms </td>
+      <td align="right">18972.43 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_INTRODUCE_STRING_OP</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">193.40 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">199.03 ms</font> </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_INTRODUCE_STRING_OP </td>
       <td align="left">Query </td>
-      <td align="right">458.55 ms </td>
+      <td align="right">602.48 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_MIGRATE_RDF_TYPE</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">7.39 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">5.07 ms</font> </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_MIGRATE_RDF_TYPE </td>
       <td align="left">Query </td>
-      <td align="right">109558.52 ms </td>
+      <td align="right">1.08E5 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_REMOVE_RDF_TYPE</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">1.83 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">1.17 ms</font> </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_REMOVE_RDF_TYPE </td>
       <td align="left">Query </td>
-      <td align="right">0.20 ms </td>
+      <td align="right">0.17 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">1.74 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">0.99 ms</font> </td>
     </tr>
     <tr>
       <td align="left">UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM </td>
       <td align="left">Query </td>
-      <td align="right">3447.05 ms </td>
+      <td align="right">4461.88 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">UPDATE_HIGH_SELECTIVITY_NON_ISSUED</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">2.62 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">1.66 ms</font> </td>
     </tr>
     <tr>
       <td align="left">UPDATE_HIGH_SELECTIVITY_NON_ISSUED </td>
       <td align="left">Query </td>
-      <td align="right">309.74 ms </td>
+      <td align="right">413.01 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">DELETE_LOW_SELECTIVITY_PAPER_MEDIUM</font> </td>
@@ -2970,15 +2616,15 @@
     <tr>
       <td align="left"><font color="#C0C0C0">DELETE_HIGH_SELECTIVIY_NON_ISSUED</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">922.31 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">1098.13 ms</font> </td>
     </tr>
     <tr>
       <td align="left">DELETE_HIGH_SELECTIVIY_NON_ISSUED </td>
       <td align="left">Query </td>
-      <td align="right">11019.60 ms </td>
+      <td align="right">13757.44 ms </td>
     </tr>
   </tbody>
-</table><h2><a name="Apache-Jena-Fuseki"></a><a href="#Apache-Jena-Fuseki">3.7. Evaluation Details for Apache Jena Fuseki, Version 2.3.0 2015-07-25T17:11:28+0000 / jena-libs 2.13.0, Test Series SMALL</a></h2>
+</table><h2><a name="Fuseki"></a><a href="#Fuseki">3.7. Evaluation Details for Fuseki, Version 2.3.0 2015-07-25T17:11:28+0000 / jena-libs 2.13.0, Test Series SMALL</a></h2>
 <table>
   <thead>
     <tr>
@@ -2997,12 +2643,12 @@
     </tr>
     <tr>
       <td align="left" colspan="2">Load </td>
-      <td align="right">33159.97 ms </td>
+      <td align="right">30028.31 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">2985.94 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">2913.98 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -3010,15 +2656,15 @@
     <tr>
       <td align="left">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY </td>
       <td align="left">Query </td>
-      <td align="right">64.73 ms </td>
-      <td align="right">31.02 ms </td>
+      <td align="right">59.53 ms </td>
+      <td align="right">29.25 ms </td>
       <td align="right">14.32 ms </td>
-      <td align="right">64.73 ms </td>
+      <td align="right">59.53 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">2232.61 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">2373.82 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -3026,15 +2672,15 @@
     <tr>
       <td align="left">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">50.40 ms </td>
-      <td align="right">38.82 ms </td>
-      <td align="right">33.43 ms </td>
-      <td align="right">50.40 ms </td>
+      <td align="right">57.01 ms </td>
+      <td align="right">44.80 ms </td>
+      <td align="right">38.88 ms </td>
+      <td align="right">57.01 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_100_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">2753.79 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">2680.30 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -3042,15 +2688,15 @@
     <tr>
       <td align="left">ENTITY_RETRIEVAL_BY_ID_100_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">163.00 ms </td>
-      <td align="right">140.95 ms </td>
-      <td align="right">120.39 ms </td>
-      <td align="right">163.00 ms </td>
+      <td align="right">154.41 ms </td>
+      <td align="right">134.98 ms </td>
+      <td align="right">117.73 ms </td>
+      <td align="right">154.41 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">1.39 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">0.54 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -3058,15 +2704,15 @@
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10 </td>
       <td align="left">Query </td>
-      <td align="right">215.98 ms </td>
-      <td align="right">144.67 ms </td>
-      <td align="right">107.30 ms </td>
-      <td align="right">215.98 ms </td>
+      <td align="right">235.30 ms </td>
+      <td align="right">151.47 ms </td>
+      <td align="right">121.31 ms </td>
+      <td align="right">235.30 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">1.30 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">0.48 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -3074,15 +2720,15 @@
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100 </td>
       <td align="left">Query </td>
-      <td align="right">86.71 ms </td>
-      <td align="right">81.19 ms </td>
-      <td align="right">81.48 ms </td>
-      <td align="right">86.71 ms </td>
+      <td align="right">132.95 ms </td>
+      <td align="right">95.40 ms </td>
+      <td align="right">82.81 ms </td>
+      <td align="right">132.95 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">1.47 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">0.38 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -3090,15 +2736,15 @@
     <tr>
       <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL </td>
       <td align="left">Query </td>
-      <td align="right">487.51 ms </td>
-      <td align="right">402.22 ms </td>
-      <td align="right">402.16 ms </td>
-      <td align="right">487.51 ms </td>
+      <td align="right">474.09 ms </td>
+      <td align="right">408.97 ms </td>
+      <td align="right">413.76 ms </td>
+      <td align="right">474.09 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_TOP10</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">1.30 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">0.36 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -3106,15 +2752,15 @@
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_TOP10 </td>
       <td align="left">Query </td>
-      <td align="right">175.27 ms </td>
-      <td align="right">154.57 ms </td>
-      <td align="right">139.42 ms </td>
-      <td align="right">175.27 ms </td>
+      <td align="right">194.05 ms </td>
+      <td align="right">165.84 ms </td>
+      <td align="right">143.85 ms </td>
+      <td align="right">194.05 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_TOP100</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">1.19 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">0.40 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -3122,15 +2768,15 @@
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_TOP100 </td>
       <td align="left">Query </td>
-      <td align="right">142.84 ms </td>
-      <td align="right">142.99 ms </td>
-      <td align="right">142.84 ms </td>
-      <td align="right">163.41 ms </td>
+      <td align="right">126.46 ms </td>
+      <td align="right">122.57 ms </td>
+      <td align="right">126.46 ms </td>
+      <td align="right">128.73 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_ALL</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">1.20 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">0.39 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -3138,15 +2784,15 @@
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_ALL </td>
       <td align="left">Query </td>
-      <td align="right">118.20 ms </td>
-      <td align="right">118.31 ms </td>
-      <td align="right">115.08 ms </td>
-      <td align="right">118.20 ms </td>
+      <td align="right">139.65 ms </td>
+      <td align="right">132.98 ms </td>
+      <td align="right">137.57 ms </td>
+      <td align="right">139.65 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_STUDIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">1.20 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">0.33 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -3154,10 +2800,10 @@
     <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_STUDIES </td>
       <td align="left">Query </td>
-      <td align="right">7458.33 ms </td>
-      <td align="right">6996.53 ms </td>
-      <td align="right">6837.65 ms </td>
-      <td align="right">7458.33 ms </td>
+      <td align="right">7854.29 ms </td>
+      <td align="right">7171.26 ms </td>
+      <td align="right">6944.53 ms </td>
+      <td align="right">7854.29 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES</font> </td>
@@ -3178,7 +2824,7 @@
     <tr>
       <td align="left"><font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">1.92 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">0.61 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -3186,15 +2832,15 @@
     <tr>
       <td align="left">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES </td>
       <td align="left">Query </td>
-      <td align="right">532946.80 ms </td>
-      <td align="right">456853.40 ms </td>
-      <td align="right">416572.05 ms </td>
-      <td align="right">532946.80 ms </td>
+      <td align="right">5.23E5 ms </td>
+      <td align="right">4.38E5 ms </td>
+      <td align="right">4.09E5 ms </td>
+      <td align="right">5.23E5 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">20630.04 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">18662.59 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -3202,15 +2848,15 @@
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY </td>
       <td align="left">Query </td>
-      <td align="right">4261.14 ms </td>
-      <td align="right">2821.66 ms </td>
-      <td align="right">146.94 ms </td>
-      <td align="right">4261.14 ms </td>
+      <td align="right">3728.62 ms </td>
+      <td align="right">2457.82 ms </td>
+      <td align="right">3497.02 ms </td>
+      <td align="right">3728.62 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">14140.41 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">11960.95 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -3218,15 +2864,15 @@
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">11.83 ms </td>
-      <td align="right">10.21 ms </td>
-      <td align="right">9.39 ms </td>
-      <td align="right">11.83 ms </td>
+      <td align="right">26.29 ms </td>
+      <td align="right">25.05 ms </td>
+      <td align="right">7.94 ms </td>
+      <td align="right">26.29 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">13465.68 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">11444.82 ms</font> </td>
       <td align="right"> </td>
       <td align="right"> </td>
       <td align="right"> </td>
@@ -3234,58 +2880,10 @@
     <tr>
       <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES </td>
       <td align="left">Query </td>
-      <td align="right">144.40 ms </td>
-      <td align="right">1719.90 ms </td>
-      <td align="right">144.40 ms </td>
-      <td align="right">2459.17 ms </td>
-    </tr>
-    <tr>
-      <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY</font> </td>
-      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">12964.62 ms</font> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-    </tr>
-    <tr>
-      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY </td>
-      <td align="left">Query </td>
-      <td align="right">18.29 ms </td>
-      <td align="right">15.41 ms </td>
-      <td align="right">16.97 ms </td>
-      <td align="right">18.29 ms </td>
-    </tr>
-    <tr>
-      <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES</font> </td>
-      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">11951.35 ms</font> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-    </tr>
-    <tr>
-      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES </td>
-      <td align="left">Query </td>
-      <td align="right">5.64 ms </td>
-      <td align="right">5.19 ms </td>
-      <td align="right">4.81 ms </td>
-      <td align="right">5.64 ms </td>
-    </tr>
-    <tr>
-      <td align="left"><font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES</font> </td>
-      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">12699.98 ms</font> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-      <td align="right"> </td>
-    </tr>
-    <tr>
-      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES </td>
-      <td align="left">Query </td>
-      <td align="right">9.94 ms </td>
-      <td align="right">10.36 ms </td>
-      <td align="right">9.94 ms </td>
-      <td align="right">10.20 ms </td>
+      <td align="right">2248.02 ms </td>
+      <td align="right">1508.94 ms </td>
+      <td align="right">120.21 ms </td>
+      <td align="right">2248.02 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY</font> </td>
@@ -3300,12 +2898,12 @@
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_INTRODUCE_STRING_OP</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">2.94 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">1.12 ms</font> </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_INTRODUCE_STRING_OP </td>
       <td align="left">Query </td>
-      <td align="right">9977.31 ms </td>
+      <td align="right">9026.97 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">SCHEMA_CHANGE_MIGRATE_RDF_TYPE</font> </td>
@@ -3340,32 +2938,32 @@
     <tr>
       <td align="left"><font color="#C0C0C0">UPDATE_HIGH_SELECTIVITY_NON_ISSUED</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">19.91 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">19.82 ms</font> </td>
     </tr>
     <tr>
       <td align="left">UPDATE_HIGH_SELECTIVITY_NON_ISSUED </td>
       <td align="left">Query </td>
-      <td align="right">192036.15 ms </td>
+      <td align="right">1.70E5 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">DELETE_LOW_SELECTIVITY_PAPER_MEDIUM</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">6.99 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">0.86 ms</font> </td>
     </tr>
     <tr>
       <td align="left">DELETE_LOW_SELECTIVITY_PAPER_MEDIUM </td>
       <td align="left">Query </td>
-      <td align="right">6.27 ms </td>
+      <td align="right">5.22 ms </td>
     </tr>
     <tr>
       <td align="left"><font color="#C0C0C0">DELETE_HIGH_SELECTIVIY_NON_ISSUED</font> </td>
       <td align="left"><font color="#C0C0C0">Prepare</font> </td>
-      <td align="right"><font color="#C0C0C0">1.00 ms</font> </td>
+      <td align="right"><font color="#C0C0C0">0.73 ms</font> </td>
     </tr>
     <tr>
       <td align="left">DELETE_HIGH_SELECTIVIY_NON_ISSUED </td>
       <td align="left">Query </td>
-      <td align="right">4.15 ms </td>
+      <td align="right">3.84 ms </td>
     </tr>
   </tbody>
 </table><h2><a name="verifyresults"></a><a href="#verifyresults">4. Verify Results</a></h2>
@@ -3374,274 +2972,244 @@
     <tr>
       <th align="left">QueryScenario </th>
       <th align="right"><a href="#sqlite4java">sqlite4java</a> </th>
-      <th align="right"><a href="#SQLite-JDBC-Xerial">SQLite JDBC Xerial</a> </th>
+      <th align="right"><a href="#SQLite-Xerial">SQLite-Xerial</a> </th>
       <th align="right"><a href="#PostgreSQL">PostgreSQL</a> </th>
       <th align="right"><a href="#ArangoDB">ArangoDB</a> </th>
       <th align="right"><a href="#MongoDB">MongoDB</a> </th>
       <th align="right"><a href="#Virtuoso">Virtuoso</a> </th>
-      <th align="right"><a href="#Apache-Jena-Fuseki">Apache Jena Fuseki</a> </th>
+      <th align="right"><a href="#Fuseki">Fuseki</a> </th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td align="left"><strong><em>ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY</em></strong> </td>
-      <td align="right">986810877 </td>
-      <td align="right">986810877 </td>
-      <td align="right">1577130375 </td>
-      <td align="right">1054325556 </td>
-      <td align="right">986810877 </td>
-      <td align="right">-812461738 </td>
-      <td align="right">-2018687351 </td>
+      <td align="right">-1561971405 </td>
+      <td align="right">-1561971405 </td>
+      <td align="right">-893169302 </td>
+      <td align="right">223914858 </td>
+      <td align="right">-1561971405 </td>
+      <td align="right">350879876 </td>
+      <td align="right">-862253540 </td>
     </tr>
     <tr>
       <td align="left"><strong><em>ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES</em></strong> </td>
-      <td align="right">196073684 </td>
-      <td align="right">196073684 </td>
-      <td align="right">-433111824 </td>
-      <td align="right">1767668704 </td>
-      <td align="right">196073684 </td>
-      <td align="right">-339965281 </td>
-      <td align="right">331796290 </td>
+      <td align="right">1240047246 </td>
+      <td align="right">1240047246 </td>
+      <td align="right">-2001464288 </td>
+      <td align="right">386052410 </td>
+      <td align="right">1240047246 </td>
+      <td align="right">-248001241 </td>
+      <td align="right">1590338745 </td>
     </tr>
     <tr>
       <td align="left"><strong><em>ENTITY_RETRIEVAL_BY_ID_100_ENTITIES</em></strong> </td>
-      <td align="right">2076487100 </td>
-      <td align="right">2076487100 </td>
-      <td align="right">2142581090 </td>
-      <td align="right">1315719492 </td>
-      <td align="right">2052472126 </td>
-      <td align="right">94699254 </td>
-      <td align="right">-1271062091 </td>
+      <td align="right">1026421390 </td>
+      <td align="right">1026421390 </td>
+      <td align="right">-1147107316 </td>
+      <td align="right">1479689030 </td>
+      <td align="right">1922438184 </td>
+      <td align="right">147341970 </td>
+      <td align="right">-707389574 </td>
     </tr>
     <tr>
       <td align="left"><strong><em>AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10</em></strong> </td>
-      <td align="right">-1543836686 </td>
-      <td align="right">-1543836686 </td>
-      <td align="right">-194403603 </td>
-      <td align="right">-195916989 </td>
-      <td align="right">-1543836686 </td>
-      <td align="right">347589709 </td>
-      <td align="right">347589709 </td>
+      <td align="right">-815258274 </td>
+      <td align="right">-815258274 </td>
+      <td align="right">534174809 </td>
+      <td align="right">532661423 </td>
+      <td align="right">-815258274 </td>
+      <td align="right">1076168121 </td>
+      <td align="right">1076168121 </td>
     </tr>
     <tr>
       <td align="left"><strong><em>AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100</em></strong> </td>
-      <td align="right">410298841 </td>
-      <td align="right">410298841 </td>
-      <td align="right">32351944 </td>
-      <td align="right">1344643452 </td>
-      <td align="right">410298841 </td>
-      <td align="right">1081764729 </td>
-      <td align="right">1081764729 </td>
+      <td align="right">1138877253 </td>
+      <td align="right">1138877253 </td>
+      <td align="right">760930356 </td>
+      <td align="right">2073221864 </td>
+      <td align="right">1138877253 </td>
+      <td align="right">1810343141 </td>
+      <td align="right">1810343141 </td>
     </tr>
     <tr>
       <td align="left"><strong><em>AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL</em></strong> </td>
-      <td align="right">-681741322 </td>
-      <td align="right">-681741322 </td>
-      <td align="right">934959366 </td>
-      <td align="right">-366046358 </td>
-      <td align="right">1541235763 </td>
-      <td align="right">1944800929 </td>
-      <td align="right">-876578445 </td>
+      <td align="right">-1629862324 </td>
+      <td align="right">-1629862324 </td>
+      <td align="right">1275111066 </td>
+      <td align="right">-1054613001 </td>
+      <td align="right">-1629862324 </td>
+      <td align="right">-683235552 </td>
+      <td align="right">-683235552 </td>
     </tr>
     <tr>
       <td align="left">AGGREGATE_ISSUES_PER_DECADE_TOP10 </td>
-      <td align="right">-801885849 </td>
-      <td align="right">-801885849 </td>
-      <td align="right">-801885849 </td>
-      <td align="right">-801885849 </td>
-      <td align="right">-801885849 </td>
-      <td align="right">-801885849 </td>
-      <td align="right">-801885849 </td>
+      <td align="right">-73307437 </td>
+      <td align="right">-73307437 </td>
+      <td align="right">-73307437 </td>
+      <td align="right">-73307437 </td>
+      <td align="right">-73307437 </td>
+      <td align="right">-73307437 </td>
+      <td align="right">-73307437 </td>
     </tr>
     <tr>
       <td align="left"><strong><em>AGGREGATE_ISSUES_PER_DECADE_TOP100</em></strong> </td>
-      <td align="right">2008061858 </td>
-      <td align="right">2008061858 </td>
-      <td align="right">2008061858 </td>
-      <td align="right">-1605449155 </td>
-      <td align="right">-1217979069 </td>
-      <td align="right">-1217979069 </td>
-      <td align="right">-1217979069 </td>
+      <td align="right">-1558327026 </td>
+      <td align="right">-1558327026 </td>
+      <td align="right">-1558327026 </td>
+      <td align="right">-876870743 </td>
+      <td align="right">-489400657 </td>
+      <td align="right">-489400657 </td>
+      <td align="right">-489400657 </td>
     </tr>
     <tr>
       <td align="left"><strong><em>AGGREGATE_ISSUES_PER_DECADE_ALL</em></strong> </td>
-      <td align="right">2008061858 </td>
-      <td align="right">2008061858 </td>
-      <td align="right">2008061858 </td>
-      <td align="right">-1605449155 </td>
-      <td align="right">-1217979069 </td>
-      <td align="right">-1217979069 </td>
-      <td align="right">-1217979069 </td>
+      <td align="right">-1558327026 </td>
+      <td align="right">-1558327026 </td>
+      <td align="right">-1558327026 </td>
+      <td align="right">-876870743 </td>
+      <td align="right">-489400657 </td>
+      <td align="right">-489400657 </td>
+      <td align="right">-489400657 </td>
     </tr>
     <tr>
       <td align="left"><strong><em>CONDITIONAL_TABLE_SCAN_ALL_STUDIES</em></strong> </td>
-      <td align="right">-1801573407 </td>
-      <td align="right">-1801573407 </td>
-      <td align="right">753112323 </td>
-      <td align="right">340679591 </td>
-      <td align="right">-1801573407 </td>
-      <td align="right">443522314 </td>
-      <td align="right">1114653560 </td>
+      <td align="right">56552878 </td>
+      <td align="right">56552878 </td>
+      <td align="right">-2043057484 </td>
+      <td align="right">1050986388 </td>
+      <td align="right">56552878 </td>
+      <td align="right">-1694170935 </td>
+      <td align="right">-884432386 </td>
     </tr>
     <tr>
       <td align="left"><strong><em>CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES</em></strong> </td>
-      <td align="right">1299552736 </td>
-      <td align="right">1299552736 </td>
-      <td align="right">-1702978190 </td>
-      <td align="right">1689435524 </td>
-      <td align="right">1299552736 </td>
-      <td align="right">-1483474871 </td>
+      <td align="right">-904531008 </td>
+      <td align="right">-904531008 </td>
+      <td align="right">-551124570 </td>
+      <td align="right">1210647261 </td>
+      <td align="right">-904531008 </td>
+      <td align="right">-57195296 </td>
       <td align="right"> </td>
     </tr>
     <tr>
       <td align="left"><strong><em>CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES</em></strong> </td>
-      <td align="right">677795065 </td>
-      <td align="right">677795065 </td>
-      <td align="right">-902940781 </td>
-      <td align="right">-820214193 </td>
-      <td align="right">677795065 </td>
-      <td align="right">-529476604 </td>
-      <td align="right">-296521212 </td>
+      <td align="right">305506946 </td>
+      <td align="right">305506946 </td>
+      <td align="right">1611627064 </td>
+      <td align="right">-320443730 </td>
+      <td align="right">305506946 </td>
+      <td align="right">1325242502 </td>
+      <td align="right">528393536 </td>
     </tr>
     <tr>
       <td align="left"><strong><em>GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY</em></strong> </td>
-      <td align="right">251633544 </td>
-      <td align="right">251633544 </td>
-      <td align="right">1586334528 </td>
-      <td align="right">-290633864 </td>
-      <td align="right">251633544 </td>
-      <td align="right">-1247886704 </td>
-      <td align="right">608508475 </td>
+      <td align="right">607282443 </td>
+      <td align="right">607282443 </td>
+      <td align="right">25784451 </td>
+      <td align="right">-900309419 </td>
+      <td align="right">607282443 </td>
+      <td align="right">1767224211 </td>
+      <td align="right">-1300963007 </td>
     </tr>
     <tr>
       <td align="left"><strong><em>GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES</em></strong> </td>
-      <td align="right">545302523 </td>
-      <td align="right">545302523 </td>
-      <td align="right">318950106 </td>
-      <td align="right">105292305 </td>
-      <td align="right">-1865095863 </td>
-      <td align="right">-561049866 </td>
-      <td align="right">1108553005 </td>
+      <td align="right">900951422 </td>
+      <td align="right">900951422 </td>
+      <td align="right">674599005 </td>
+      <td align="right">476100530 </td>
+      <td align="right">-1509446964 </td>
+      <td align="right">-205400967 </td>
+      <td align="right">1464201904 </td>
     </tr>
     <tr>
       <td align="left"><strong><em>GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES</em></strong> </td>
-      <td align="right">-1046371767 </td>
-      <td align="right">-1046371767 </td>
-      <td align="right">1586334528 </td>
-      <td align="right">-925346621 </td>
-      <td align="right">484768485 </td>
-      <td align="right">-1247886704 </td>
-      <td align="right">608508475 </td>
-    </tr>
-    <tr>
-      <td align="left"><strong><em>GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY</em></strong> </td>
-      <td align="right">81072793 </td>
-      <td align="right">81072793 </td>
-      <td align="right">1603718120 </td>
-      <td align="right">-425304115 </td>
-      <td align="right">-581150917 </td>
-      <td align="right"> </td>
-      <td align="right">1207871171 </td>
-    </tr>
-    <tr>
-      <td align="left"><strong><em>GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES</em></strong> </td>
-      <td align="right">-1625978850 </td>
-      <td align="right">-1625978850 </td>
-      <td align="right">607888469 </td>
-      <td align="right">818767134 </td>
-      <td align="right">790368074 </td>
-      <td align="right"> </td>
-      <td align="right">1207871171 </td>
-    </tr>
-    <tr>
-      <td align="left"><strong><em>GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES</em></strong> </td>
-      <td align="right">-850864807 </td>
-      <td align="right">-850864807 </td>
-      <td align="right">1603718120 </td>
-      <td align="right">-236605731 </td>
-      <td align="right">-1247357375 </td>
-      <td align="right"> </td>
-      <td align="right">1207871171 </td>
+      <td align="right">1498018394 </td>
+      <td align="right">1498018394 </td>
+      <td align="right">25784451 </td>
+      <td align="right">772538181 </td>
+      <td align="right">-147081651 </td>
+      <td align="right">1767224211 </td>
+      <td align="right">-1300963007 </td>
     </tr>
     <tr>
       <td align="left"><strong><em>SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY</em></strong> </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
       <td align="right"> </td>
     </tr>
     <tr>
       <td align="left">SCHEMA_CHANGE_INTRODUCE_STRING_OP </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
     </tr>
     <tr>
       <td align="left"><strong><em>SCHEMA_CHANGE_MIGRATE_RDF_TYPE</em></strong> </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
       <td align="right"> </td>
     </tr>
     <tr>
       <td align="left"><strong><em>SCHEMA_CHANGE_REMOVE_RDF_TYPE</em></strong> </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
       <td align="right"> </td>
     </tr>
     <tr>
       <td align="left"><strong><em>UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM</em></strong> </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
       <td align="right"> </td>
     </tr>
     <tr>
       <td align="left">UPDATE_HIGH_SELECTIVITY_NON_ISSUED </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
     </tr>
     <tr>
       <td align="left"><strong><em>DELETE_LOW_SELECTIVITY_PAPER_MEDIUM</em></strong> </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
       <td align="right"> </td>
-      <td align="right">195827612 </td>
+      <td align="right">1318887779 </td>
     </tr>
     <tr>
       <td align="left">DELETE_HIGH_SELECTIVIY_NON_ISSUED </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
-      <td align="right">195827612 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
+      <td align="right">1318887779 </td>
     </tr>
   </tbody>
 </table>
