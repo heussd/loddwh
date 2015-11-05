@@ -17,6 +17,8 @@ public class QueryResult {
 		NONE
 	}
 
+	private static final int MAX_RESULT_ROW_COUNT = 1000;
+
 	private final Type type;
 
 	private Object scalarValue;
@@ -28,7 +30,6 @@ public class QueryResult {
 		this.type = type;
 	}
 
-
 	/**
 	 * Setter method for {@link Type#TWO_COLUMNS}.
 	 * 
@@ -37,9 +38,11 @@ public class QueryResult {
 	 */
 	public void push(String column1, String column2) {
 		if (this.type != Type.TWO_COLUMNS)
-			throw new RuntimeException("Invalid method call. This method is only allowed for type " + Type.TWO_COLUMNS + ", but was called for type " + this.type);
+			throw new RuntimeException(
+					"Invalid method call. This method is only allowed for type " + Type.TWO_COLUMNS + ", but was called for type " + this.type);
 
-		rows.add(new Row(column1, column2, null, null, null));
+		if (rows.size() < MAX_RESULT_ROW_COUNT)
+			rows.add(new Row(column1, column2, null, null, null));
 	}
 
 	/**
@@ -64,20 +67,21 @@ public class QueryResult {
 		if (this.type != Type.GRAPH)
 			throw new RuntimeException("Invalid method call. This method is only allowed for type " + Type.GRAPH + ", but was called for type " + this.type);
 
-		rows.add(new Row(column1, column2, column3, column4, column5));
+		if (rows.size() < MAX_RESULT_ROW_COUNT)
+			rows.add(new Row(column1, column2, column3, column4, column5));
 	}
 
 	public void push(DataObject dataObject) {
 		if (this.type != Type.COMPLETE_ENTITIES)
-			throw new RuntimeException("Invalid method call. This method is only allowed for type " + Type.COMPLETE_ENTITIES + ", but was called for type " + this.type);
+			throw new RuntimeException(
+					"Invalid method call. This method is only allowed for type " + Type.COMPLETE_ENTITIES + ", but was called for type " + this.type);
 
 		if (dataObjects == null)
 			this.dataObjects = new ArrayList<>();
 
-		this.dataObjects.add(dataObject);
+		if (dataObjects.size() < MAX_RESULT_ROW_COUNT)
+			this.dataObjects.add(dataObject);
 	}
-
-	
 
 	class Row {
 		public String col1;
@@ -174,7 +178,6 @@ public class QueryResult {
 		return out;
 	}
 
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -185,7 +188,6 @@ public class QueryResult {
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
