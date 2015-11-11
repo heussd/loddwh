@@ -26,8 +26,8 @@ public class Benchmark {
 	public static void main(String[] args) throws Exception {
 
 		List<TestSeries> testSeries = new ArrayList<>();
-		testSeries.add(TestSeries.TINY);
-		// testSeries.add(TestSeries.SMALL);
+//		testSeries.add(TestSeries.TINY);
+		 testSeries.add(TestSeries.SMALL);
 		// testSeries.add(TestSeries.MEDIUM);
 		// testSeries.add(TestSeries.LARGE);
 

@@ -5,3 +5,5 @@ bin/
 target
 *.db
 *.swp
+
+*.db-journal
