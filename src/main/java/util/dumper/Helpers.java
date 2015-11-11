@@ -28,17 +28,20 @@ import util.Dataset;
 
 public abstract class Helpers {
 
-	public static String GetLinkConformString(String value){
+	public static String GetLinkConformString(String value) {
 		return value.replace(' ', '-').replace('.', '-');
 	}
-	
+
 	public static String DoubleToStringNDecimals(double value, int decimals, boolean transferToScientificNotation) {
 		String format = "0.";
-		for(int i = 0; i < decimals; i++) format += "0";
-		if(transferToScientificNotation){ format += "E0"; }
+		for (int i = 0; i < decimals; i++)
+			format += "0";
+		if (transferToScientificNotation) {
+			format += "E0";
+		}
 		return new DecimalFormat(format).format(value);
 	}
-	
+
 	public static boolean isNumeric(String str) {
 		return str.matches("-?\\d+(\\.\\d+)?"); // match a number with optional
 												// '-' and decimal.
@@ -145,7 +148,6 @@ public abstract class Helpers {
 			int counter = 0;// , writes = 0;
 			String inline = "", record = "";
 			while ((inline = inputReader.readLine()) != null) {
-				++counter;
 				// if (inline.contains("<dcterms:identifier>")) {
 				// if (++counter % 100000 == 0) {
 				// System.out.println(counter + " RDF records so far, " + writes
@@ -160,6 +162,7 @@ public abstract class Helpers {
 				record += inline.trim() + "\n";
 
 				if (inline.contains("</rdf:Description>")) {
+					++counter;
 					DataObject dataObject = new DataObject();
 					dataObject.fromRdfString(record);
 					dataObjectConsumer.accept(dataObject);
@@ -174,6 +177,43 @@ public abstract class Helpers {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public static int countRdf(Dataset dataset) {
+		int counter = 0;
+		try {
+
+			BufferedReader inputReader = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(dataset.file))));
+
+			boolean headerWrittenYet = false;
+			// , writes = 0;
+			String inline = "", record = "";
+			while ((inline = inputReader.readLine()) != null) {
+				// if (inline.contains("<dcterms:identifier>")) {
+				// if (++counter % 100000 == 0) {
+				// System.out.println(counter + " RDF records so far, " + writes
+				// + " writes...");
+				// }
+				// }
+				if (!headerWrittenYet && inline.contains("<rdf:Description")) {
+					record = "";
+					headerWrittenYet = true;
+				}
+
+				record += inline.trim() + "\n";
+
+				if (inline.contains("</rdf:Description>")) {
+					++counter;
+					record = "";
+				}
+			}
+
+			inputReader.close();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		
+		return counter;
 	}
 
 	public static void writeRdfExtract(ArrayList<String> wantedIds, Dataset source, String target) throws Exception {
@@ -446,9 +486,9 @@ public abstract class Helpers {
 	}
 
 	public static void terminalLaunchApp(String... commands) {
-		if(!Config.THIS_IS_OSX)
+		if (!Config.THIS_IS_OSX)
 			return;
-		
+
 		try {
 			ProcessBuilder processBuilder = new ProcessBuilder(commands);
 			Process process = processBuilder.start();
