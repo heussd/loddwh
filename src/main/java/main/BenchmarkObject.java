@@ -1,34 +1,38 @@
 package main;
 
+import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Map.Entry;
 
-import util.Dataset;
+import database.Database;
 import util.QueryResult;
 import util.QueryScenario;
-import database.Database;
 
-public class BenchmarkObject {
-	
-	private Database database;
-	
+public class BenchmarkObject implements Serializable {
+
+	private static final long serialVersionUID = 4448652654178302742L;
+
 	private Hashtable<QueryScenario, Double> prepareQueryScenarioResults;
 	private Hashtable<Integer, Hashtable<QueryScenario, Double>> queryQueryScenarioResults;
 	private double setUpTime, loadTime;
-	
-	private Hashtable<QueryScenario, QueryResult> queryResults;
-	
+
+	private Hashtable<QueryScenario, Integer> queryResults;
+
+	private String name;
+
+	private String version;
+
 	public BenchmarkObject(Database database) {
 		super();
-		
-		this.database = database;
-		
+
+		this.name = database.getName();
+		this.version = database.getVersion();
+
 		prepareQueryScenarioResults = new Hashtable<QueryScenario, Double>();
 		queryQueryScenarioResults = new Hashtable<Integer, Hashtable<QueryScenario, Double>>();
-		
-		queryResults = new Hashtable<QueryScenario, QueryResult>();
+
+		queryResults = new Hashtable<QueryScenario, Integer>();
 	}
 
 	public double getSetUpTime() {
@@ -47,16 +51,20 @@ public class BenchmarkObject {
 		this.loadTime = loadTime;
 	}
 
-	public String getTitle() {
-		return database.getName();
+	public String getVersion() {
+		return this.version;
 	}
 
-	public Database getDatabase() {
-		return database;
+	public String getTitle() {
+		return this.name;
 	}
-	
-	public Hashtable<QueryScenario, QueryResult> getQueryResults(){
-		return queryResults;
+
+	// public Database getDatabase() {
+	// return database;
+	// }
+
+	public Integer getQueryResults(QueryScenario queryScenario) {
+		return queryResults.get(queryScenario);
 	}
 
 	public Hashtable<QueryScenario, Double> getPrepareQueryScenarioResults() {
@@ -69,33 +77,35 @@ public class BenchmarkObject {
 
 	@Override
 	public String toString() {
-		return "BenchmarkObject [database=" + database
-				+ ", prepareQueryScenarioResults="
-				+ prepareQueryScenarioResults + ", queryQueryScenarioResults="
-				+ queryQueryScenarioResults + ", setUpTime=" + setUpTime
-				+ ", loadTime=" + loadTime + ", queryResults=" + "Way to much for print"
-				+ "]";
+		return "BenchmarkObject [database=" + name + ", prepareQueryScenarioResults=" + prepareQueryScenarioResults + ", queryQueryScenarioResults="
+				+ queryQueryScenarioResults + ", setUpTime=" + setUpTime + ", loadTime=" + loadTime + ", queryResults=" + "Way to much for print" + "]";
 	}
 
-	public void InvalidateQueryScenarioResults(QueryScenario queryScenario){
-		prepareQueryScenarioResults.put(queryScenario, (double)-1);		
+	public void InvalidateQueryScenarioResults(QueryScenario queryScenario) {
+		prepareQueryScenarioResults.put(queryScenario, (double) -1);
 		InvalidateQueryScenarioResultsForAllExecutions(queryScenario, queryQueryScenarioResults);
 		queryResults.remove(queryScenario);
 	}
-	private void InvalidateQueryScenarioResultsForAllExecutions(QueryScenario queryScenario, Hashtable<Integer, Hashtable<QueryScenario, Double>> executionsResults){
+
+	private void InvalidateQueryScenarioResultsForAllExecutions(QueryScenario queryScenario,
+			Hashtable<Integer, Hashtable<QueryScenario, Double>> executionsResults) {
 		Iterator<Entry<Integer, Hashtable<QueryScenario, Double>>> iterator = executionsResults.entrySet().iterator();
-		while(iterator.hasNext()){
+		while (iterator.hasNext()) {
 			Entry<Integer, Hashtable<QueryScenario, Double>> entry = iterator.next();
-			entry.getValue().put(queryScenario, (double)-1);
+			entry.getValue().put(queryScenario, (double) -1);
 		}
 	}
 
-	public void InvalidateBenchmarkResults(){
+	public void InvalidateBenchmarkResults() {
 		setUpTime = -1;
 		loadTime = -1;
-		
+
 		for (QueryScenario queryScenario : QueryScenario.values()) {
 			InvalidateQueryScenarioResults(queryScenario);
 		}
+	}
+
+	public void putQueryResult(QueryScenario queryScenario, Integer result) {
+		this.queryResults.put(queryScenario, result);
 	}
 }

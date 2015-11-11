@@ -26,7 +26,7 @@ public class BenchmarkObjectReportModel {
 	
 	private void BuildModel(BenchmarkObject benchmarkObject){
 		Name = benchmarkObject.getTitle();
-		Version = benchmarkObject.getDatabase().getVersion();
+		Version = benchmarkObject.getVersion();
 		
 		initialize.add(new BenchmarkObjectReportModelRow("Set up", null, benchmarkObject.getSetUpTime(), null, null, null, 0, targetCsv));
 		initialize.add(new BenchmarkObjectReportModelRow("Load", null, benchmarkObject.getLoadTime(), null, null, null, 1, targetCsv));

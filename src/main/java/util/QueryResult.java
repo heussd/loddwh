@@ -1,5 +1,6 @@
 package util;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -8,7 +9,9 @@ import java.util.ArrayList;
  * @author th
  *
  */
-public class QueryResult {
+public class QueryResult implements Serializable {
+
+	private static final long serialVersionUID = 2466840812809882014L;
 
 	public static enum Type {
 		COMPLETE_ENTITIES,

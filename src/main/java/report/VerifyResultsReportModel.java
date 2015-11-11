@@ -3,8 +3,8 @@ package report;
 import java.util.ArrayList;
 import java.util.List;
 
-import util.QueryScenario;
 import main.BenchmarkObject;
+import util.QueryScenario;
 
 public class VerifyResultsReportModel {
 
@@ -27,8 +27,8 @@ public class VerifyResultsReportModel {
 			for (DatabaseReportObject db : databases) {
 				BenchmarkObject bmo = findFirstByName(dataModels, db.getName());
 				
-				if(bmo.getQueryResults().containsKey(queryScenario) && bmo.getQueryResults().get(queryScenario) != null)
-					hashCodes.add(bmo.getQueryResults().get(queryScenario).hashCode());
+				if(bmo.getQueryResults(queryScenario) != null)
+					hashCodes.add(bmo.getQueryResults(queryScenario));
 				else
 					hashCodes.add(null);
 			}
