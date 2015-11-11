@@ -1,13 +1,11 @@
 package main;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
-
-import org.apache.commons.io.FileUtils;
-import org.pegdown.Extensions;
-import org.pegdown.PegDownProcessor;
 
 import database.ArangoDB;
 import database.Database;
@@ -17,8 +15,6 @@ import database.PostgreSQL;
 import database.SQLite4Java;
 import database.SQLiteXerial;
 import database.Virtuoso;
-import report.DatabaseReportObject;
-import report.Reports;
 import util.Config;
 import util.Dataset;
 import util.QueryResult;
@@ -45,13 +41,18 @@ public class Benchmark {
 		testDatabases.add(new Fuseki());
 
 		for (TestSeries testSerie : testSeries) {
+			new File("results/serialisedBenchmarkObjects/" + testSerie + "/").mkdirs();
 			List<BenchmarkObject> benchmarkObjects = new ArrayList<>();
-			for (Database database : testDatabases) {
-				benchmarkObjects.add(new BenchmarkObject(database));
-			}
+			for (Database db : testDatabases) {
+				// benchmarkObjects.add(new BenchmarkObject(database));
+				// }
 
-			for (BenchmarkObject benchmarkObject : benchmarkObjects) {
-				Database db = benchmarkObject.getDatabase();
+				// for (BenchmarkObject benchmarkObject : benchmarkObjects) {
+				BenchmarkObject benchmarkObject = new BenchmarkObject(db);
+				benchmarkObjects.add(benchmarkObject);
+
+				// Database db = benchmarkObject.getDatabase();
+				// Database db = testDatabases.get(0);
 				long setUpStart, setUpEnd, loadStart, loadEnd;
 
 				try {
@@ -97,7 +98,7 @@ public class Benchmark {
 								}
 							}
 
-							benchmarkObject.getQueryResults().put(queryScenario, result);
+							benchmarkObject.putQueryResult(queryScenario, result.hashCode());
 							benchmarkObject.getPrepareQueryScenarioResults().put(queryScenario, nanoExecutionTimeInMilliseconds(prepareStart, prepareEnd));
 
 						} catch (Exception e) {
@@ -127,9 +128,13 @@ public class Benchmark {
 				}
 
 				System.out.println("Done with " + benchmarkObject);
-			}
 
-			makeReports(testSerie, benchmarkObjects);
+				FileOutputStream fos = new FileOutputStream("results/serialisedBenchmarkObjects/" + testSerie + "/" + benchmarkObject.getTitle() + ".ser");
+				ObjectOutputStream oos = new ObjectOutputStream(fos);
+				oos.writeObject(benchmarkObject);
+				oos.close();
+			}
+			Report.makeReports(testSerie, benchmarkObjects);
 		}
 	}
 
@@ -148,55 +153,6 @@ public class Benchmark {
 	private static double nanoExecutionTimeInMilliseconds(long start, long end) {
 		double result = (double) (end - start) / (double) 1000000;
 		return result;
-	}
-
-	private static void makeReports(TestSeries testSerie, List<BenchmarkObject> benchmarkObjects) throws Exception {
-		Reports reports = new Reports();
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("<style style=\"text/css\">tr:hover{background: #FFFF00;}</style>\n\n");
-
-		sb.append(reports.MakeBenchmarkReport(benchmarkObjects, testSerie, false));
-
-		ArrayList<DatabaseReportObject> databases = new ArrayList<>();
-		for (BenchmarkObject benchmarkObject : benchmarkObjects)
-			databases.add(new DatabaseReportObject(benchmarkObject.getTitle()));
-		sb.append(reports.MakeTableOfContents(databases));
-
-		sb.append(reports.MakeTestSeriesReport(testSerie, false));
-
-		int tocCount = 1;
-		for (BenchmarkObject benchmarkObject : benchmarkObjects) {
-			sb.append(reports.MakeBenchmarkObjectReport(benchmarkObject, testSerie, String.valueOf(tocCount), false));
-			tocCount++;
-		}
-
-		sb.append(reports.MakeVerifyResultsReport(benchmarkObjects, false));
-
-		String filename = String.format("Results-Testserie_%s", testSerie.toString());
-		FileUtils.writeStringToFile(new File(Config.WHERE_THE_RESULTS_AT + filename + ".md"), sb.toString());
-
-		PegDownProcessor pdp = new PegDownProcessor(Extensions.ALL);
-		String htmlResult = pdp.markdownToHtml(sb.toString());
-		FileUtils.writeStringToFile(new File(Config.WHERE_THE_RESULTS_AT + filename + ".html"), htmlResult);
-
-		makeCsvReports(testSerie, benchmarkObjects);
-
-		System.out.println("Wrote Report for Testserie " + testSerie.toString());
-	}
-
-	private static void makeCsvReports(TestSeries testSerie, List<BenchmarkObject> benchmarkObjects) throws Exception {
-		Reports reports = new Reports();
-		StringBuilder sb = new StringBuilder();
-
-		sb.append(reports.MakeBenchmarkReport(benchmarkObjects, testSerie, true));
-		sb.append(reports.MakeTestSeriesReport(testSerie, true));
-		for (BenchmarkObject benchmarkObject : benchmarkObjects)
-			sb.append(reports.MakeBenchmarkObjectReport(benchmarkObject, testSerie, null, true));
-		sb.append(reports.MakeVerifyResultsReport(benchmarkObjects, true));
-
-		String filename = String.format("Results-Testserie_%s", testSerie.toString());
-		FileUtils.writeStringToFile(new File(Config.WHERE_THE_RESULTS_AT + filename + ".csv"), sb.toString());
 	}
 
 }
