@@ -3,8 +3,9 @@ package util;
 public enum TestSeries {
 	TINY(Dataset.hebis_1000_records),
 	SMALL(Dataset.hebis_100000_records),
-	MEDIUM(Dataset.hebis_10147116_13050073_rdf_gz, Dataset.hebis_29873806_36057474_rdf_gz),
-	LARGE(Dataset.hebis_29873806_36057474_rdf_gz,
+	MEDIUM(Dataset.hebis_10147116_13050073_rdf_gz),
+	LARGE(Dataset.hebis_10147116_13050073_rdf_gz, Dataset.hebis_29873806_36057474_rdf_gz),
+	ALL(Dataset.hebis_29873806_36057474_rdf_gz,
 			Dataset.hebis_00000001_05051126_rdf_gz,
 			Dataset.hebis_05051127_10147115_rdf_gz,
 			Dataset.hebis_10147116_13050073_rdf_gz,

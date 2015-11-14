@@ -406,7 +406,7 @@ public class Virtuoso implements Database {
 
 	@Override
 	public void start() {
-		Helpers.terminalLaunchScript("virtuoso.sh", 20);
+		Helpers.terminalLaunchScript("virtuoso.sh", 90);
 	}
 
 	@Override

@@ -26,19 +26,19 @@ public class Benchmark {
 	public static void main(String[] args) throws Exception {
 
 		List<TestSeries> testSeries = new ArrayList<>();
-//		testSeries.add(TestSeries.TINY);
-		 testSeries.add(TestSeries.SMALL);
-		// testSeries.add(TestSeries.MEDIUM);
-		// testSeries.add(TestSeries.LARGE);
+		testSeries.add(TestSeries.TINY);
+//		 testSeries.add(TestSeries.SMALL);
+//		 testSeries.add(TestSeries.MEDIUM);
+//		 testSeries.add(TestSeries.LARGE);
 
 		List<Database> testDatabases = new ArrayList<>();
 		testDatabases.add(new SQLite4Java());
-		testDatabases.add(new SQLiteXerial());
-		testDatabases.add(new PostgreSQL());
-		testDatabases.add(new ArangoDB());
-		testDatabases.add(new MongoDB());
-		testDatabases.add(new Virtuoso());
-		testDatabases.add(new Fuseki());
+//		testDatabases.add(new SQLiteXerial()); 
+//		testDatabases.add(new PostgreSQL());
+//		testDatabases.add(new ArangoDB());
+//		testDatabases.add(new MongoDB());
+//		testDatabases.add(new Virtuoso());
+//		testDatabases.add(new Fuseki());
 
 		for (TestSeries testSerie : testSeries) {
 			new File("results/serialisedBenchmarkObjects/" + testSerie + "/").mkdirs();
