@@ -35,6 +35,7 @@ public class SQLiteXerial extends Helpers implements Database {
 	private Templates templates;
 	private ArrayList<Dataset> lastLoadedDatasets = new ArrayList<>();
 	private boolean graphStructurePrepared = false;
+	private ArrayList<String> scenarioQueries = new ArrayList<>();
 
 	public SQLiteXerial() {
 		// Produce some queries based on Config / Codes enums - do not prepare
@@ -265,6 +266,15 @@ public class SQLiteXerial extends Helpers implements Database {
 			String queryString = templates.resolve(queryScenario);
 			queryString += " where level0.id in (" + Joiner.on(",").join(ids) + ")";
 			preparedStatement = connection.prepareStatement(queryString);
+		} else if (queryScenario.toString().startsWith("SCHEMA_")) {
+//			System.out.println(queryScenario);
+			scenarioQueries.clear();
+			String queries = templates.resolve(queryScenario);
+			for (String query : queries.split(";")) {
+				if (query != null)
+					scenarioQueries.add(query);
+			}
+
 		}
 
 		this.queryScenario = queryScenario;
@@ -331,7 +341,15 @@ public class SQLiteXerial extends Helpers implements Database {
 
 			case NONE:
 			default:
+				if (queryScenario.toString().startsWith("SCHEMA_")) {
+					for (String query : scenarioQueries) {
+//						System.out.println("EXEC : " + query);
+						connection.createStatement().executeUpdate(query);
+					}
+					
+				} else {
 				preparedStatement.executeUpdate();
+				}
 				break;
 			}
 		}
@@ -346,12 +364,12 @@ public class SQLiteXerial extends Helpers implements Database {
 		// sqLiteXerial.load(Dataset.hebis_10000_records);
 		sqLiteXerial.load(Dataset.hebis_10000_records);
 
-		QueryScenario queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY;
+		QueryScenario queryScenario = QueryScenario.SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY;
 
 		sqLiteXerial.prepare(queryScenario);
 		QueryResult qR1 = sqLiteXerial.query(queryScenario);
 
-		queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES;
+		queryScenario = QueryScenario.SCHEMA_CHANGE_MIGRATE_RDF_TYPE;
 		sqLiteXerial.prepare(queryScenario);
 		QueryResult qR2 = sqLiteXerial.query(queryScenario);
 

@@ -1,4 +1,4 @@
 alter table justatable
 add column istrop text;
 
-update justatable set istrop=substring(RDF_ABOUT from '........$');
+update justatable set istrop=substr(RDF_ABOUT, 30);

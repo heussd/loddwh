@@ -1,5 +1,3 @@
--- SQLite cannot drop columns.
-
 DROP TABLE IF EXISTS justatable2;
 
 CREATE TABLE justatable2 ( 

@@ -35,6 +35,7 @@ public class SQLite4Java extends Helpers implements Database {
 	private SQLiteQueue queue;
 	private ArrayList<Dataset> lastLoadedDatasets = new ArrayList<>();
 	private boolean graphStructurePrepared = false;
+	private ArrayList<String> scenarioQueries = new ArrayList<>();
 
 	public SQLite4Java() {
 		// Disable logging of sqlite4java
@@ -297,6 +298,16 @@ public class SQLite4Java extends Helpers implements Database {
 			String queryString = templates.resolve(queryScenario);
 			queryString += " where level0.id in (" + Joiner.on(",").join(ids) + ")";
 			preparedStatement = connection.prepare(queryString);
+		} else if (queryScenario.toString().startsWith("SCHEMA_")) {
+			// System.out.println(queryScenario);
+			scenarioQueries.clear();
+			String queries = templates.resolve(queryScenario);
+			for (String query : queries.split(";")) {
+				query = query.trim();
+				if (query != null)
+					scenarioQueries.add(query);
+			}
+
 		}
 
 		this.queryScenario = queryScenario;
@@ -313,66 +324,78 @@ public class SQLite4Java extends Helpers implements Database {
 		// Auto commit setting:
 		// https://stackoverflow.com/questions/4998630/how-to-disable-autocommit-in-sqlite4java#5005785
 		connection.exec("BEGIN");
-
-		for (SQLiteStatement preparedStatement : scenarioStatements) {
-			switch (queryScenario.queryResultType) {
-			case GRAPH:
-				while (preparedStatement.step()) {
-					switch (queryScenario) {
-					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
-					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES:
-						 case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES:
-						queryResult.push(preparedStatement.columnString(0), preparedStatement.columnString(1), preparedStatement.columnString(2));
-						break;
-//					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
-//					case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
-						// case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
-					// queryResult.push(preparedStatement.columnString(0), preparedStatement.columnString(1), preparedStatement.columnString(2),
-					// preparedStatement.columnString(3), preparedStatement.columnString(4));
-					// break;
-					default:
-						throw new RuntimeException("Unknown case");
-					}
-				}
-				break;
-			case TWO_COLUMNS:
-				while (preparedStatement.step()) {
-					queryResult.push(preparedStatement.columnString(0), preparedStatement.columnString(1));
-				}
-				break;
-			case COMPLETE_ENTITIES:
-				while (preparedStatement.step()) {
-					DataObject dataObject = new DataObject();
-					for (Codes code : Codes.values()) {
-						if (preparedStatement.columnNull(code.ordinal())) {
-							dataObject.set(code, null);
-							continue;
-						}
-						if (code.IS_MULTIPLE) {
-							// https://stackoverflow.com/questions/3395729/convert-json-array-to-normal-java-array
-							JSONArray jsonArray = new JSONArray(preparedStatement.columnString(code.ordinal()));
-							if (jsonArray != null) {
-								int len = jsonArray.length();
-								for (int i = 0; i < len; i++) {
-									dataObject.putMultiple(code, jsonArray.get(i).toString());
-								}
-							}
-						} else {
-							dataObject.set(code, preparedStatement.columnString(code.ordinal()));
-						}
-					}
-					queryResult.push(dataObject);
-				}
-				break;
-
-			case NONE:
-			default:
-				preparedStatement.step();
-				break;
+		
+		if (queryScenario.toString().startsWith("SCHEMA_")) {
+			for (String query : scenarioQueries) {
+//				System.out.println(query);
+				connection.exec(query);
 			}
+//			connection.exec("COMMIT");
+//			System.exit(1);
+		} else {
 
+			for (SQLiteStatement preparedStatement : scenarioStatements) {
+				switch (queryScenario.queryResultType) {
+				case GRAPH:
+					while (preparedStatement.step()) {
+						switch (queryScenario) {
+						case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
+						case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES:
+						case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES:
+							queryResult.push(preparedStatement.columnString(0), preparedStatement.columnString(1), preparedStatement.columnString(2));
+							break;
+						// case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
+						// case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
+						// case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
+						// queryResult.push(preparedStatement.columnString(0), preparedStatement.columnString(1), preparedStatement.columnString(2),
+						// preparedStatement.columnString(3), preparedStatement.columnString(4));
+						// break;
+						default:
+							throw new RuntimeException("Unknown case");
+						}
+					}
+					break;
+				case TWO_COLUMNS:
+					while (preparedStatement.step()) {
+						queryResult.push(preparedStatement.columnString(0), preparedStatement.columnString(1));
+					}
+					break;
+				case COMPLETE_ENTITIES:
+					while (preparedStatement.step()) {
+						DataObject dataObject = new DataObject();
+						for (Codes code : Codes.values()) {
+							if (preparedStatement.columnNull(code.ordinal())) {
+								dataObject.set(code, null);
+								continue;
+							}
+							if (code.IS_MULTIPLE) {
+								// https://stackoverflow.com/questions/3395729/convert-json-array-to-normal-java-array
+								JSONArray jsonArray = new JSONArray(preparedStatement.columnString(code.ordinal()));
+								if (jsonArray != null) {
+									int len = jsonArray.length();
+									for (int i = 0; i < len; i++) {
+										dataObject.putMultiple(code, jsonArray.get(i).toString());
+									}
+								}
+							} else {
+								dataObject.set(code, preparedStatement.columnString(code.ordinal()));
+							}
+						}
+						queryResult.push(dataObject);
+					}
+					break;
+
+				case NONE:
+				default:
+
+					preparedStatement.stepThrough();
+					// while (preparedStatement.step()) {
+					// }
+					break;
+				}
+
+			}
 		}
-
 		connection.exec("COMMIT");
 		return queryResult;
 	}
@@ -385,10 +408,15 @@ public class SQLite4Java extends Helpers implements Database {
 		sqLiteXerial.setUp();
 		sqLiteXerial.load(Dataset.hebis_10000_records);
 
-		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY;
+		QueryScenario queryScenario = QueryScenario.SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY;
 
 		sqLiteXerial.prepare(queryScenario);
 		QueryResult queryResult = sqLiteXerial.query(queryScenario);
+
+		queryScenario = QueryScenario.SCHEMA_CHANGE_INTRODUCE_STRING_OP;
+
+		sqLiteXerial.prepare(queryScenario);
+		queryResult = sqLiteXerial.query(queryScenario);
 
 		// System.out.println(queryResult);
 		//
