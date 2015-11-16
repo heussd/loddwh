@@ -1,7 +1,7 @@
 <style style="text/css">tr:hover{background: #FFFF00;}</style>
 
 
-## <a name="overview"></a>[1\. Evaluation Overview, all Databases, Test Series LARGE](#overview)
+## <a name="overview"></a>[Evaluation Overview, all Databases, Test Series LARGE](#overview)
 
 | QueryScenario | Phase | [sqlite4java](#sqlite4java) | [SQLite-Xerial](#SQLite-Xerial) | [PostgreSQL](#PostgreSQL) | [Virtuoso](#Virtuoso) | [MongoDB](#MongoDB) | [ArangoDB](#ArangoDB) |
 | :-- | :-- | --: | --: | --: | --: | --: | --: |
@@ -56,25 +56,24 @@
 
 # <a name="toc"></a>[Table of contents](#toc)
 
-1. [Evaluation Overview](#overview)
-1. [Test Series Datasets](#testseriesinformation)
-1. Evaluation Details
-	1. [sqlite4java](#sqlite4java)
-	1. [SQLite-Xerial](#SQLite-Xerial)
-	1. [PostgreSQL](#PostgreSQL)
-	1. [Virtuoso](#Virtuoso)
-	1. [MongoDB](#MongoDB)
-	1. [ArangoDB](#ArangoDB)
-1. [Verify Results](#verifyresults)
+- [Evaluation Overview](#overview)
+- [Test Series Datasets](#testseriesinformation)
+- Evaluation Details
+    - [sqlite4java](#sqlite4java)
+    - [SQLite-Xerial](#SQLite-Xerial)
+    - [PostgreSQL](#PostgreSQL)
+    - [Virtuoso](#Virtuoso)
+    - [MongoDB](#MongoDB)
+    - [ArangoDB](#ArangoDB)
 
-## <a name="testseriesinformation"></a>[2\. Test Series Datasets](#testseriesinformation)
+## <a name="testseriesinformation"></a>[Test Series Datasets](#testseriesinformation)
 
 | Test Series LARGE | Dataset Size |
 | :-- | --: |
 | hebis_10147116_13050073_rdf_gz | 206.285 MB |
 | hebis_29873806_36057474_rdf_gz | 298.021 MB |
 
-## <a name="sqlite4java"></a>[3\.1\. Evaluation Details for sqlite4java, Version 392 with SQLite 3.8.7, Test Series LARGE](#sqlite4java)
+## <a name="sqlite4java"></a>[Evaluation Details for sqlite4java, Version 392 with SQLite 3.8.7, Test Series LARGE](#sqlite4java)
 
 | QueryScenario | Phase | 1st Exec | 2nd Exec | 3rd Exec | Average time | Min time | Max time |
 | :-- | :-- | --: | --: | --: | --: |
@@ -127,7 +126,7 @@
 | <font color="#C0C0C0">DELETE_HIGH_SELECTIVIY_NON_ISSUED</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">5.07 ms</font> |
 | DELETE_HIGH_SELECTIVIY_NON_ISSUED | Query | 1950.12 ms |
 
-## <a name="SQLite-Xerial"></a>[3\.2\. Evaluation Details for SQLite-Xerial, Version 3.8.11, Test Series LARGE](#SQLite-Xerial)
+## <a name="SQLite-Xerial"></a>[Evaluation Details for SQLite-Xerial, Version 3.8.11, Test Series LARGE](#SQLite-Xerial)
 
 | QueryScenario | Phase | 1st Exec | 2nd Exec | 3rd Exec | Average time | Min time | Max time |
 | :-- | :-- | --: | --: | --: | --: |
@@ -180,7 +179,7 @@
 | <font color="#C0C0C0">DELETE_HIGH_SELECTIVIY_NON_ISSUED</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">3486.75 ms</font> |
 | DELETE_HIGH_SELECTIVIY_NON_ISSUED | Query | 775.04 ms |
 
-## <a name="PostgreSQL"></a>[3\.3\. Evaluation Details for PostgreSQL, Version PostgreSQL 9.4.4 on x86_64-apple-darwin14.3.0, compiled by Apple LLVM version 6.1.0 (clang-602.0.53) (based on LLVM 3.6.0svn), 64-bit / 9.4-1201-jdbc41, Test Series LARGE](#PostgreSQL)
+## <a name="PostgreSQL"></a>[Evaluation Details for PostgreSQL, Version PostgreSQL 9.4.4 on x86_64-apple-darwin14.3.0, compiled by Apple LLVM version 6.1.0 (clang-602.0.53) (based on LLVM 3.6.0svn), 64-bit / 9.4-1201-jdbc41, Test Series LARGE](#PostgreSQL)
 
 | QueryScenario | Phase | 1st Exec | 2nd Exec | 3rd Exec | Average time | Min time | Max time |
 | :-- | :-- | --: | --: | --: | --: |
@@ -233,7 +232,7 @@
 | <font color="#C0C0C0">DELETE_HIGH_SELECTIVIY_NON_ISSUED</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">6470.05 ms</font> |
 | DELETE_HIGH_SELECTIVIY_NON_ISSUED | Query | 666.58 ms |
 
-## <a name="Virtuoso"></a>[3\.4\. Evaluation Details for Virtuoso, Version 07.20.3214 / Virtuoso JDBC 4.1, Test Series LARGE](#Virtuoso)
+## <a name="Virtuoso"></a>[Evaluation Details for Virtuoso, Version 07.20.3214 / Virtuoso JDBC 4.1, Test Series LARGE](#Virtuoso)
 
 | QueryScenario | Phase | 1st Exec | 2nd Exec | 3rd Exec | Average time | Min time | Max time |
 | :-- | :-- | --: | --: | --: | --: |
@@ -286,7 +285,7 @@
 | <font color="#C0C0C0">DELETE_HIGH_SELECTIVIY_NON_ISSUED</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">Error</font> |
 | DELETE_HIGH_SELECTIVIY_NON_ISSUED | Query | Error |
 
-## <a name="MongoDB"></a>[3\.5\. Evaluation Details for MongoDB, Version 3.0.6, Test Series LARGE](#MongoDB)
+## <a name="MongoDB"></a>[Evaluation Details for MongoDB, Version 3.0.6, Test Series LARGE](#MongoDB)
 
 | QueryScenario | Phase | 1st Exec | 2nd Exec | 3rd Exec | Average time | Min time | Max time |
 | :-- | :-- | --: | --: | --: | --: |
@@ -339,7 +338,7 @@
 | <font color="#C0C0C0">DELETE_HIGH_SELECTIVIY_NON_ISSUED</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">0.00 ms</font> |
 | DELETE_HIGH_SELECTIVIY_NON_ISSUED | Query | 2821.43 ms |
 
-## <a name="ArangoDB"></a>[3\.6\. Evaluation Details for ArangoDB, Version 2.6.9 64bit -- ICU 54.1, V8 4.1.0.27, OpenSSL 1.0.2d 9 Jul 2015 / Java Driver 2.6.8, Test Series LARGE](#ArangoDB)
+## <a name="ArangoDB"></a>[Evaluation Details for ArangoDB, Version 2.6.9 64bit -- ICU 54.1, V8 4.1.0.27, OpenSSL 1.0.2d 9 Jul 2015 / Java Driver 2.6.8, Test Series LARGE](#ArangoDB)
 
 | QueryScenario | Phase | 1st Exec | 2nd Exec | 3rd Exec | Average time | Min time | Max time |
 | :-- | :-- | --: | --: | --: | --: |
@@ -391,31 +390,3 @@
 | DELETE_LOW_SELECTIVITY_PAPER_MEDIUM | Query | 4.40E6 ms |
 | <font color="#C0C0C0">DELETE_HIGH_SELECTIVIY_NON_ISSUED</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">0.01 ms</font> |
 | DELETE_HIGH_SELECTIVIY_NON_ISSUED | Query | 34492.86 ms |
-
-## <a name="verifyresults"></a>[4\. Verify Results](#verifyresults)
-
-| QueryScenario | [sqlite4java](#sqlite4java) | [SQLite-Xerial](#SQLite-Xerial) | [PostgreSQL](#PostgreSQL) | [Virtuoso](#Virtuoso) | [MongoDB](#MongoDB) | [ArangoDB](#ArangoDB) |
-| :-- | --: | --: | --: | --: | --: | --: |
-| **_ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY_** | 183003720 | 1051693749 | -1631735825 | 1821908203 | 1248153376 | 866776771 |
-| **_ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES_** | -697403916 | -2095390205 | -1704601671 | -754290544 | -365507961 | 1349785041 |
-| **_ENTITY_RETRIEVAL_BY_ID_100_ENTITIES_** | 712704393 | -275340846 | 1290241298 | -1643704926 | -2020231810 | -1166324957 |
-| **_AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10_** | -893730948 | 371599978 | 1095708964 | -318234811 | 1002209834 | 1037819031 |
-| **_AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100_** | -991420243 | 273910683 | -1509065022 | -1234297414 | 904520539 | -2008411683 |
-| **_AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL_** | -711801863 | 553529063 | -1598586606 | 1176114115 |  | -848118979 |
-| **_AGGREGATE_ISSUES_PER_DECADE_TOP10_** | 137065434 | 1402396360 | 258415476 | -641672479 | -1501063400 | -1806999695 |
-| **_AGGREGATE_ISSUES_PER_DECADE_TOP100_** | 1979964404 | -1049671966 | 2101314446 | 1019514728 | -2118916963 | -1454031601 |
-| **_AGGREGATE_ISSUES_PER_DECADE_ALL_** | -1483128166 | -217797240 | -1361778124 | 1019514728 | 1967337086 | 266342679 |
-| **_CONDITIONAL_TABLE_SCAN_ALL_STUDIES_** | -2076523569 | 838620136 | -1980786097 | -2025724649 | 1740882618 | 1063397217 |
-| **_CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_** | -597014367 | 1450505394 | 1974231731 | 128186041 | 1210328302 | -130620526 |
-| **_CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES_** | 2007091515 | -1289559890 | -459257711 | -1721816936 | -87385924 | -1008792621 |
-| **_GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY_** | 320861599 | -386870628 | 291629040 | -7219016 | -439645692 | -493015244 |
-| **_GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES_** | 320861599 | -386870628 | 1597392381 | -2024960072 | -439645692 | -493015244 |
-| **_GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES_** | 320861599 | -386870628 | 291629040 | -7219016 | -439645692 | -493015244 |
-| **_SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY_** | 81934384 | 886776430 | 1861437711 |  | 1833456590 | 1924522786 |
-| **_SCHEMA_CHANGE_INTRODUCE_STRING_OP_** | 81934384 | 886776430 | 1861437711 |  | 1833456590 | 1924522786 |
-| **_SCHEMA_CHANGE_MIGRATE_RDF_TYPE_** | 81934384 | 886776430 | 1861437711 |  | 1833456590 | 1924522786 |
-| **_SCHEMA_CHANGE_REMOVE_RDF_TYPE_** | 81934384 | 886776430 | 1861437711 |  | 1833456590 | 1924522786 |
-| **_UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM_** | 81934384 | 886776430 | 1861437711 |  | 1833456590 | 1924522786 |
-| **_UPDATE_HIGH_SELECTIVITY_NON_ISSUED_** | 81934384 | 886776430 | 1861437711 | 1334516554 | 1833456590 | 1924522786 |
-| **_DELETE_LOW_SELECTIVITY_PAPER_MEDIUM_** | 81934384 | 886776430 | 1861437711 | 1334516554 | 1833456590 | 1924522786 |
-| **_DELETE_HIGH_SELECTIVIY_NON_ISSUED_** | 81934384 | 886776430 | 1861437711 |  | 1833456590 | 1924522786 |
