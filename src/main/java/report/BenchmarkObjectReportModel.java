@@ -5,10 +5,9 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 
-import arq.query;
+import main.BenchmarkObject;
 import util.QueryScenario;
 import util.TestSeries;
-import main.BenchmarkObject;
 
 public class BenchmarkObjectReportModel {
 
@@ -39,7 +38,11 @@ public class BenchmarkObjectReportModel {
 			double firstOrOne;
 
 			// Prepare
-			firstOrOne = benchmarkObject.getPrepareQueryScenarioResults().get(queryScenario);
+			try {
+				firstOrOne = benchmarkObject.getPrepareQueryScenarioResults().get(queryScenario);
+			} catch (NullPointerException e) {
+				firstOrOne = -1;
+			}
 			if (queryScenario.isReadOnly)
 				readOnly.add(new BenchmarkObjectReportModelRow(queryScenario.toString(), "Prepare", firstOrOne, null, null, null, null, null, sort, targetCsv));
 			else
@@ -56,10 +59,9 @@ public class BenchmarkObjectReportModel {
 			if (queryScenario.isReadOnly) {
 				second = getNth(queryScenario, benchmarkObject.getQueryQueryScenarioResults(), 2);
 				third = getNth(queryScenario, benchmarkObject.getQueryQueryScenarioResults(), 3);
-				
+
 				readOnly.add(new BenchmarkObjectReportModelRow(queryScenario.toString(), "Query", firstOrOne, second, third, avg, min, max, sort, targetCsv));
-			}
-			else
+			} else
 				notReadOnly
 						.add(new BenchmarkObjectReportModelRow(queryScenario.toString(), "Query", firstOrOne, second, third, avg, min, max, sort, targetCsv));
 			sort++;
@@ -67,37 +69,49 @@ public class BenchmarkObjectReportModel {
 	}
 
 	private double GetFirstOrOne(QueryScenario queryScenario, Hashtable<Integer, Hashtable<QueryScenario, Double>> scenarioResults) {
-		return scenarioResults.get(1).get(queryScenario);
+		try {
+			return scenarioResults.get(1).get(queryScenario);
+		} catch (NullPointerException e) {
+			return -1;
+		}
 	}
 
 	private double GetMax(QueryScenario queryScenario, Hashtable<Integer, Hashtable<QueryScenario, Double>> scenarioResults) {
-		double val = scenarioResults.get(1).get(queryScenario);
-		Enumeration<Hashtable<QueryScenario, Double>> e = scenarioResults.elements();
-		if (e.hasMoreElements())
-			e.nextElement(); // Skip 1
-		while (e.hasMoreElements()) {
-			Hashtable<QueryScenario, Double> cur = e.nextElement();
-			if (!cur.containsKey(queryScenario))
-				continue;
-			if (cur.get(queryScenario) > val)
-				val = cur.get(queryScenario);
+		try {
+			double val = scenarioResults.get(1).get(queryScenario);
+			Enumeration<Hashtable<QueryScenario, Double>> e = scenarioResults.elements();
+			if (e.hasMoreElements())
+				e.nextElement(); // Skip 1
+			while (e.hasMoreElements()) {
+				Hashtable<QueryScenario, Double> cur = e.nextElement();
+				if (!cur.containsKey(queryScenario))
+					continue;
+				if (cur.get(queryScenario) > val)
+					val = cur.get(queryScenario);
+			}
+			return val;
+		} catch (NullPointerException e) {
+			return -1;
 		}
-		return val;
 	}
 
 	private double GetMin(QueryScenario queryScenario, Hashtable<Integer, Hashtable<QueryScenario, Double>> scenarioResults) {
-		double val = scenarioResults.get(1).get(queryScenario);
-		Enumeration<Hashtable<QueryScenario, Double>> e = scenarioResults.elements();
-		if (e.hasMoreElements())
-			e.nextElement(); // Skip 1
-		while (e.hasMoreElements()) {
-			Hashtable<QueryScenario, Double> cur = e.nextElement();
-			if (!cur.containsKey(queryScenario))
-				continue;
-			if (cur.get(queryScenario) < val)
-				val = cur.get(queryScenario);
+		try {
+			double val = scenarioResults.get(1).get(queryScenario);
+			Enumeration<Hashtable<QueryScenario, Double>> e = scenarioResults.elements();
+			if (e.hasMoreElements())
+				e.nextElement(); // Skip 1
+			while (e.hasMoreElements()) {
+				Hashtable<QueryScenario, Double> cur = e.nextElement();
+				if (!cur.containsKey(queryScenario))
+					continue;
+				if (cur.get(queryScenario) < val)
+					val = cur.get(queryScenario);
+			}
+			return val;
+		} catch (NullPointerException e) {
+			return -1;
 		}
-		return val;
 	}
 
 	private double GetAvg(QueryScenario queryScenario, Hashtable<Integer, Hashtable<QueryScenario, Double>> scenarioResults) {
