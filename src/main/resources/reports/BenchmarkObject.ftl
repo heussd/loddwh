@@ -1,5 +1,5 @@
 
-## <a name="${linkname}"></a>[3\.${tocindex}\. Evaluation Details for ${name}, Version ${version}, Test Series ${testserie}](#${linkname})
+## <a name="${linkname}"></a>[Evaluation Details for ${name}, Version ${version}, Test Series ${testserie}](#${linkname})
 
 | QueryScenario | Phase | 1st Exec | 2nd Exec | 3rd Exec | Average time | Min time | Max time |
 | :-- | :-- | --: | --: | --: | --: |

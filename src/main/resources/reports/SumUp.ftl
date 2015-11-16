@@ -1,5 +1,5 @@
 
-## <a name="overview"></a>[1\. Evaluation Overview, all Databases, Test Series ${testserie}](#overview)
+## <a name="overview"></a>[Evaluation Overview, all Databases, Test Series ${testserie}](#overview)
 
 | QueryScenario | Phase |<#list databases as db> [${db.name}](#${db.linkconformname}) |</#list>
 | :-- | :-- |<#list databases as db> --: |</#list>
