@@ -58,8 +58,8 @@ public class ArangoDB implements Database {
 
 	@Override
 	public void start() {
-		if (Config.THIS_IS_OSX)
-			Helpers.terminalLaunchScript("arangodb.sh", 20);
+//		if (Config.THIS_IS_OSX)
+//			Helpers.terminalLaunchScript("arangodb.sh", 20);
 		
 		ArangoConfigure configure = new ArangoConfigure();
 		configure.init();

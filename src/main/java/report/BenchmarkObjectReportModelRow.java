@@ -14,8 +14,10 @@ public class BenchmarkObjectReportModelRow implements TemplateHashModel {
 	public Double FirstOrOne, Avg, Min, Max;
 	public int Sort;
 	private boolean targetCsv;
+	public Double third;
+	public Double second;
 
-	public BenchmarkObjectReportModelRow(String queryScenario, String phase, Double firstOrOne, Double avg, Double min, Double max, int sort,
+	public BenchmarkObjectReportModelRow(String queryScenario, String phase, Double firstOrOne, Double second, Double third, Double avg, Double min, Double max, int sort,
 			boolean targetCsv) {
 		super();
 		QueryScenario = queryScenario;
@@ -25,6 +27,8 @@ public class BenchmarkObjectReportModelRow implements TemplateHashModel {
 		Min = min;
 		Max = max;
 		Sort = sort;
+		this.second = second;
+		this.third = third;
 		this.targetCsv = targetCsv;
 	}
 
@@ -42,6 +46,20 @@ public class BenchmarkObjectReportModelRow implements TemplateHashModel {
 			else
 				return new SimpleScalar(
 						Helpers.DoubleToStringNDecimals(FirstOrOne, 2, !targetCsv && FirstOrOne >= Config.BORDER_FOR_SCIENTIFIC_NOTATION_REPORT_RESULT)
+								+ (targetCsv ? "" : " ms"));
+		case "second":
+			if (second == null || second == -1)
+				return new SimpleScalar("Error");
+			else
+				return new SimpleScalar(
+						Helpers.DoubleToStringNDecimals(second, 2, !targetCsv && second >= Config.BORDER_FOR_SCIENTIFIC_NOTATION_REPORT_RESULT)
+								+ (targetCsv ? "" : " ms"));
+		case "third":
+			if (third == null || second == -1)
+				return new SimpleScalar("Error");
+			else
+				return new SimpleScalar(
+						Helpers.DoubleToStringNDecimals(third, 2, !targetCsv && third >= Config.BORDER_FOR_SCIENTIFIC_NOTATION_REPORT_RESULT)
 								+ (targetCsv ? "" : " ms"));
 		case "avg":
 			if (Avg == null || Avg == -1)
