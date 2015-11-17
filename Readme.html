@@ -1,0 +1,457 @@
+<style>
+table,th,td{border:1px solid black;border-collapse:collapse;padding:4px;}
+</style><h1><a name="documentation"></a><a href="#documentation">System documentation</a></h1><h2><a name="toc"></a><a href="#toc">Table of contents</a></h2>
+<ol>
+  <li><a href="#benchmarkOverview">Benchmark overview</a>
+  <ol>
+    <li><a href="#dataDescription">Data description</a></li>
+    <li><a href="#evaluatedDatabases">Evaluated databases</a></li>
+    <li><a href="#queryScenarios">Query scenarios</a></li>
+    <li><a href="#evaluationWorkflow">Evaluation workflow</a></li>
+    <li><a href="#benchmarkReporting">Reporting</a></li>
+  </ol></li>
+  <li><a href="#projectOverview">Project overview</a>
+  <ol>
+    <li><a href="#basicProjectInformation">Basic project information</a></li>
+    <li><a href="#howToRun">How to run</a></li>
+    <li><a href="#reportingOverview">Reporting</a></li>
+  </ol></li>
+  <li><a href="#projectDetail">Project detail</a>
+  <ol>
+    <li><a href="#javaResources">Java resources</a></li>
+    <li><a href="#importantJavaClasses">Important java classes</a></li>
+    <li><a href="#evaluationDetail">Database implementations</a>
+    <ol>
+      <li><a href="#modifyDatabases">Modify database implementations</a></li>
+      <li><a href="#addRemoveDatabases">Add or remove database implementations</a></li>
+    </ol></li>
+    <li><a href="#reportingDetail">Reporting</a>
+    <ol>
+      <li><a href="#modifyReports">Modify reporting layouts</a></li>
+      <li><a href="#addInformationToReports">Add new information to reports</a></li>
+      <li><a href="#addRemoveReports">Add or remove reports</a></li>
+    </ol></li>
+  </ol></li>
+</ol><h2><a name="benchmarkOverview"></a><a href="#benchmarkOverview">1. Benchmark overview</a></h2><p>This benchmark tries to figure out how different types of database-systems (relational, object-relational, document-oriented, graph, &hellip;) can handle data, that is serialized from an RDF-store (Resource Description Framework), and how the possibilities for queries on that data are.</p><h3><a name="dataDescription"></a><a href="#dataDescription">1.1 Data description</a></h3><p>The data, that is benchmarked in that software, is delivered in packages with different sizes. A package is called <em>dataset</em>. For the benchmark datasets are combined to <em>testseries</em>. So a testseries consists of one or more datasets.</p><p>A dataset contains entities, that are serialized from a RDF-store into a XML-file. That&rsquo;s an example of one entitity:</p>
+<pre><code>&lt;rdf:Description rdf:about=&quot;http://lod.hebis.de/resource/26887673&quot;&gt;
+    &lt;rdf:type rdf:resource=&quot;http://purl.org/vocab/frbr/core#Manifestation&quot;/&gt;
+    &lt;wdrs:describedby rdf:resource=&quot;http://lod.hebis.de/catalog/html/26887673&quot;/&gt;
+    &lt;dcterms:medium&gt;paper&lt;/dcterms:medium&gt;
+    &lt;dcterms:format&gt;print&lt;/dcterms:format&gt;
+    &lt;rdf:type rdf:resource=&quot;http://purl.org/dc/terms/BibliographicResource&quot;/&gt;
+    &lt;rdf:type rdf:resource=&quot;http://purl.org/ontology/bibo/Book&quot;/&gt;
+    &lt;dcterms:identifier&gt;268876738&lt;/dcterms:identifier&gt;
+    &lt;bibo:oclcnum&gt;741569552&lt;/bibo:oclcnum&gt;
+    &lt;isbd:P1018&gt;1932&lt;/isbd:P1018&gt;
+    &lt;dcterms:issued&gt;1932&lt;/dcterms:issued&gt;
+    &lt;dcterms:title&gt;Untersuchungen ueber die Gueltigkeit des Pontschen Index&lt;/dcterms:title&gt;
+    &lt;isbd:P1004&gt;Untersuchungen ueber die Gueltigkeit des Pontschen Index&lt;/isbd:P1004&gt;
+&lt;/rdf:Description&gt;
+</code></pre><p>The entities of datasets have to be loaded into the database-systems the best way possible, which means in a form that would normally be used on that database-system. It&rsquo;s important to know that not all entities contain all possible fields, that some fields are multiples (means arrays) and that not all entities or datasets are in valid XML.</p><p>The benchmark currently has the following testseries defined:</p>
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Short description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left">TINY</td>
+      <td align="left">One test dataset, 1,000 entities, ~1 MB of data</td>
+    </tr>
+    <tr>
+      <td align="left">SMALL</td>
+      <td align="left">One test dataset, 100,000 entities, ~100 MB of data</td>
+    </tr>
+    <tr>
+      <td align="left">MEDIUM</td>
+      <td align="left">Dumped datasets, ~4 GB of data</td>
+    </tr>
+    <tr>
+      <td align="left">LARGE</td>
+      <td align="left">Dumped datasets, ~6 GB of data</td>
+    </tr>
+    <tr>
+      <td align="left">ALL</td>
+      <td align="left">Dumped datasets, ~13 GB of data</td>
+    </tr>
+  </tbody>
+</table><h3><a name="evaluatedDatabases"></a><a href="#evaluatedDatabases">1.2 Evaluated databases</a></h3><p>This benchmarking software currently supports the following database-systems:</p>
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Short information</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left">SQLite 4 Java</td>
+      <td align="left">A relational database</td>
+    </tr>
+    <tr>
+      <td align="left">SQLite Xerial</td>
+      <td align="left">A relational database</td>
+    </tr>
+    <tr>
+      <td align="left">Fuseki</td>
+      <td align="left">A HTTP-SPARQL interface to Jena</td>
+    </tr>
+    <tr>
+      <td align="left">PostgreSQL</td>
+      <td align="left">An object-relational database</td>
+    </tr>
+    <tr>
+      <td align="left">Open Virtuoso</td>
+      <td align="left">A database-engine-hybrid</td>
+    </tr>
+    <tr>
+      <td align="left">MongoDB</td>
+      <td align="left">A document-oriented NoSQL-database</td>
+    </tr>
+    <tr>
+      <td align="left">ArangoDB</td>
+      <td align="left">A multi-model NoSQL-database</td>
+    </tr>
+  </tbody>
+</table><h3><a name="queryScenarios"></a><a href="#queryScenarios">1.3 Query scenarios</a></h3><p>This benchmarking software currently benchmarks the database-systems with the in this chapter described query scenarios. The query scenarios are categorized and target on <a href="#dataDescription">the context of specific data</a> benchmarked in this software.<br/>Each query scenario may have been divided into a prepare and a query step. For a more detailed explanation of the query scenarios, see the java documentation of the query scenario definition in code or see the benchmark-results-publication of Timm Heuss, where the purposes of the query scenarios and their results are discussed.</p><p><strong>Entity-retrieval scenarios:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Short description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY</td>
+      <td align="left">Retrieve a specific entity by its database-id</td>
+    </tr>
+    <tr>
+      <td align="left">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES</td>
+      <td align="left">Retrieve ten specific entities by their database-ids</td>
+    </tr>
+    <tr>
+      <td align="left">ENTITY_RETRIEVAL_BY_ID_100_ENTITIES</td>
+      <td align="left">Retrieve 100 specific entities by their database-ids</td>
+    </tr>
+  </tbody>
+</table><p><strong>Aggregation scenarios:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Short description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10</td>
+      <td align="left">Aggregate all entities by field <em>publisher</em>, order by the <em>count</em> descending and retrieve the first ten results</td>
+    </tr>
+    <tr>
+      <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100</td>
+      <td align="left">Same, but retrieve the first 100 results</td>
+    </tr>
+    <tr>
+      <td align="left">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL</td>
+      <td align="left">Same, but retrieve all results</td>
+    </tr>
+    <tr>
+      <td align="left">AGGREGATE_ISSUES_PER_DECADE_TOP10</td>
+      <td align="left">Aggregate all entities by field <em>issued</em>. This field contains a year. Count the decade-occurences of all years. Order by the <em>count</em> descending and retrieve the first ten results</td>
+    </tr>
+    <tr>
+      <td align="left">AGGREGATE_ISSUES_PER_DECADE_TOP100</td>
+      <td align="left">Same, but retrieve the first 100 results</td>
+    </tr>
+    <tr>
+      <td align="left">AGGREGATE_ISSUES_PER_DECADE_ALL</td>
+      <td align="left">Same, but retrieve all results</td>
+    </tr>
+  </tbody>
+</table><p><strong>Table-scan scenarios:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Short description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left">CONDITIONAL_TABLE_SCAN_ALL_STUDIES</td>
+      <td align="left">Return all entities that are studies</td>
+    </tr>
+    <tr>
+      <td align="left">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES</td>
+      <td align="left">Return all entities that are bibliographic resources</td>
+    </tr>
+    <tr>
+      <td align="left">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES</td>
+      <td align="left">Return all entities that are both</td>
+    </tr>
+  </tbody>
+</table><p><strong>Graph-like-scenarios:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Short description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY</td>
+      <td align="left">For one entity, find all entities that share a value in array-field <em>subject</em> with it</td>
+    </tr>
+    <tr>
+      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES</td>
+      <td align="left">Same, but do it for ten entities</td>
+    </tr>
+    <tr>
+      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES</td>
+      <td align="left">Same, but do it for 100 entities</td>
+    </tr>
+    <tr>
+      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY</td>
+      <td align="left">For one entity, find all entities that share a value in array-field <em>subject</em> with it, for each of them find all entities that share a value in array-field <em>subject</em> with them</td>
+    </tr>
+    <tr>
+      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES</td>
+      <td align="left">Same, but do it for ten entities</td>
+    </tr>
+    <tr>
+      <td align="left">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES</td>
+      <td align="left">Same, but do it for 100 entities</td>
+    </tr>
+  </tbody>
+</table><p><strong>Data-changing scenarios:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Short description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left">SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY</td>
+      <td align="left">Create a new field on each entity</td>
+    </tr>
+    <tr>
+      <td align="left">SCHEMA_CHANGE_INTRODUCE_STRING_OP</td>
+      <td align="left">Create a new field on each entity, whose value is build from the current entity</td>
+    </tr>
+    <tr>
+      <td align="left">SCHEMA_CHANGE_MIGRATE_RDF_TYPE</td>
+      <td align="left">Create new boolean-fields for each entity-type on all entities, indicating if the entity is of that type</td>
+    </tr>
+    <tr>
+      <td align="left">SCHEMA_CHANGE_REMOVE_RDF_TYPE</td>
+      <td align="left">Remove a field from each entity</td>
+    </tr>
+    <tr>
+      <td align="left">UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM</td>
+      <td align="left">Update a field on all entities that fit a specific condition. The condition forces the most entities to be updated.</td>
+    </tr>
+    <tr>
+      <td align="left">UPDATE_HIGH_SELECTIVITY_NON_ISSUED</td>
+      <td align="left">Update a field on all entities that fit a specific condition. The condition forces the least entities to be updated.</td>
+    </tr>
+    <tr>
+      <td align="left">DELETE_LOW_SELECTIVITY_PAPER_MEDIUM</td>
+      <td align="left">Delete entities that fit a specific condition. The condition forces the most entities to be deleted.</td>
+    </tr>
+    <tr>
+      <td align="left">DELETE_HIGH_SELECTIVIY_NON_ISSUED</td>
+      <td align="left">Delete entities that fit a specific condition. The condition forces the least entities to be deleted.</td>
+    </tr>
+  </tbody>
+</table><h3><a name="evaluationWorkflow"></a><a href="#evaluationWorkflow">1.4 Evaluation workflow</a></h3><p>The workflow of this software describes how the program executes the benchmarking process over the databases. Each database has to load data and to execute the query scenarios. While this is done, execution times have to be measured. After the execution finished, the results have to be prepared to fit into the generated reports.</p><p>The workflow is a step by step procedure:<br/>The program iterates over the configured testseries, so the whole benchmark is done for each of them. For each of the testseries, all databases are benchmarked with all query scenarios. The results of each database, which contains the measured execution times and the data results for the read-only query scenarios, are serialized for the at the end following reporting step. After all databases finished the benchmarking for the current testserie, the report is build over the results and saved named after the testserie.</p>
+<ol>
+  <li>For each configured testserie
+  <ol>
+    <li>For each database
+    <ol>
+      <li>Do the <a href="#wftdb">workflow for the database-benchmarking</a></li>
+      <li>Serialize the results</li>
+    </ol></li>
+    <li>Build the benchmark report over the results</li>
+    <li>Save the report named after the current testserie</li>
+  </ol></li>
+</ol><p>The <a name="wftdb"></a>workflow for the database-benchmarking is also a step by step procedure. When a database is benchmarked with a testserie, the following procedure runs:</p>
+<ol>
+  <li>Start the database-system</li>
+  <li>Clean the database-system (to remove the environment of earlier benchmarks)</li>
+  <li>Set up the database-system with the needed environment (for example create database-tables)</li>
+  <li>Load the data of the current testserie</li>
+  <li>For each query scenario
+  <ol>
+    <li>Prepare the query scenario (for example create database-indices that help the current query scenario)</li>
+    <li>Execute the query scenario</li>
+  </ol></li>
+  <li>Stop the database-system</li>
+</ol><p>Step 5.2, the execution of the query scenario, is, for read-only query scenarios, executed three times.<br/>The execution times are measured for each step except starting, cleaning and stopping the database-system. Starting and stopping are non-relevant in this benchmark, and cleaning is a necessary step to have the set up step be executed on a clean database-system. </p><h3><a name="benchmarkReporting"></a><a href="#benchmarkReporting">1.5 Reporting</a></h3><p>The benchmark generates reports from the execution times of query scenarios and their data-results. Currently a report for a testserie consists of 4 parts and is generated in Markdown, HTML and CSV, which allows further processing in table calculation programs.</p><p><strong>Evaluation overview</strong><br/>The evaluation overview compares the average measured times for all query scenarios and the set up and the load step over all database-systems. The lowest execution time is highlighted in each row, for example:</p>
+<table>
+  <thead>
+    <tr>
+      <th align="left">QueryScenario </th>
+      <th align="left">Phase </th>
+      <th align="right">sqlite4java </th>
+      <th align="right">SQLite-Xerial </th>
+      <th align="right">PostgreSQL </th>
+      <th align="right">Virtuoso </th>
+      <th align="right">Fuseki </th>
+      <th align="right">MongoDB </th>
+      <th align="right">ArangoDB </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left">Set up </td>
+      <td align="left"> </td>
+      <td align="right">21.42 ms </td>
+      <td align="right">67.42 ms </td>
+      <td align="right">246.23 ms </td>
+      <td align="right">0.96 ms </td>
+      <td align="right"><strong>0.00 ms</strong> </td>
+      <td align="right">3.68 ms </td>
+      <td align="right">179.59 ms </td>
+    </tr>
+    <tr>
+      <td align="left">Load </td>
+      <td align="left"> </td>
+      <td align="right">23510.82 ms </td>
+      <td align="right">18206.71 ms </td>
+      <td align="right">27151.81 ms </td>
+      <td align="right"><strong>8227.13 ms</strong> </td>
+      <td align="right">30703.51 ms </td>
+      <td align="right">31006.20 ms </td>
+      <td align="right">37685.51 ms </td>
+    </tr>
+    <tr>
+      <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY</font> </td>
+      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
+      <td align="right"><font color="#C0C0C0"> 327.59 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 341.15 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> <strong>187.91 ms</strong></font> </td>
+      <td align="right"><font color="#C0C0C0"> 2527.07 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 3077.42 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 666.65 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 1697.89 ms</font> </td>
+    </tr>
+    <tr>
+      <td align="left">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY </td>
+      <td align="left">Query </td>
+      <td align="right">0.43 ms </td>
+      <td align="right"><strong>0.15 ms</strong> </td>
+      <td align="right">1.16 ms </td>
+      <td align="right">302.60 ms </td>
+      <td align="right">36.11 ms </td>
+      <td align="right">61.52 ms </td>
+      <td align="right">127.41 ms </td>
+    </tr>
+    <tr>
+      <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES</font> </td>
+      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
+      <td align="right"><font color="#C0C0C0"> 154.34 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 369.34 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 193.49 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> <strong>145.26 ms</strong></font> </td>
+      <td align="right"><font color="#C0C0C0"> 2130.68 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 587.62 ms</font> </td>
+      <td align="right"><font color="#C0C0C0"> 1659.46 ms</font> </td>
+    </tr>
+    <tr>
+      <td align="left">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES </td>
+      <td align="left">Query </td>
+      <td align="right">0.86 ms </td>
+      <td align="right"><strong>0.73 ms</strong> </td>
+      <td align="right">1.85 ms </td>
+      <td align="right">5135.57 ms </td>
+      <td align="right">37.88 ms </td>
+      <td align="right">451.85 ms </td>
+      <td align="right">1283.15 ms </td>
+    </tr>
+  </tbody>
+</table><p><strong>Testseries information</strong><br/>This part lists the datasets of the testseries used for that benchmark. For each dataset, the file size is shown.</p><p><strong>Evaluation details for each database-system</strong><br/>A table of that part exists for each database-system. It shows for each query scenario and the set up and the load step execution times. In cases of read-only query scenarios, that are executed three times, the results are differentiated in average, min and max. For example:</p>
+<table>
+  <thead>
+    <tr>
+      <th align="left">QueryScenario </th>
+      <th align="left">Phase </th>
+      <th align="right">First time </th>
+      <th align="right">Average time </th>
+      <th align="right">Min time </th>
+      <th align="right">Max time </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left">Set up </td>
+      <td align="left"> </td>
+      <td align="right">67.42 ms </td>
+      <td align="right"> </td>
+      <td align="right"> </td>
+      <td align="right"> </td>
+    </tr>
+    <tr>
+      <td align="left">Load </td>
+      <td align="left"> </td>
+      <td align="right">18206.71 ms </td>
+      <td align="right"> </td>
+      <td align="right"> </td>
+      <td align="right"> </td>
+    </tr>
+    <tr>
+      <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY</font> </td>
+      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
+      <td align="right"><font color="#C0C0C0">341.15 ms</font> </td>
+      <td align="right"> </td>
+      <td align="right"> </td>
+      <td align="right"> </td>
+    </tr>
+    <tr>
+      <td align="left">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY </td>
+      <td align="left">Query </td>
+      <td align="right">0.31 ms </td>
+      <td align="right">0.15 ms </td>
+      <td align="right">0.08 ms </td>
+      <td align="right">0.31 ms </td>
+    </tr>
+    <tr>
+      <td align="left"><font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES</font> </td>
+      <td align="left"><font color="#C0C0C0">Prepare</font> </td>
+      <td align="right"><font color="#C0C0C0">369.34 ms</font> </td>
+      <td align="right"> </td>
+      <td align="right"> </td>
+      <td align="right"> </td>
+    </tr>
+    <tr>
+      <td align="left">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES </td>
+      <td align="left">Query </td>
+      <td align="right">0.47 ms </td>
+      <td align="right">0.73 ms </td>
+      <td align="right">0.47 ms </td>
+      <td align="right">1.47 ms </td>
+    </tr>
+  </tbody>
+</table><p><strong>Verify results</strong><br/>That part compares the data-results for each query scenario over all database-systems. For example, the aggregation query scenarios all have as data-result a list with two columns. That list is saved in the result and for the reporting that list is calculated into a hash. For all databases and each query scenario theses hashes are compared, because they have to be the same, if the results were the same over the databases.<br/>This table is highlighting the query scenarios, where the data-results were not the same over all databases. </p><h2><a name="projectOverview"></a><a href="#projectOverview">2. Project overview</a></h2><p>This chapter gives an overview over the software and makes it possible to execute the benchmark on the own.</p><h3><a name="basicProjectInformation"></a><a href="#basicProjectInformation">2.1 Basic project information</a></h3><p>The sources of the project are published on GitHub, see <a href="https://github.com/heussd/loddwhbench">https://github.com/heussd/loddwhbench</a>. It&rsquo;s a Java Maven project and needs Java 8 (JDK and JRE) to compile and run. For Maven, an internet connection is needed at compile-time. The IDE at developing was Eclipse.</p><p>Three datasets are included in the project, which allow the execution of testseries TINY and SMALL. For possibilities to get larger datasets, contact the repository owner Timm Heuss.</p><h3><a name="howToRun"></a><a href="#howToRun">2.2 How to run</a></h3><p>To run the project first ensure that all database systems, that should be benchmarked, are installed with default settings on your local computer. Both SQLite database-systems are delivered as binaries with the project, so for SQLite, nothing has to be installed.</p>
+<ul>
+  <li>For Open Virtuoso, please set the path to the installation directory on your local computer in <em>src/main/java/util/Config.java</em> before the compilation.</li>
+  <li>For PostgreSQL, please set a valid database-system user and password in <em>src/main/java/util/Config.java</em> before the compilation.</li>
+  <li>Please define the database-systems and the testseries you want to benchmark in top of <em>src/main/java/main/Benchmark.java</em> before the compilation. There you can just comment out the things you don&rsquo;t want to execute. It&rsquo;s not necessary to edit this, but it prevents databases you don&rsquo;t want to benchmark from showing up as failures in the reports.</li>
+</ul><p>If you are running the benchmark on a Mac with the operating system OS X, the database-systems will be automatically started and stopped over scripts. For all other operating systems, all databases have to be up and running before executing the benchmark.<br/>You run the benchmark by starting the class <em>src/main/java/main/Benchmark.java</em>. It&rsquo;s printed into the console, if a database-system finished the benchmark, and if the reports are successfully generated. Failures are also shown in the console.</p><h3><a name="reportingOverview"></a><a href="#reportingOverview">2.3 Reporting</a></h3><p>The generated reports are saved in the project sub-directory <em>results/</em> by default. The directory can be changed in <em>src/main/java/util/Config.java</em>.</p><p>The reporting is based on serialized results of testseries for all database-systems. Therefore, it is not necessary to execute the whole benchmark again, if for example the layout of the reports change. At any time, the class <em>src/main/java/main/Report.java</em> can be started and it will generate the reports of all serialized benchmark results found and overwrite the old ones.</p><h2><a name="projectDetail"></a><a href="#projectDetail">3. Project detail</a></h2><p>This chapter describes specific project parts in detail and shows the way to extend it with new database-systems or reports.</p><h3><a name="javaResources"></a><a href="#javaResources">3.1 Java resources</a></h3><p>The resources of this project are located in <em>src/main/resources/</em>.</p><p><strong>Queries</strong><br/>In the sub-folder <em>queries/</em> are files for each query scenario for most database-system. They contain the respective, for example, SQL or SPARQL query of the query scenario. The content is loaded while a query scenario is prepared. The queries in their query languages are separated from the code to make it easier to modify them.</p><p><strong>Reports</strong><br/>The sub-folder <em>reports/</em> contains the Markdown and CSV templates for all report parts, see <a href="#reportingDetail">reporting</a>.</p><p><strong>Shells</strong><br/>The sub-folder <em>shell/</em> contains scrips for starting and stopping different database-systems on a mac with the operating system OS X. The respective scripts are executed at the beginning and the end of the benchmark on a database.</p><p><strong>Test datasets</strong><br/>In resources are also three datasets included, which contains 1,000 or 10,000 or 100,000 entities. They make it possible to execute the testseries TINY and SMALL on the local machine.</p><h3><a name="importantJavaClasses"></a><a href="#importantJavaClasses">3.2 Important java classes</a></h3><p><strong>src/main/java/main/Benchmark.java</strong><br/>This class controls the whole benchmarking workflow and is the one to be executed if the benchmark should run.</p><p><strong>src/main/java/main/BenchmarkObject.java</strong><br/>An object of this class exists for every database-system benchmarked in every testserie and contains the measured execution times and the query results. Objects of this class are serialized for the reporting.</p><p><strong>src/main/java/main/Report.java</strong><br/>This class controls the whole reporting workflow and can be executed at any time to override old reports.</p><p><strong>src/main/java/database/Database.java</strong><br/>This interface has to be implemented by all database-systems that should run in that benchmark.</p><p><strong>src/main/java/report/Reports.java</strong><br/>This class is the main entrance to the reporting system based on a template engine used in the reporting workflow. This class builds the different data-models for the templates of the report parts, see <a href="#reportingDetail">reporting detail</a>.</p><p><strong>src/main/java/util/Codes.java</strong><br/>This enum contains all possible fields the entities in the datasets can have.</p><p><strong>src/main/java/util/Config.java</strong><br/>This class contains different config settings. There are settings for specific database-systems, but also global settings which can change the behaviour of the benchmark process. The settings explain their selfes over their name.</p><p><strong>src/main/java/util/Dataset.java</strong><br/>This enum contains all existing datasets and their file pathes.</p><p><strong>src/main/java/util/QueryResult.java</strong><br/>An object of this class contains the query results of a single query scenario. It can take <a href="#queryScenarios">different types of query results</a> and calculate hashes over them to compare the results with others.</p><p><strong>src/main/java/util/QueryScenario.java</strong><br/>This enum contains all query scenarios that are called on the database-implementation interface.</p><p><strong>src/main/java/util/TestSeries.java</strong><br/>This enum contains the five testseries and which datasets are included in them.</p><p><strong>src/main/java/util.dumper/Helpers.java</strong><br/>This class contains static methods for recurring tasks, for example converting big numbers into a scientific notation (for example 6,720,000,000 ms to 6.72*10^9 ms or 6.72E9 ms).</p><p><strong>src/main/java/main/ReadmeToHtml.java</strong><br/>This class compiles this Readme.md into a HTML document in the same directory.</p><p><strong>pom.xml</strong><br/>This file contains all Maven settings and dependencies.</p><h3><a name="evaluationDetail"></a><a href="#evaluationDetail">3.3 Database implementations</a></h3><p>There is a java class for each database-system included in that benchmark, called database implementation. All of theses classes implement the interface found in <em>src/main/java/database/Database.java</em> and lie in the same package. The interface is used by the benchmarking process. These database implementations do the communication with the particular database-systems. The interface forces the following members to be implemented:</p>
+<ul>
+  <li>String getName()</li>
+  <li>String getVersion()</li>
+  <li>void start()</li>
+  <li>void stop()</li>
+  <li>void clean()</li>
+  <li>void setUp()</li>
+  <li>void load(Dataset)</li>
+  <li>void prepare(QueryScenario)</li>
+  <li>QueryResult query(QueryScenario)</li>
+</ul><p>For the database-systems with a query language, like SQL or SPARQL, the QueryScenario-queries are placed in files in <a href="#javaResources">the java resources of the project</a> to be easier modified. The implementation then has to load the specific query from file in the prepare step. For MongoDB, for example, the queries are implemented in code, because MongoDB provides a java driver that also maps query language functions to java methods and one objective of that benchmark is to use the database-systems like anybody would in practice.</p><h4><a name="modifyDatabases"></a><a href="#modifyDatabases">3.3.1 Modify database implementations</a></h4><p>Modifying database implementations in most cases means changing the implementation of the different query scenarios or the procedure to load data. So if, for example, for one database-system a better or faster way to load the datasets as the current one was found, the load method of the database-implementation has to be modified. And if, for example, a query scenario changes in any way, the query for it has to be updated in the database-implementation.<br/>New query scenarios of course have to be newly implemented for all database-implementations.</p><h4><a name="addRemoveDatabases"></a><a href="#addRemoveDatabases">3.3.2 Add or remove database implementations</a></h4><p>For removing database-implementations, remove the respective class and remove the single calls to it from <em>src/main/java/main/Benchmark.java</em> and <em>src/main/java/main/Report.java</em>.</p><p>For adding a new database-implementation, add a new class in package <em>src/main/java/database/</em> that implements the interface <em>src/main/java/database/Database.java</em>. Then let the <em>src/main/java/main/Benchmark.java</em> and the <em>src/main/java/main/Report.java</em> know about the new implementation. The benchmark then can handle the new database-implementation. Reports will work out of the box.</p><h3><a name="reportingDetail"></a><a href="#reportingDetail">3.4 Reporting</a></h3><p>The reports are generated over a template engine, called <a href="http://freemarker.incubator.apache.org/">FreeMarker</a>. <a href="#benchmarkReporting">Every report part</a> has its own FreeMarker template which can be found in <a href="#javaResources">the java resources of the project</a>.<br/>A template is a layout which is reusable for different data. While the reporting step is executed, so called models, basically java classes with variables for the data, are built, and these models are passed into the templates, where they are used by the template engine to write the data into the report. FreeMarker provides a template language, which can be used for conditional output, loops over lists of data, converting numbers and many more.</p><p>There are two types of reporting layouts: Markdown and CSV. The HTML reports are built from the Markdown ones.</p><h4><a name="modifyReports"></a><a href="#modifyReports">3.4.1 Modify reporting layouts</a></h4><p>For modifying the layout of the report parts, or, for example, adding non-variable text or making parts bold or italic, the templates have to be modified. The templates can be found by the report part name in <a href="#javaResources">the java resources of the project</a>.</p><p>For reordering the report parts in the report, the class <em>src/main/java/main/Report.java</em>, methods <em>makeReports()</em> and <em>makeCsvReports()</em>, have to be edited. The order of the report parts executed in that methods is the same as they show up in the report. After that, reorder the lines in the table of contents template too.</p><h4><a name="addInformationToReports"></a><a href="#addInformationToReports">3.4.2 Add new information to reports</a></h4><p>As already mentioned, so called data-models are passed into the templates. If it is necessary to add variable data to an existing report part, modify its data-model and the relevant classes in package <em>src/main/java/report</em> to hold the new data, just like the already existing data. After this is done, the new variables can be used in the templates like the other ones.</p><h4><a name="addRemoveReports"></a><a href="#addRemoveReports">3.4.3 Add or remove reports</a></h4><p>To remove a report part, remove the template and the code which generates its data-model. For a short-time removal, it is sufficient to comment out the report-generation-call in class <em>src/main/java/main/Reports.java</em>.</p><p>To add new report parts, add a new template and add the relevant code to build its data-model. It gets more complicated the more complex the part should be. Basically, a data-model for FreeMarker is a HashMap from key-strings to value-objects. In the template, the variables are referenced over the key-strings. If the value-objects are a primitive type, they can directly be used in the template. If the value-objects are a non-primitive type, like own java classes, these classes have to implement the FreeMarker interface <em>TemplateHashModel</em>, which let&rsquo;s you return the variables of the data-model to keys given into the interface. The best way to add new report parts is to look how it is done in the four other report parts, and to imitate it.</p>
