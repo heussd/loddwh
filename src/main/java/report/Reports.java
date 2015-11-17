@@ -28,7 +28,7 @@ public class Reports {
 	
 	public Reports() throws Exception{
 		cfg = new Configuration(Configuration.VERSION_2_3_22);
-		cfg.setDirectoryForTemplateLoading(new File(Reports.class.getResource("/reports/").getFile()));
+		cfg.setDirectoryForTemplateLoading(new File(Reports.class.getResource("/reports/").toURI()));
 		cfg.setDefaultEncoding("UTF-8");
 		cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);				
 	}

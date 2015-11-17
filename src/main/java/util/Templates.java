@@ -52,7 +52,7 @@ public class Templates {
 			// a
 			// plain directory for it, but non-file-system sources are possible
 			// too:
-			configuration.setDirectoryForTemplateLoading(new File(Templates.class.getResource("/queries/").getFile()));
+			configuration.setDirectoryForTemplateLoading(new File(Templates.class.getResource("/queries/").toURI()));
 
 			// Set the preferred charset template files are stored in. UTF-8 is
 			// a good choice in most applications:

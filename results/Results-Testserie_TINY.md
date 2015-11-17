@@ -71,7 +71,7 @@
 
 | Test Series TINY | Dataset Size |
 | :-- | --: |
-| hebis_1000_records | 0.077 MB |
+| hebis_1000_records | 0.000 MB |
 
 ## <a name="sqlite4java"></a>[Evaluation Details for sqlite4java, Version 392 with SQLite 3.8.7, Test Series TINY](#sqlite4java)
 

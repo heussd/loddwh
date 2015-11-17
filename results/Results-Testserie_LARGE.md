@@ -71,7 +71,6 @@
 
 | Test Series LARGE | Dataset Size |
 | :-- | --: |
-| hebis_10147116_13050073_rdf_gz | 206.285 MB |
 | hebis_29873806_36057474_rdf_gz | 298.021 MB |
 
 ## <a name="sqlite4java"></a>[Evaluation Details for sqlite4java, Version 392 with SQLite 3.8.7, Test Series LARGE](#sqlite4java)
