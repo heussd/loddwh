@@ -1,0 +1,271 @@
+2015-11-17T03:19:22Z [1085] INFO Authentication is turned off
+2015-11-17T03:19:22Z [1085] INFO ArangoDB (version 2.6.9 [darwin]) is ready for business. Have fun!
+2015-11-17T03:19:45Z [1085] INFO creating database 'loddwhbench', directory '/Users/th/arangoDB/databases/database-26629072'
+2015-11-17T03:19:45Z [1085] INFO created application directory '/usr/local/var/lib/arangodb-apps/_db/loddwhbench' for database 'loddwhbench'
+2015-11-17T03:19:45Z [1085] INFO collection '_users' does not exist, no authentication available
+2015-11-17T03:19:45Z [1085] INFO In database 'loddwhbench': No version information file found in database directory.
+2015-11-17T03:19:45Z [1085] INFO In database 'loddwhbench': Found 24 defined task(s), 19 task(s) to run
+2015-11-17T03:19:45Z [1085] INFO In database 'loddwhbench': state prod/standalone/init, tasks setupUsers, createUsersIndex, addDefaultUser, updateUserModel, setupGraphs, createModules, createRouting, createKickstarterConfiguration, insertRedirectionsAll, setupAal, createAalIndex, setupAqlFunctions, createStatistics, createConfiguration, systemAppEndpoints, setupQueues, setupJobs, moveFoxxApps, dropAal
+2015-11-17T03:19:45Z [1085] INFO In database 'loddwhbench': init successfully finished
+2015-11-17T03:20:13Z [1085] INFO dropping database 'loddwhbench', directory '/Users/th/arangoDB/databases/database-26629072'
+2015-11-17T03:20:13Z [1085] INFO creating database 'loddwhbench', directory '/Users/th/arangoDB/databases/database-44454864'
+2015-11-17T03:20:13Z [1085] INFO collection '_users' does not exist, no authentication available
+2015-11-17T03:20:13Z [1085] INFO In database 'loddwhbench': No version information file found in database directory.
+2015-11-17T03:20:13Z [1085] INFO In database 'loddwhbench': Found 24 defined task(s), 19 task(s) to run
+2015-11-17T03:20:13Z [1085] INFO In database 'loddwhbench': state prod/standalone/init, tasks setupUsers, createUsersIndex, addDefaultUser, updateUserModel, setupGraphs, createModules, createRouting, createKickstarterConfiguration, insertRedirectionsAll, setupAal, createAalIndex, setupAqlFunctions, createStatistics, createConfiguration, systemAppEndpoints, setupQueues, setupJobs, moveFoxxApps, dropAal
+2015-11-17T03:20:13Z [1085] INFO In database 'loddwhbench': init successfully finished
+2015-11-17T04:44:21Z [1085] ERROR cannot create json file '/Users/th/arangoDB/SHUTDOWN.tmp': Too many open files
+2015-11-17T04:44:21Z [1085] ERROR unable to write WAL state file '/Users/th/arangoDB/SHUTDOWN'
+2015-11-17T04:44:21Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:21Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:21Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:21Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:21Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:21Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:21Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:21Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:22Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:22Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:23Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:23Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/journals/logfile-1328628519888.db': Too many open files
+2015-11-17T04:44:24Z [1085] ERROR unable to create logfile '/Users/th/arangoDB/journals/logfile-1328628519888.db': system error
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] ERROR unable to create logfile: system error
+2015-11-17T04:44:24Z [1085] ERROR unable to create new WAL reserve logfile
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:24Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:24Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:25Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:25Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:25Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:25Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:25Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:25Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:25Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:25Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:25Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:25Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:25Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:25Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:25Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:25Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:25Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:25Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:25Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:25Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:25Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:25Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:25Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:25Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:25Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:25Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:25Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:25Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:25Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/databases/database-44454864/collection-60773328/temp-1175062270928.db': Too many open files
+2015-11-17T04:44:25Z [1085] WARNING got unexpected error in CollectorThread::collect: no journal
+2015-11-17T04:44:25Z [1085] ERROR cannot create datafile '/Users/th/arangoDB/journals/logfile-1329070625744.db': Too many open files
+2015-11-17T04:44:25Z [1085] ERROR unable to create logfile '/Users/th/arangoDB/journals/logfile-1329070625744.db': system error
+2015-11-17T04:44:25Z [1085] ERROR unable to create logfile: system error
+2015-11-17T04:44:25Z [1085] ERROR unable to create new WAL reserve logfile
+
