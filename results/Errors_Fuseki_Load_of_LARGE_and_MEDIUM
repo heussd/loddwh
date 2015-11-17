@@ -1,0 +1,27 @@
+th@crystalwell:~/Ph.D./2016 Ph.D. Thesis/d2/loddwhbench/src/main/resources/shell$ chmod +x *
+th@crystalwell:~/Ph.D./2016 Ph.D. Thesis/d2/loddwhbench/src/main/resources/shell$ cd ..
+th@crystalwell:~/Ph.D./2016 Ph.D. Thesis/d2/loddwhbench/src/main/resources$ cd ..
+th@crystalwell:~/Ph.D./2016 Ph.D. Thesis/d2/loddwhbench/src/main$ cd ..
+th@crystalwell:~/Ph.D./2016 Ph.D. Thesis/d2/loddwhbench/src$ cd ..
+th@crystalwell:~/Ph.D./2016 Ph.D. Thesis/d2/loddwhbench$ cd target/classes/shell/
+th@crystalwell:~/Ph.D./2016 Ph.D. Thesis/d2/loddwhbench/target/classes/shell$ chmod +x *
+th@crystalwell:~/Ph.D./2016 Ph.D. Thesis/d2/loddwhbench/target/classes/shell$ ./fuseki.sh 
+[2015-11-17 10:16:55] Server     INFO  Running in read-only mode for /DB
+[2015-11-17 10:16:55] Server     INFO  Fuseki 2.3.0 2015-07-25T17:11:28+0000
+[2015-11-17 10:16:55] Config     INFO  FUSEKI_HOME=/Users/th/Ph.D./Applications/DB/apache-jena-fuseki-2.3.0
+[2015-11-17 10:16:55] Config     INFO  FUSEKI_BASE=/Users/th/Ph.D./Applications/DB/apache-jena-fuseki-2.3.0/run
+[2015-11-17 10:16:55] Servlet    INFO  Initializing Shiro environment
+[2015-11-17 10:16:55] Config     INFO  Shiro file: file:///Users/th/Ph.D./Applications/DB/apache-jena-fuseki-2.3.0/run/shiro.ini
+[2015-11-17 10:16:55] Config     INFO  Template file: templates/config-tdb-dir
+[2015-11-17 10:16:55] Config     INFO  TDB dataset: directory=DB
+[2015-11-17 10:16:56] Config     INFO  Register: /DB
+[2015-11-17 10:16:56] Server     INFO  Started 2015/11/17 10:16:56 CET on port 3030
+[2015-11-17 10:17:20] Fuseki     INFO  [1] POST http://localhost:3030/DB/update
+[2015-11-17 10:17:20] Fuseki     INFO  [1] POST /DB :: 'update' :: [application/sparql-update] ? 
+[2015-11-17 10:17:20] Fuseki     INFO  [1] 204 No Content (21 ms)
+[2015-11-17 10:17:32] Fuseki     INFO  [2] POST http://localhost:3030/DB/data?default
+[2015-11-17 10:17:32] Fuseki     INFO  [2] POST /DB :: 'data' :: [application/rdf+xml] ? default
+[...]
+[2015-11-17 11:24:40] Fuseki     ERROR [line: 36775041, col: 25] {E213} java.util.concurrent.TimeoutException: Idle timeout expired: 30002/30000 ms
+[2015-11-17 11:24:41] Fuseki     INFO  [2] 500 Server Error (853.320 s)
+
