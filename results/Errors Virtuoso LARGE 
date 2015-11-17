@@ -1,0 +1,28 @@
+09:30:19 OpenLink Virtuoso Universal Server
+09:30:19 Version 07.20.3214-pthreads for Darwin as of Aug 18 2015
+09:30:19 uses parts of OpenSSL, PCRE, Html Tidy
+09:30:20 SQL Optimizer enabled (max 1000 layouts)
+09:30:20 Compiler unit is timed at 0.000513 msec
+09:30:23 Server received signal 28. Continuing with the default action for that signal.
+09:30:25 Checkpoint started
+09:30:25 Roll forward started
+09:30:25 Roll forward complete
+09:30:26 Checkpoint started
+09:30:26 Checkpoint finished, log reused
+09:30:26 Checkpoint started
+09:30:26 Checkpoint finished, log reused
+09:30:26 Checkpoint started
+09:30:26 Checkpoint finished, log reused
+09:30:26 Checkpoint started
+09:30:26 Checkpoint finished, log reused
+09:30:26 Checkpoint started
+09:30:27 Checkpoint finished, log reused
+09:30:27 Checkpoint started
+09:30:27 Checkpoint finished, log reused
+09:30:29 HTTP/WebDAV server online at 8890
+09:30:29 Server online at 1111 (pid 1788)
+09:31:49 PL LOG: Loader started
+09:31:49 PL LOG:  File /Users/th/Ph.D./hebisdumps/noHeader/hebis-29873806-36057474.rdf.gz error 22007 XM033: XML parser detected an error:
+	ERROR  : Attribute name without value is allowed in HTML but not in XML
+at li
+09:31:49 PL LOG: No more files to load. Loader has finished,
