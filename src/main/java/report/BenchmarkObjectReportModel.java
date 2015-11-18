@@ -84,10 +84,9 @@ public class BenchmarkObjectReportModel {
 				e.nextElement(); // Skip 1
 			while (e.hasMoreElements()) {
 				Hashtable<QueryScenario, Double> cur = e.nextElement();
-				if (!cur.containsKey(queryScenario))
-					continue;
-				if (cur.get(queryScenario) > val)
-					val = cur.get(queryScenario);
+				if (cur.containsKey(queryScenario))
+					if (cur.get(queryScenario) > val)
+						val = cur.get(queryScenario);
 			}
 			return val;
 		} catch (NullPointerException e) {
