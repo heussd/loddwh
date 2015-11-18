@@ -5,54 +5,54 @@
 
 | QueryScenario | Phase | [sqlite4java](#sqlite4java) | [SQLite-Xerial](#SQLite-Xerial) | [PostgreSQL](#PostgreSQL) | [Virtuoso](#Virtuoso) | [Fuseki](#Fuseki) | [MongoDB](#MongoDB) | [ArangoDB](#ArangoDB) |
 | :-- | :-- | --: | --: | --: | --: | --: | --: | --: |
-| Set up |  | 19.93 ms | 68.01 ms | 246.23 ms | **0.96 ms** | Error | 3.68 ms | 179.59 ms |
-| Load |  | 19048.50 ms | 17948.44 ms | 27151.81 ms | **8227.13 ms** | Error | 31006.20 ms | 37685.51 ms |
-| <font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 314.78 ms</font> |<font color="#C0C0C0"> 354.71 ms</font> |<font color="#C0C0C0"> **187.91 ms**</font> |<font color="#C0C0C0"> 2527.07 ms</font> |<font color="#C0C0C0"> Error</font> |<font color="#C0C0C0"> 666.65 ms</font> |<font color="#C0C0C0"> 1697.89 ms</font> |
-| ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY | Query | 0.40 ms | **0.14 ms** | 1.16 ms | 302.60 ms | Error | 61.52 ms | 127.41 ms |
-| <font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 147.43 ms</font> |<font color="#C0C0C0"> 415.04 ms</font> |<font color="#C0C0C0"> 193.49 ms</font> |<font color="#C0C0C0"> **145.26 ms**</font> |<font color="#C0C0C0"> Error</font> |<font color="#C0C0C0"> 587.62 ms</font> |<font color="#C0C0C0"> 1659.46 ms</font> |
-| ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES | Query | 0.83 ms | **0.43 ms** | 1.85 ms | 5135.57 ms | Error | 451.85 ms | 1283.15 ms |
-| <font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_100_ENTITIES</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> **171.29 ms**</font> |<font color="#C0C0C0"> 437.42 ms</font> |<font color="#C0C0C0"> 186.93 ms</font> |<font color="#C0C0C0"> 187.45 ms</font> |<font color="#C0C0C0"> Error</font> |<font color="#C0C0C0"> 614.22 ms</font> |<font color="#C0C0C0"> 1684.48 ms</font> |
-| ENTITY_RETRIEVAL_BY_ID_100_ENTITIES | Query | 2.21 ms | **1.84 ms** | 4.00 ms | 40300.99 ms | Error | 4643.60 ms | 12976.55 ms |
-| <font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.63 ms</font> |<font color="#C0C0C0"> 193.46 ms</font> |<font color="#C0C0C0"> 80.62 ms</font> |<font color="#C0C0C0"> 1.82 ms</font> |<font color="#C0C0C0"> Error</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
-| AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10 | Query | 134.64 ms | 32.45 ms | 41.04 ms | **21.84 ms** | Error | 83.63 ms | 158.19 ms |
-| <font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.57 ms</font> |<font color="#C0C0C0"> 218.41 ms</font> |<font color="#C0C0C0"> 96.21 ms</font> |<font color="#C0C0C0"> 1.24 ms</font> |<font color="#C0C0C0"> Error</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
-| AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100 | Query | 143.94 ms | 32.09 ms | 41.83 ms | **27.45 ms** | Error | 83.09 ms | 145.58 ms |
-| <font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.72 ms</font> |<font color="#C0C0C0"> 208.74 ms</font> |<font color="#C0C0C0"> 99.40 ms</font> |<font color="#C0C0C0"> 1.53 ms</font> |<font color="#C0C0C0"> Error</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
-| AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL | Query | 154.91 ms | **40.26 ms** | 50.25 ms | 116.82 ms | Error | 110.77 ms | 301.44 ms |
-| <font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_TOP10</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 3.74 ms</font> |<font color="#C0C0C0"> 389.29 ms</font> |<font color="#C0C0C0"> 218.90 ms</font> |<font color="#C0C0C0"> 1.39 ms</font> |<font color="#C0C0C0"> Error</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
-| AGGREGATE_ISSUES_PER_DECADE_TOP10 | Query | 174.19 ms | 225.04 ms | **46.10 ms** | 136.46 ms | Error | 127.21 ms | 399.98 ms |
-| <font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_TOP100</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.63 ms</font> |<font color="#C0C0C0"> 406.49 ms</font> |<font color="#C0C0C0"> 219.27 ms</font> |<font color="#C0C0C0"> 2.12 ms</font> |<font color="#C0C0C0"> Error</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
-| AGGREGATE_ISSUES_PER_DECADE_TOP100 | Query | 164.77 ms | 228.12 ms | **44.40 ms** | 133.34 ms | Error | 114.53 ms | 383.72 ms |
-| <font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_ALL</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.52 ms</font> |<font color="#C0C0C0"> 422.42 ms</font> |<font color="#C0C0C0"> 213.19 ms</font> |<font color="#C0C0C0"> 1.39 ms</font> |<font color="#C0C0C0"> Error</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
-| AGGREGATE_ISSUES_PER_DECADE_ALL | Query | 161.50 ms | 226.51 ms | **46.88 ms** | 143.11 ms | Error | 114.41 ms | 375.78 ms |
-| <font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_STUDIES</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.57 ms</font> |<font color="#C0C0C0"> 362.61 ms</font> |<font color="#C0C0C0"> 159.15 ms</font> |<font color="#C0C0C0"> 7.14 ms</font> |<font color="#C0C0C0"> Error</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> 1437.42 ms</font> |
-| CONDITIONAL_TABLE_SCAN_ALL_STUDIES | Query | 207.82 ms | 299.94 ms | **130.40 ms** | 16675.65 ms | Error | 217.29 ms | 152.86 ms |
-| <font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.56 ms</font> |<font color="#C0C0C0"> 2.69 ms</font> |<font color="#C0C0C0"> 111.25 ms</font> |<font color="#C0C0C0"> 7.12 ms</font> |<font color="#C0C0C0"> Error</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
-| CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES | Query | 980.37 ms | 1189.01 ms | 1031.39 ms | 2.99E5 ms | Error | **515.95 ms** | 3203.18 ms |
-| <font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.58 ms</font> |<font color="#C0C0C0"> 2.10 ms</font> |<font color="#C0C0C0"> 339.09 ms</font> |<font color="#C0C0C0"> 6.93 ms</font> |<font color="#C0C0C0"> Error</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
-| CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES | Query | 250.47 ms | 339.87 ms | **128.86 ms** | 13504.67 ms | Error | 267.11 ms | 747.21 ms |
-| <font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 15154.92 ms</font> |<font color="#C0C0C0"> 15637.78 ms</font> |<font color="#C0C0C0"> 176.48 ms</font> |<font color="#C0C0C0"> 80.29 ms</font> |<font color="#C0C0C0"> Error</font> |<font color="#C0C0C0"> **79.33 ms**</font> |<font color="#C0C0C0"> 18441.61 ms</font> |
-| GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY | Query | **0.15 ms** | 0.17 ms | 8.33 ms | 6.51 ms | Error | 269.81 ms | 73.29 ms |
-| <font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 75.32 ms</font> |<font color="#C0C0C0"> 93.38 ms</font> |<font color="#C0C0C0"> 71.64 ms</font> |<font color="#C0C0C0"> **44.47 ms**</font> |<font color="#C0C0C0"> Error</font> |<font color="#C0C0C0"> 78.34 ms</font> |<font color="#C0C0C0"> 827.13 ms</font> |
-| GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES | Query | **0.47 ms** | 0.57 ms | 5.92 ms | 0.49 ms | Error | 3042.83 ms | 679.41 ms |
-| <font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 88.96 ms</font> |<font color="#C0C0C0"> 98.20 ms</font> |<font color="#C0C0C0"> 71.29 ms</font> |<font color="#C0C0C0"> **68.81 ms**</font> |<font color="#C0C0C0"> Error</font> |<font color="#C0C0C0"> 80.58 ms</font> |<font color="#C0C0C0"> 1601.05 ms</font> |
-| GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES | Query | 14.32 ms | 12.07 ms | 6.65 ms | **6.14 ms** | Error | 41676.83 ms | 6267.49 ms |
-| <font color="#C0C0C0">SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 3.33 ms</font> |<font color="#C0C0C0"> 2.18 ms</font> |<font color="#C0C0C0"> 9.37 ms</font> |<font color="#C0C0C0"> 2.14 ms</font> |<font color="#C0C0C0"> Error</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
-| SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY | Query | 1.67 ms | **0.82 ms** | 680.37 ms | 16271.80 ms | Error | 730.76 ms | 7259.30 ms |
-| <font color="#C0C0C0">SCHEMA_CHANGE_INTRODUCE_STRING_OP</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.83 ms</font> |<font color="#C0C0C0"> 212.58 ms</font> |<font color="#C0C0C0"> 138.84 ms</font> |<font color="#C0C0C0"> 191.79 ms</font> |<font color="#C0C0C0"> Error</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
-| SCHEMA_CHANGE_INTRODUCE_STRING_OP | Query | 776.19 ms | 899.90 ms | 4984.46 ms | **489.95 ms** | Error | 10512.26 ms | 6907.28 ms |
-| <font color="#C0C0C0">SCHEMA_CHANGE_MIGRATE_RDF_TYPE</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.81 ms</font> |<font color="#C0C0C0"> 2.31 ms</font> |<font color="#C0C0C0"> 191.10 ms</font> |<font color="#C0C0C0"> 5.32 ms</font> |<font color="#C0C0C0"> Error</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
-| SCHEMA_CHANGE_MIGRATE_RDF_TYPE | Query | **1619.26 ms** | 2103.30 ms | 14700.13 ms | 91227.25 ms | Error | 2156.42 ms | 28700.81 ms |
-| <font color="#C0C0C0">SCHEMA_CHANGE_REMOVE_RDF_TYPE</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 1.04 ms</font> |<font color="#C0C0C0"> 2.14 ms</font> |<font color="#C0C0C0"> 10.33 ms</font> |<font color="#C0C0C0"> 1.15 ms</font> |<font color="#C0C0C0"> Error</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
-| SCHEMA_CHANGE_REMOVE_RDF_TYPE | Query | 442.17 ms | 576.15 ms | 20.84 ms | **0.19 ms** | Error | 404.88 ms | 5876.80 ms |
-| <font color="#C0C0C0">UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.44 ms</font> |<font color="#C0C0C0"> 160.42 ms</font> |<font color="#C0C0C0"> 165.19 ms</font> |<font color="#C0C0C0"> 1.01 ms</font> |<font color="#C0C0C0"> Error</font> |<font color="#C0C0C0"> 0.01 ms</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
-| UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM | Query | 529.73 ms | 908.66 ms | 2348.41 ms | 3837.52 ms | Error | **346.10 ms** | 6928.84 ms |
-| <font color="#C0C0C0">UPDATE_HIGH_SELECTIVITY_NON_ISSUED</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.53 ms</font> |<font color="#C0C0C0"> 214.09 ms</font> |<font color="#C0C0C0"> 220.00 ms</font> |<font color="#C0C0C0"> 1.45 ms</font> |<font color="#C0C0C0"> Error</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
-| UPDATE_HIGH_SELECTIVITY_NON_ISSUED | Query | 82.10 ms | **28.92 ms** | 105.60 ms | 328.60 ms | Error | 60.63 ms | 1073.74 ms |
-| <font color="#C0C0C0">DELETE_LOW_SELECTIVITY_PAPER_MEDIUM</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.46 ms</font> |<font color="#C0C0C0"> 215.56 ms</font> |<font color="#C0C0C0"> 181.27 ms</font> |<font color="#C0C0C0"> Error</font> |<font color="#C0C0C0"> Error</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
-| DELETE_LOW_SELECTIVITY_PAPER_MEDIUM | Query | **305.24 ms** | 617.56 ms | 423.15 ms | Error | Error | 442.88 ms | 1213.62 ms |
-| <font color="#C0C0C0">DELETE_HIGH_SELECTIVIY_NON_ISSUED</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.41 ms</font> |<font color="#C0C0C0"> 18.81 ms</font> |<font color="#C0C0C0"> 121.94 ms</font> |<font color="#C0C0C0"> 883.94 ms</font> |<font color="#C0C0C0"> Error</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
-| DELETE_HIGH_SELECTIVIY_NON_ISSUED | Query | 8.94 ms | 4.64 ms | **2.14 ms** | 11342.42 ms | Error | 5.95 ms | 18.37 ms |
+| Set up |  | 19.93 ms | 68.01 ms | 246.23 ms | 0.96 ms | **0.00 ms** | 3.68 ms | 179.59 ms |
+| Load |  | 19048.50 ms | 17948.44 ms | 27151.81 ms | **8227.13 ms** | 30072.75 ms | 31006.20 ms | 37685.51 ms |
+| <font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 314.78 ms</font> |<font color="#C0C0C0"> 354.71 ms</font> |<font color="#C0C0C0"> **187.91 ms**</font> |<font color="#C0C0C0"> 2527.07 ms</font> |<font color="#C0C0C0"> 2966.76 ms</font> |<font color="#C0C0C0"> 666.65 ms</font> |<font color="#C0C0C0"> 1697.89 ms</font> |
+| ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY | Query | 0.40 ms | **0.14 ms** | 1.16 ms | 302.60 ms | 41.63 ms | 61.52 ms | 127.41 ms |
+| <font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 147.43 ms</font> |<font color="#C0C0C0"> 415.04 ms</font> |<font color="#C0C0C0"> 193.49 ms</font> |<font color="#C0C0C0"> **145.26 ms**</font> |<font color="#C0C0C0"> 2338.34 ms</font> |<font color="#C0C0C0"> 587.62 ms</font> |<font color="#C0C0C0"> 1659.46 ms</font> |
+| ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES | Query | 0.83 ms | **0.43 ms** | 1.85 ms | 5135.57 ms | 48.79 ms | 451.85 ms | 1283.15 ms |
+| <font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_100_ENTITIES</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> **171.29 ms**</font> |<font color="#C0C0C0"> 437.42 ms</font> |<font color="#C0C0C0"> 186.93 ms</font> |<font color="#C0C0C0"> 187.45 ms</font> |<font color="#C0C0C0"> 2747.84 ms</font> |<font color="#C0C0C0"> 614.22 ms</font> |<font color="#C0C0C0"> 1684.48 ms</font> |
+| ENTITY_RETRIEVAL_BY_ID_100_ENTITIES | Query | 2.21 ms | **1.84 ms** | 4.00 ms | 40300.99 ms | 153.49 ms | 4643.60 ms | 12976.55 ms |
+| <font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.63 ms</font> |<font color="#C0C0C0"> 193.46 ms</font> |<font color="#C0C0C0"> 80.62 ms</font> |<font color="#C0C0C0"> 1.82 ms</font> |<font color="#C0C0C0"> 0.84 ms</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
+| AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10 | Query | 134.64 ms | 32.45 ms | 41.04 ms | **21.84 ms** | 174.15 ms | 83.63 ms | 158.19 ms |
+| <font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.57 ms</font> |<font color="#C0C0C0"> 218.41 ms</font> |<font color="#C0C0C0"> 96.21 ms</font> |<font color="#C0C0C0"> 1.24 ms</font> |<font color="#C0C0C0"> 6.81 ms</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
+| AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100 | Query | 143.94 ms | 32.09 ms | 41.83 ms | **27.45 ms** | 81.54 ms | 83.09 ms | 145.58 ms |
+| <font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.72 ms</font> |<font color="#C0C0C0"> 208.74 ms</font> |<font color="#C0C0C0"> 99.40 ms</font> |<font color="#C0C0C0"> 1.53 ms</font> |<font color="#C0C0C0"> 0.70 ms</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
+| AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL | Query | 154.91 ms | **40.26 ms** | 50.25 ms | 116.82 ms | 458.24 ms | 110.77 ms | 301.44 ms |
+| <font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_TOP10</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 3.74 ms</font> |<font color="#C0C0C0"> 389.29 ms</font> |<font color="#C0C0C0"> 218.90 ms</font> |<font color="#C0C0C0"> 1.39 ms</font> |<font color="#C0C0C0"> 0.50 ms</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
+| AGGREGATE_ISSUES_PER_DECADE_TOP10 | Query | 174.19 ms | 225.04 ms | **46.10 ms** | 136.46 ms | 166.90 ms | 127.21 ms | 399.98 ms |
+| <font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_TOP100</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.63 ms</font> |<font color="#C0C0C0"> 406.49 ms</font> |<font color="#C0C0C0"> 219.27 ms</font> |<font color="#C0C0C0"> 2.12 ms</font> |<font color="#C0C0C0"> 0.48 ms</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
+| AGGREGATE_ISSUES_PER_DECADE_TOP100 | Query | 164.77 ms | 228.12 ms | **44.40 ms** | 133.34 ms | 144.22 ms | 114.53 ms | 383.72 ms |
+| <font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_ALL</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.52 ms</font> |<font color="#C0C0C0"> 422.42 ms</font> |<font color="#C0C0C0"> 213.19 ms</font> |<font color="#C0C0C0"> 1.39 ms</font> |<font color="#C0C0C0"> 0.47 ms</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
+| AGGREGATE_ISSUES_PER_DECADE_ALL | Query | 161.50 ms | 226.51 ms | **46.88 ms** | 143.11 ms | 112.12 ms | 114.41 ms | 375.78 ms |
+| <font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_STUDIES</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.57 ms</font> |<font color="#C0C0C0"> 362.61 ms</font> |<font color="#C0C0C0"> 159.15 ms</font> |<font color="#C0C0C0"> 7.14 ms</font> |<font color="#C0C0C0"> 0.48 ms</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> 1437.42 ms</font> |
+| CONDITIONAL_TABLE_SCAN_ALL_STUDIES | Query | 207.82 ms | 299.94 ms | **130.40 ms** | 16675.65 ms | 7521.54 ms | 217.29 ms | 152.86 ms |
+| <font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.56 ms</font> |<font color="#C0C0C0"> 2.69 ms</font> |<font color="#C0C0C0"> 111.25 ms</font> |<font color="#C0C0C0"> 7.12 ms</font> |<font color="#C0C0C0"> 0.70 ms</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
+| CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES | Query | 980.37 ms | 1189.01 ms | 1031.39 ms | 2.99E5 ms | 65087.94 ms | **515.95 ms** | 3203.18 ms |
+| <font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.58 ms</font> |<font color="#C0C0C0"> 2.10 ms</font> |<font color="#C0C0C0"> 339.09 ms</font> |<font color="#C0C0C0"> 6.93 ms</font> |<font color="#C0C0C0"> 2.85 ms</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
+| CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES | Query | 250.47 ms | 339.87 ms | **128.86 ms** | 13504.67 ms | 23235.87 ms | 267.11 ms | 747.21 ms |
+| <font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 15154.92 ms</font> |<font color="#C0C0C0"> 15637.78 ms</font> |<font color="#C0C0C0"> 176.48 ms</font> |<font color="#C0C0C0"> 80.29 ms</font> |<font color="#C0C0C0"> 661.71 ms</font> |<font color="#C0C0C0"> **79.33 ms**</font> |<font color="#C0C0C0"> 18441.61 ms</font> |
+| GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY | Query | **0.15 ms** | 0.17 ms | 8.33 ms | 6.51 ms | 136.78 ms | 269.81 ms | 73.29 ms |
+| <font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 75.32 ms</font> |<font color="#C0C0C0"> 93.38 ms</font> |<font color="#C0C0C0"> 71.64 ms</font> |<font color="#C0C0C0"> **44.47 ms**</font> |<font color="#C0C0C0"> 496.71 ms</font> |<font color="#C0C0C0"> 78.34 ms</font> |<font color="#C0C0C0"> 827.13 ms</font> |
+| GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES | Query | **0.47 ms** | 0.57 ms | 5.92 ms | 0.49 ms | 7.61 ms | 3042.83 ms | 679.41 ms |
+| <font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 88.96 ms</font> |<font color="#C0C0C0"> 98.20 ms</font> |<font color="#C0C0C0"> 71.29 ms</font> |<font color="#C0C0C0"> **68.81 ms**</font> |<font color="#C0C0C0"> 614.32 ms</font> |<font color="#C0C0C0"> 80.58 ms</font> |<font color="#C0C0C0"> 1601.05 ms</font> |
+| GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES | Query | 14.32 ms | 12.07 ms | 6.65 ms | **6.14 ms** | 122.48 ms | 41676.83 ms | 6267.49 ms |
+| <font color="#C0C0C0">SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 3.33 ms</font> |<font color="#C0C0C0"> 2.18 ms</font> |<font color="#C0C0C0"> 9.37 ms</font> |<font color="#C0C0C0"> 2.14 ms</font> |<font color="#C0C0C0"> 4.05 ms</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
+| SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY | Query | 1.67 ms | **0.82 ms** | 680.37 ms | 16271.80 ms | 12291.21 ms | 730.76 ms | 7259.30 ms |
+| <font color="#C0C0C0">SCHEMA_CHANGE_INTRODUCE_STRING_OP</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.83 ms</font> |<font color="#C0C0C0"> 212.58 ms</font> |<font color="#C0C0C0"> 138.84 ms</font> |<font color="#C0C0C0"> 191.79 ms</font> |<font color="#C0C0C0"> 1.46 ms</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
+| SCHEMA_CHANGE_INTRODUCE_STRING_OP | Query | 776.19 ms | 899.90 ms | 4984.46 ms | **489.95 ms** | 524.28 ms | 10512.26 ms | 6907.28 ms |
+| <font color="#C0C0C0">SCHEMA_CHANGE_MIGRATE_RDF_TYPE</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.81 ms</font> |<font color="#C0C0C0"> 2.31 ms</font> |<font color="#C0C0C0"> 191.10 ms</font> |<font color="#C0C0C0"> 5.32 ms</font> |<font color="#C0C0C0"> 3.92 ms</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
+| SCHEMA_CHANGE_MIGRATE_RDF_TYPE | Query | **1619.26 ms** | 2103.30 ms | 14700.13 ms | 91227.25 ms | 29899.91 ms | 2156.42 ms | 28700.81 ms |
+| <font color="#C0C0C0">SCHEMA_CHANGE_REMOVE_RDF_TYPE</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 1.04 ms</font> |<font color="#C0C0C0"> 2.14 ms</font> |<font color="#C0C0C0"> 10.33 ms</font> |<font color="#C0C0C0"> 1.15 ms</font> |<font color="#C0C0C0"> 0.99 ms</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
+| SCHEMA_CHANGE_REMOVE_RDF_TYPE | Query | 442.17 ms | 576.15 ms | 20.84 ms | **0.19 ms** | 8.06 ms | 404.88 ms | 5876.80 ms |
+| <font color="#C0C0C0">UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.44 ms</font> |<font color="#C0C0C0"> 160.42 ms</font> |<font color="#C0C0C0"> 165.19 ms</font> |<font color="#C0C0C0"> 1.01 ms</font> |<font color="#C0C0C0"> 2.31 ms</font> |<font color="#C0C0C0"> 0.01 ms</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
+| UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM | Query | 529.73 ms | 908.66 ms | 2348.41 ms | 3837.52 ms | 1964.35 ms | **346.10 ms** | 6928.84 ms |
+| <font color="#C0C0C0">UPDATE_HIGH_SELECTIVITY_NON_ISSUED</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.53 ms</font> |<font color="#C0C0C0"> 214.09 ms</font> |<font color="#C0C0C0"> 220.00 ms</font> |<font color="#C0C0C0"> 1.45 ms</font> |<font color="#C0C0C0"> 17.98 ms</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
+| UPDATE_HIGH_SELECTIVITY_NON_ISSUED | Query | 82.10 ms | **28.92 ms** | 105.60 ms | 328.60 ms | 4643.03 ms | 60.63 ms | 1073.74 ms |
+| <font color="#C0C0C0">DELETE_LOW_SELECTIVITY_PAPER_MEDIUM</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.46 ms</font> |<font color="#C0C0C0"> 215.56 ms</font> |<font color="#C0C0C0"> 181.27 ms</font> |<font color="#C0C0C0"> Error</font> |<font color="#C0C0C0"> 1.35 ms</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
+| DELETE_LOW_SELECTIVITY_PAPER_MEDIUM | Query | 305.24 ms | 617.56 ms | 423.15 ms | Error | **6.33 ms** | 442.88 ms | 1213.62 ms |
+| <font color="#C0C0C0">DELETE_HIGH_SELECTIVIY_NON_ISSUED</font> | <font color="#C0C0C0">Prepare</font> |<font color="#C0C0C0"> 0.41 ms</font> |<font color="#C0C0C0"> 18.81 ms</font> |<font color="#C0C0C0"> 121.94 ms</font> |<font color="#C0C0C0"> 883.94 ms</font> |<font color="#C0C0C0"> 0.92 ms</font> |<font color="#C0C0C0"> **0.00 ms**</font> |<font color="#C0C0C0"> **0.00 ms**</font> |
+| DELETE_HIGH_SELECTIVIY_NON_ISSUED | Query | 8.94 ms | 4.64 ms | **2.14 ms** | 11342.42 ms | 3.56 ms | 5.95 ms | 18.37 ms |
 
 # <a name="toc"></a>[Table of contents](#toc)
 
@@ -289,54 +289,54 @@
 
 | QueryScenario | Phase | 1st Exec | 2nd Exec | 3rd Exec | Average time | 
 | :-- | :-- | --: | --: | --: | --: |
-| Set up || Error |
-| Load || Error |
-| <font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">Error</font> |  |  |  |
-| ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY | Query | Error | Error | Error | Error |
-| <font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">Error</font> |  |  |  |
-| ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES | Query | Error | Error | Error | Error |
-| <font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_100_ENTITIES</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">Error</font> |  |  |  |
-| ENTITY_RETRIEVAL_BY_ID_100_ENTITIES | Query | Error | Error | Error | Error |
-| <font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">Error</font> |  |  |  |
-| AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10 | Query | Error | Error | Error | Error |
-| <font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">Error</font> |  |  |  |
-| AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100 | Query | Error | Error | Error | Error |
-| <font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">Error</font> |  |  |  |
-| AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL | Query | Error | Error | Error | Error |
-| <font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_TOP10</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">Error</font> |  |  |  |
-| AGGREGATE_ISSUES_PER_DECADE_TOP10 | Query | Error | Error | Error | Error |
-| <font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_TOP100</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">Error</font> |  |  |  |
-| AGGREGATE_ISSUES_PER_DECADE_TOP100 | Query | Error | Error | Error | Error |
-| <font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_ALL</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">Error</font> |  |  |  |
-| AGGREGATE_ISSUES_PER_DECADE_ALL | Query | Error | Error | Error | Error |
-| <font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_STUDIES</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">Error</font> |  |  |  |
-| CONDITIONAL_TABLE_SCAN_ALL_STUDIES | Query | Error | Error | Error | Error |
-| <font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">Error</font> |  |  |  |
-| CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES | Query | Error | Error | Error | Error |
-| <font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">Error</font> |  |  |  |
-| CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES | Query | Error | Error | Error | Error |
-| <font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">Error</font> |  |  |  |
-| GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY | Query | Error | Error | Error | Error |
-| <font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">Error</font> |  |  |  |
-| GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES | Query | Error | Error | Error | Error |
-| <font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">Error</font> |  |  |  |
-| GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES | Query | Error | Error | Error | Error |
-| <font color="#C0C0C0">SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">Error</font> |
-| SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY | Query | Error |
-| <font color="#C0C0C0">SCHEMA_CHANGE_INTRODUCE_STRING_OP</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">Error</font> |
-| SCHEMA_CHANGE_INTRODUCE_STRING_OP | Query | Error |
-| <font color="#C0C0C0">SCHEMA_CHANGE_MIGRATE_RDF_TYPE</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">Error</font> |
-| SCHEMA_CHANGE_MIGRATE_RDF_TYPE | Query | Error |
-| <font color="#C0C0C0">SCHEMA_CHANGE_REMOVE_RDF_TYPE</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">Error</font> |
-| SCHEMA_CHANGE_REMOVE_RDF_TYPE | Query | Error |
-| <font color="#C0C0C0">UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">Error</font> |
-| UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM | Query | Error |
-| <font color="#C0C0C0">UPDATE_HIGH_SELECTIVITY_NON_ISSUED</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">Error</font> |
-| UPDATE_HIGH_SELECTIVITY_NON_ISSUED | Query | Error |
-| <font color="#C0C0C0">DELETE_LOW_SELECTIVITY_PAPER_MEDIUM</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">Error</font> |
-| DELETE_LOW_SELECTIVITY_PAPER_MEDIUM | Query | Error |
-| <font color="#C0C0C0">DELETE_HIGH_SELECTIVIY_NON_ISSUED</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">Error</font> |
-| DELETE_HIGH_SELECTIVIY_NON_ISSUED | Query | Error |
+| Set up || 0.00 ms |
+| Load || 30072.75 ms |
+| <font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">2966.76 ms</font> |  |  |  |
+| ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY | Query | 93.75 ms | 15.56 ms | 15.58 ms | 41.63 ms |
+| <font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">2338.34 ms</font> |  |  |  |
+| ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES | Query | 65.68 ms | 36.84 ms | 43.86 ms | 48.79 ms |
+| <font color="#C0C0C0">ENTITY_RETRIEVAL_BY_ID_100_ENTITIES</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">2747.84 ms</font> |  |  |  |
+| ENTITY_RETRIEVAL_BY_ID_100_ENTITIES | Query | 174.35 ms | 146.93 ms | 139.20 ms | 153.49 ms |
+| <font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">0.84 ms</font> |  |  |  |
+| AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10 | Query | 285.79 ms | 134.20 ms | 102.46 ms | 174.15 ms |
+| <font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">6.81 ms</font> |  |  |  |
+| AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100 | Query | 86.31 ms | 79.80 ms | 78.49 ms | 81.54 ms |
+| <font color="#C0C0C0">AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">0.70 ms</font> |  |  |  |
+| AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL | Query | 500.25 ms | 410.13 ms | 464.33 ms | 458.24 ms |
+| <font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_TOP10</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">0.50 ms</font> |  |  |  |
+| AGGREGATE_ISSUES_PER_DECADE_TOP10 | Query | 190.50 ms | 158.43 ms | 151.75 ms | 166.90 ms |
+| <font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_TOP100</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">0.48 ms</font> |  |  |  |
+| AGGREGATE_ISSUES_PER_DECADE_TOP100 | Query | 156.28 ms | 146.36 ms | 130.02 ms | 144.22 ms |
+| <font color="#C0C0C0">AGGREGATE_ISSUES_PER_DECADE_ALL</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">0.47 ms</font> |  |  |  |
+| AGGREGATE_ISSUES_PER_DECADE_ALL | Query | 116.42 ms | 105.16 ms | 114.78 ms | 112.12 ms |
+| <font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_STUDIES</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">0.48 ms</font> |  |  |  |
+| CONDITIONAL_TABLE_SCAN_ALL_STUDIES | Query | 7400.73 ms | 7518.27 ms | 7645.61 ms | 7521.54 ms |
+| <font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">0.70 ms</font> |  |  |  |
+| CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES | Query | 66308.89 ms | 67642.58 ms | 61312.35 ms | 65087.94 ms |
+| <font color="#C0C0C0">CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">2.85 ms</font> |  |  |  |
+| CONDITIONAL_TABLE_SCAN_ALL_BIBLIOGRAPHIC_RESOURCES_AND_STUDIES | Query | 22817.02 ms | 27546.35 ms | 19344.25 ms | 23235.87 ms |
+| <font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">661.71 ms</font> |  |  |  |
+| GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY | Query | 142.34 ms | 132.45 ms | 135.53 ms | 136.78 ms |
+| <font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">496.71 ms</font> |  |  |  |
+| GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES | Query | 8.86 ms | 7.22 ms | 6.75 ms | 7.61 ms |
+| <font color="#C0C0C0">GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">614.32 ms</font> |  |  |  |
+| GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES | Query | 126.00 ms | 121.21 ms | 120.22 ms | 122.48 ms |
+| <font color="#C0C0C0">SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">4.05 ms</font> |
+| SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY | Query | 12291.21 ms |
+| <font color="#C0C0C0">SCHEMA_CHANGE_INTRODUCE_STRING_OP</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">1.46 ms</font> |
+| SCHEMA_CHANGE_INTRODUCE_STRING_OP | Query | 524.28 ms |
+| <font color="#C0C0C0">SCHEMA_CHANGE_MIGRATE_RDF_TYPE</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">3.92 ms</font> |
+| SCHEMA_CHANGE_MIGRATE_RDF_TYPE | Query | 29899.91 ms |
+| <font color="#C0C0C0">SCHEMA_CHANGE_REMOVE_RDF_TYPE</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">0.99 ms</font> |
+| SCHEMA_CHANGE_REMOVE_RDF_TYPE | Query | 8.06 ms |
+| <font color="#C0C0C0">UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">2.31 ms</font> |
+| UPDATE_LOW_SELECTIVITY_PAPER_MEDIUM | Query | 1964.35 ms |
+| <font color="#C0C0C0">UPDATE_HIGH_SELECTIVITY_NON_ISSUED</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">17.98 ms</font> |
+| UPDATE_HIGH_SELECTIVITY_NON_ISSUED | Query | 4643.03 ms |
+| <font color="#C0C0C0">DELETE_LOW_SELECTIVITY_PAPER_MEDIUM</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">1.35 ms</font> |
+| DELETE_LOW_SELECTIVITY_PAPER_MEDIUM | Query | 6.33 ms |
+| <font color="#C0C0C0">DELETE_HIGH_SELECTIVIY_NON_ISSUED</font> | <font color="#C0C0C0">Prepare</font> | <font color="#C0C0C0">0.92 ms</font> |
+| DELETE_HIGH_SELECTIVIY_NON_ISSUED | Query | 3.56 ms |
 
 ## <a name="MongoDB"></a>[Evaluation Details for MongoDB, Version 3.0.6, Test Series SMALL](#MongoDB)
 
