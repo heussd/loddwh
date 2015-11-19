@@ -1,0 +1,32 @@
+ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY
+ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES
+ENTITY_RETRIEVAL_BY_ID_100_ENTITIES
+AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10
+AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP100
+AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL
+Fehler bei MongoDB, AGGREGATE_PUBLICATIONS_PER_PUBLISHER_ALL
+AGGREGATE_ISSUES_PER_DECADE_TOP10
+com.mongodb.MongoCommandException: Command failed with error 16819: 'exception: Sort exceeded memory limit of 104857600 bytes, but did not opt in to external sorting. Aborting operation. Pass allowDiskUse:true to opt in.' on server localhost:27017. The full response is { "errmsg" : "exception: Sort exceeded memory limit of 104857600 bytes, but did not opt in to external sorting. Aborting operation. Pass allowDiskUse:true to opt in.", "code" : 16819, "ok" : 0.0 }
+	at com.mongodb.connection.ProtocolHelper.getCommandFailureException(ProtocolHelper.java:77)
+	at com.mongodb.connection.CommandProtocol.createCommandResult(CommandProtocol.java:140)
+	at com.mongodb.connection.CommandProtocol.receiveMessage(CommandProtocol.java:131)
+	at com.mongodb.connection.CommandProtocol.execute(CommandProtocol.java:84)
+	at com.mongodb.connection.DefaultServer$DefaultServerProtocolExecutor.execute(DefaultServer.java:155)
+	at com.mongodb.connection.DefaultServerConnection.executeProtocol(DefaultServerConnection.java:219)
+	at com.mongodb.connection.DefaultServerConnection.command(DefaultServerConnection.java:146)
+	at com.mongodb.operation.CommandOperationHelper.executeWrappedCommandProtocol(CommandOperationHelper.java:166)
+	at com.mongodb.operation.CommandOperationHelper.executeWrappedCommandProtocol(CommandOperationHelper.java:157)
+	at com.mongodb.operation.CommandOperationHelper.executeWrappedCommandProtocol(CommandOperationHelper.java:82)
+	at com.mongodb.operation.AggregateOperation$1.call(AggregateOperation.java:199)
+	at com.mongodb.operation.AggregateOperation$1.call(AggregateOperation.java:196)
+	at com.mongodb.operation.OperationHelper.withConnectionSource(OperationHelper.java:195)
+	at com.mongodb.operation.OperationHelper.withConnection(OperationHelper.java:168)
+	at com.mongodb.operation.AggregateOperation.execute(AggregateOperation.java:196)
+	at com.mongodb.operation.AggregateOperation.execute(AggregateOperation.java:62)
+	at com.mongodb.Mongo.execute(Mongo.java:738)
+	at com.mongodb.Mongo$2.execute(Mongo.java:725)
+	at com.mongodb.OperationIterable.iterator(OperationIterable.java:47)
+	at com.mongodb.OperationIterable.forEach(OperationIterable.java:70)
+	at com.mongodb.AggregateIterableImpl.forEach(AggregateIterableImpl.java:107)
+	at database.MongoDB.query(MongoDB.java:202)
+	at main.Benchmark.main(Benchmark.java:86)
