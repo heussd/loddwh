@@ -14,7 +14,6 @@ import java.util.zip.GZIPInputStream;
 
 import com.google.common.base.Joiner;
 
-import arq.cmd.TerminationException;
 import util.Codes;
 import util.Config;
 import util.DataObject;
@@ -27,18 +26,22 @@ import util.dumper.Helpers;
 public class Virtuoso implements Database {
 
 	public static void main(String[] args) throws Throwable {
-		Virtuoso testVirtuoso = new Virtuoso();
-		testVirtuoso.setUp();
-		// testVirtuoso.load(Dataset.hebis_10147116_13050073_rdf_gz);
-		testVirtuoso.load(Dataset.hebis_10000_records);
+		Database database = new Virtuoso();
+		database.start();
+		database.clean();
+		database.setUp();
+		database.load(Dataset.hebis_100000_records);
 
-		// testVirtuoso.buildRdfLoaderCommand(Dataset.hebis_1000_records);
+		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY;
+		queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY;
+		database.prepare(queryScenario);
+		QueryResult queryResult = database.query(queryScenario);
+		System.out.println(queryResult);
 
-		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_TEN_ENTITIES;
-		// QueryScenario queryScenario =
-		// QueryScenario.AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10;
-		testVirtuoso.prepare(queryScenario);
-		QueryResult queryResult = testVirtuoso.query(queryScenario);
+		queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES;
+		queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES;
+		database.prepare(queryScenario);
+		queryResult = database.query(queryScenario);
 		System.out.println(queryResult);
 
 	}
@@ -49,6 +52,7 @@ public class Virtuoso implements Database {
 	private Templates templates;
 	private ArrayList<PreparedStatement> scenarioStatements;
 	private QueryScenario queryScenario;
+	private String queryString;
 
 	public Virtuoso() {
 		graphId = Config.DATABASE;
@@ -258,8 +262,10 @@ public class Virtuoso implements Database {
 			while (resultSet.next()) {
 				ids.add("\"" + resultSet.getString(1) + "\"");
 			}
-			scenarioStatements
-					.add(connection.prepareStatement("sparql " + templates.resolve("ENTITY_RETRIEVAL").replaceAll("##ids##", Joiner.on(",").join(ids))));
+			
+			
+			scenarioStatements.add(connection.prepareStatement("sparql select ?a where {?a ?b ?c } limit 1"));
+			this.queryString = "sparql " + templates.resolve("ENTITY_RETRIEVAL").replaceAll("##ids##", Joiner.on(",").join(ids));
 			break;
 		}
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
@@ -271,17 +277,17 @@ public class Virtuoso implements Database {
 		{
 			String query = templates.resolve("GRAPH_LIKE_prepare");
 			switch (queryScenario) {
-//			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECCTS_2HOPS_100_ENTITIES:
+			// case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECCTS_2HOPS_100_ENTITIES:
 			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES:
 				query += " limit 100";
 				break;
 			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES:
-//			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
+				// case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
 				query += " limit 10";
 				break;
 			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
-//			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECCTS_2HOPS_ONE_ENTITY:
-				query += " limit 100";
+				// case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECCTS_2HOPS_ONE_ENTITY:
+				query += " limit 1";
 				break;
 			default:
 				throw new RuntimeException("Dont know how to limit " + queryScenario);
@@ -301,7 +307,8 @@ public class Virtuoso implements Database {
 				break;
 			}
 
-			scenarioStatements.add(connection.prepareStatement("sparql " + templates.resolve(templateName).replaceAll("##ids##", Joiner.on(",").join(ids))));
+			scenarioStatements.add(connection.prepareStatement("sparql select ?a where {?a ?b ?c } limit 1"));
+			this.queryString = "sparql " + templates.resolve(templateName).replaceAll("##ids##", Joiner.on(",").join(ids));
 			break;
 		}
 		case SCHEMA_CHANGE_MIGRATE_RDF_TYPE:
@@ -327,6 +334,7 @@ public class Virtuoso implements Database {
 			// System.out.println(preparedStatement);
 			switch (queryScenario.queryResultType) {
 			case GRAPH:
+				preparedStatement = connection.prepareStatement(queryString);
 				resultSet = preparedStatement.executeQuery();
 				while (resultSet.next()) {
 					switch (resultSet.getMetaData().getColumnCount()) {
@@ -349,6 +357,7 @@ public class Virtuoso implements Database {
 				}
 				break;
 			case COMPLETE_ENTITIES:
+				preparedStatement = connection.prepareStatement(queryString);
 				resultSet = preparedStatement.executeQuery();
 
 				while (resultSet.next()) {
@@ -406,13 +415,13 @@ public class Virtuoso implements Database {
 
 	@Override
 	public void start() {
-		Helpers.terminalLaunchScript("virtuoso.sh", 90);
+		// Helpers.terminalLaunchScript("virtuoso.sh", 90);
 	}
 
 	@Override
 	public void stop() {
-		if (Config.THIS_IS_OSX)
-			Helpers.terminalLaunchScript("virtuoso_stop.sh", 10);
+		// if (Config.THIS_IS_OSX)
+		// Helpers.terminalLaunchScript("virtuoso_stop.sh", 10);
 	}
 
 }

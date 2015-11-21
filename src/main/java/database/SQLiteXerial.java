@@ -36,6 +36,8 @@ public class SQLiteXerial extends Helpers implements Database {
 	private ArrayList<Dataset> lastLoadedDatasets = new ArrayList<>();
 	private boolean graphStructurePrepared = false;
 	private ArrayList<String> scenarioQueries = new ArrayList<>();
+	private ArrayList<String> ids;
+	private String queryString;
 
 	public SQLiteXerial() {
 		// Produce some queries based on Config / Codes enums - do not prepare
@@ -232,7 +234,8 @@ public class SQLiteXerial extends Helpers implements Database {
 
 			// I have no idea why this does not work...
 			// preparedStatement.setString(1, Joiner.on(",").join(ids));
-			preparedStatement = connection.prepareStatement("select * from justatable where dcterms_identifier in (" + Joiner.on(",").join(ids) + ")");
+			this.ids = ids;
+			preparedStatement = connection.prepareStatement("select * from justatable where dcterms_identifier in (?)");
 		} else if (queryScenario.queryResultType == Type.GRAPH) {
 			// Prepare IDs for ENTITY_RETRIEVAL scenarios
 
@@ -264,10 +267,12 @@ public class SQLiteXerial extends Helpers implements Database {
 			// preparedStatement.setString(1, Joiner.on(",").join(ids));
 
 			String queryString = templates.resolve(queryScenario);
-			queryString += " where level0.id in (" + Joiner.on(",").join(ids) + ")";
+//			queryString += " where level0.id in (?)";
 			preparedStatement = connection.prepareStatement(queryString);
+			this.ids = ids;
+			this.queryString = queryString;
 		} else if (queryScenario.toString().startsWith("SCHEMA_")) {
-//			System.out.println(queryScenario);
+			// System.out.println(queryScenario);
 			scenarioQueries.clear();
 			String queries = templates.resolve(queryScenario);
 			for (String query : queries.split(";")) {
@@ -292,6 +297,9 @@ public class SQLiteXerial extends Helpers implements Database {
 			ResultSet resultSet;
 			switch (queryScenario.queryResultType) {
 			case GRAPH:
+//				preparedStatement.setString(1, Joiner.on(",").join(ids));
+				preparedStatement = connection.prepareStatement(queryString + " where level0.id in (" + Joiner.on(",").join(ids) + ")");
+
 				resultSet = preparedStatement.executeQuery();
 				while (resultSet.next()) {
 					switch (resultSet.getMetaData().getColumnCount()) {
@@ -314,6 +322,10 @@ public class SQLiteXerial extends Helpers implements Database {
 				}
 				break;
 			case COMPLETE_ENTITIES:
+				if (queryScenario.toString().startsWith("ENTITY_RETRIEVAL")) {
+					// preparing does not work :/
+					preparedStatement = connection.prepareStatement("select * from justatable where dcterms_identifier in (" + Joiner.on(",").join(ids) + ")");
+				}
 				resultSet = preparedStatement.executeQuery();
 				while (resultSet.next()) {
 					DataObject dataObject = new DataObject();
@@ -343,12 +355,12 @@ public class SQLiteXerial extends Helpers implements Database {
 			default:
 				if (queryScenario.toString().startsWith("SCHEMA_")) {
 					for (String query : scenarioQueries) {
-//						System.out.println("EXEC : " + query);
+						// System.out.println("EXEC : " + query);
 						connection.createStatement().executeUpdate(query);
 					}
-					
+
 				} else {
-				preparedStatement.executeUpdate();
+					preparedStatement.executeUpdate();
 				}
 				break;
 			}
@@ -358,23 +370,30 @@ public class SQLiteXerial extends Helpers implements Database {
 	}
 
 	public static void main(String[] args) throws Exception {
+		Database database = new SQLiteXerial();
+		database.start();
+		database.clean();
+		database.setUp();
+		database.load(Dataset.hebis_100000_records);
 
-		SQLiteXerial sqLiteXerial = new SQLiteXerial();
-		sqLiteXerial.setUp();
-		// sqLiteXerial.load(Dataset.hebis_10000_records);
-		sqLiteXerial.load(Dataset.hebis_10000_records);
+		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY;
+//		 queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY;
+		database.prepare(queryScenario);
+		QueryResult queryResult = database.query(queryScenario);
+		System.out.println(queryResult);
 
-		QueryScenario queryScenario = QueryScenario.SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY;
+		queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES;
+//		 queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES;
+		database.prepare(queryScenario);
+		queryResult = database.query(queryScenario);
+		System.out.println(queryResult);
 
-		sqLiteXerial.prepare(queryScenario);
-		QueryResult qR1 = sqLiteXerial.query(queryScenario);
+		// queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY;
+		// database.prepare(queryScenario);
+		// queryResult = database.query(queryScenario);
+		// System.out.println(queryResult);
 
-		queryScenario = QueryScenario.SCHEMA_CHANGE_MIGRATE_RDF_TYPE;
-		sqLiteXerial.prepare(queryScenario);
-		QueryResult qR2 = sqLiteXerial.query(queryScenario);
-
-		System.out.println("R1: " + qR1);
-		System.out.println("R2: " + qR2);
+		database.stop();
 	}
 
 	@Override

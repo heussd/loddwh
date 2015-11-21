@@ -30,6 +30,8 @@ public class PostgreSQL extends Helpers implements Database {
 	private QueryScenario queryScenario;
 	private Templates templates;
 	private boolean graphStructurePrepared = false;
+	private ArrayList<String> ids;
+	private String queryString;
 
 	@Override
 	public String getName() {
@@ -43,19 +45,30 @@ public class PostgreSQL extends Helpers implements Database {
 
 	public static void main(String[] args) throws Exception {
 
-		PostgreSQL postgreSQL = new PostgreSQL();
-		postgreSQL.start();
-		postgreSQL.stop();
+		Database database = new PostgreSQL();
+		// database.start();
+		database.clean();
+		database.setUp();
+		database.load(Dataset.hebis_100000_records);
 
-		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES;
-
-		postgreSQL.setUp();
-		// postgreSQL.load(dataset);
-		postgreSQL.load(Dataset.hebis_10000_records);
-		// postgreSQL.clear(queryScenario);
-		postgreSQL.prepare(queryScenario);
-		QueryResult queryResult = postgreSQL.query(queryScenario);
+		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY;
+		queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY;
+		database.prepare(queryScenario);
+		QueryResult queryResult = database.query(queryScenario);
 		System.out.println(queryResult);
+
+		// queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES;
+		// queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES;
+		// database.prepare(queryScenario);
+		// queryResult = database.query(queryScenario);
+		// System.out.println(queryResult);
+
+		// queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY;
+		// database.prepare(queryScenario);
+		// queryResult = database.query(queryScenario);
+		// System.out.println(queryResult);
+
+		// database.stop();
 	}
 
 	public PostgreSQL() {
@@ -178,10 +191,10 @@ public class PostgreSQL extends Helpers implements Database {
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES:
 		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES:
-//		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
-//		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
-//		case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
-			if (!this.graphStructurePrepared ) {
+			// case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
+			// case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
+			// case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
+			if (!this.graphStructurePrepared) {
 				this.graphStructurePrepared = true;
 				// Fall through
 			} else {
@@ -215,6 +228,7 @@ public class PostgreSQL extends Helpers implements Database {
 				break;
 			default:
 			}
+
 			ResultSet resultSet = connection.createStatement().executeQuery(query);
 			ArrayList<String> ids = new ArrayList<>();
 			while (resultSet.next()) {
@@ -222,7 +236,9 @@ public class PostgreSQL extends Helpers implements Database {
 			}
 			// preparedStatement.setString(1, Joiner.on(",").join(ids));
 
-			preparedStatement = connection.prepareStatement("select * from justatable where dcterms_identifier in (" + Joiner.on(",").join(ids) + ")");
+			this.ids = ids;
+			// System.out.println("IDS: " + ids.size());
+			preparedStatement = connection.prepareStatement("select * from justatable where dcterms_identifier in ($1)");
 
 			// System.out.println(preparedStatement);
 		} else if (queryScenario.queryResultType == Type.GRAPH) {
@@ -230,38 +246,33 @@ public class PostgreSQL extends Helpers implements Database {
 
 			String query = "select DCTERMS_IDENTIFIER from justatable where dcterms_subject IS NOT null order by dcterms_medium, isbd_p1008, dcterm_contributor, dcterms_issued, dcterms_identifier limit";
 			switch (queryScenario) {
-//			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
+			// case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_100_ENTITIES:
 			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES:
 				query += " 100;";
 				break;
 			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_10_ENTITIES:
-//			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
+				// case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_10_ENTITIES:
 				query += " 10;";
 				break;
 			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
-//			case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
-				query += " 100;";
+				// case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_2HOPS_ONE_ENTITY:
+				query += " 1;";
 				break;
 			default:
 				throw new RuntimeException("Dont know how to limit " + queryScenario);
 			}
-
+//			System.out.println(query);
 			ResultSet resultSet = connection.createStatement().executeQuery(query);
 			ArrayList<String> ids = new ArrayList<>();
 			while (resultSet.next()) {
 				ids.add("'" + resultSet.getString(1) + "'");
 			}
 
-			// I have no idea why this does not work...
-			// preparedStatement.setString(1, Joiner.on(",").join(ids));
-
 			String queryString = templates.resolve(queryScenario);
+			queryString += " where level0.dcterms_identifier in ";
 
-			if (ids.size() == 0) {
-				queryString += " where level0.dcterms_identifier in (null)";
-			} else {
-				queryString += " where level0.dcterms_identifier in (" + Joiner.on(",").join(ids) + ")";
-			}
+			this.queryString = queryString;
+			this.ids = ids;
 
 			// System.out.println(queryString);
 			preparedStatement = connection.prepareStatement(queryString);
@@ -283,6 +294,9 @@ public class PostgreSQL extends Helpers implements Database {
 			ResultSet resultSet;
 			switch (queryScenario.queryResultType) {
 			case GRAPH:
+				preparedStatement = connection.prepareStatement(queryString + "(" + (ids.size() > 0 ? Joiner.on(",").join(ids) : "null") + ")");
+
+				// System.out.println(queryString + "(" + Joiner.on(",").join(ids) + ")");
 				resultSet = preparedStatement.executeQuery();
 				while (resultSet.next()) {
 					switch (resultSet.getMetaData().getColumnCount()) {
@@ -305,6 +319,9 @@ public class PostgreSQL extends Helpers implements Database {
 				}
 				break;
 			case COMPLETE_ENTITIES:
+				if (queryScenario.toString().contains("ENTITY_RETRIEVAL_")) {
+					preparedStatement = connection.prepareStatement("select * from justatable where dcterms_identifier in (" + Joiner.on(",").join(ids) + ")");
+				}
 				resultSet = preparedStatement.executeQuery();
 				while (resultSet.next()) {
 					DataObject dataObject = new DataObject();

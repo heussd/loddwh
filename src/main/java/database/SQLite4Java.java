@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
+import org.sqlite.SQLiteConfig.SynchronousMode;
 
 import com.almworks.sqlite4java.SQLiteConnection;
 import com.almworks.sqlite4java.SQLiteJob;
@@ -36,6 +37,8 @@ public class SQLite4Java extends Helpers implements Database {
 	private ArrayList<Dataset> lastLoadedDatasets = new ArrayList<>();
 	private boolean graphStructurePrepared = false;
 	private ArrayList<String> scenarioQueries = new ArrayList<>();
+	private ArrayList<String> ids;
+	private String queryString;
 
 	public SQLite4Java() {
 		// Disable logging of sqlite4java
@@ -264,7 +267,8 @@ public class SQLite4Java extends Helpers implements Database {
 
 			// I have no idea why this does not work...
 			// preparedStatement.bind(1, Joiner.on(",").join(ids));
-			preparedStatement = connection.prepare("select * from justatable where dcterms_identifier in (" + Joiner.on(",").join(ids) + ")");
+			this.ids = ids;
+			preparedStatement = connection.prepare("select * from justatable where dcterms_identifier in ((?))");
 		} else if (queryScenario.queryResultType == Type.GRAPH) {
 			// Prepare IDs for ENTITY_RETRIEVAL scenarios
 
@@ -296,7 +300,9 @@ public class SQLite4Java extends Helpers implements Database {
 			// preparedStatement.setString(1, Joiner.on(",").join(ids));
 
 			String queryString = templates.resolve(queryScenario);
-			queryString += " where level0.id in (" + Joiner.on(",").join(ids) + ")";
+			// queryString += " where level0.id in (?)";
+			this.queryString = queryString;
+			this.ids = ids;
 			preparedStatement = connection.prepare(queryString);
 		} else if (queryScenario.toString().startsWith("SCHEMA_")) {
 			// System.out.println(queryScenario);
@@ -324,19 +330,22 @@ public class SQLite4Java extends Helpers implements Database {
 		// Auto commit setting:
 		// https://stackoverflow.com/questions/4998630/how-to-disable-autocommit-in-sqlite4java#5005785
 		connection.exec("BEGIN");
-		
+
 		if (queryScenario.toString().startsWith("SCHEMA_")) {
 			for (String query : scenarioQueries) {
-//				System.out.println(query);
+				// System.out.println(query);
 				connection.exec(query);
 			}
-//			connection.exec("COMMIT");
-//			System.exit(1);
+			// connection.exec("COMMIT");
+			// System.exit(1);
 		} else {
 
 			for (SQLiteStatement preparedStatement : scenarioStatements) {
 				switch (queryScenario.queryResultType) {
 				case GRAPH:
+					// Preparing does not work :/
+					preparedStatement = connection.prepare(queryString + " where level0.id in (" + Joiner.on(",").join(ids) + ")");
+
 					while (preparedStatement.step()) {
 						switch (queryScenario) {
 						case GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY:
@@ -361,6 +370,11 @@ public class SQLite4Java extends Helpers implements Database {
 					}
 					break;
 				case COMPLETE_ENTITIES:
+					if (queryScenario.toString().startsWith("ENTITY_RETRIEVAL_")) {
+						// Preparing does not work :/
+						preparedStatement = connection.prepare("select * from justatable where dcterms_identifier in (" + Joiner.on(",").join(ids) + ")");
+					}
+
 					while (preparedStatement.step()) {
 						DataObject dataObject = new DataObject();
 						for (Codes code : Codes.values()) {
@@ -402,30 +416,31 @@ public class SQLite4Java extends Helpers implements Database {
 
 	public static void main(String[] args) throws Exception {
 
-		SQLite4Java sqLiteXerial = new SQLite4Java();
-		sqLiteXerial.start();
-		sqLiteXerial.clean();
-		sqLiteXerial.setUp();
-		sqLiteXerial.load(Dataset.hebis_10000_records);
+		Database database = new SQLite4Java();
+		database.start();
+		database.clean();
+		database.setUp();
+		database.load(Dataset.hebis_100000_records);
 
-		QueryScenario queryScenario = QueryScenario.SCHEMA_CHANGE_INTRODUCE_NEW_PROPERTY;
-
-		sqLiteXerial.prepare(queryScenario);
-		QueryResult queryResult = sqLiteXerial.query(queryScenario);
-
-		queryScenario = QueryScenario.SCHEMA_CHANGE_INTRODUCE_STRING_OP;
-
-		sqLiteXerial.prepare(queryScenario);
-		queryResult = sqLiteXerial.query(queryScenario);
-
-		// System.out.println(queryResult);
-		//
-		// queryScenario =
-		// QueryScenario.AGGREGATE_PUBLICATIONS_PER_PUBLISHER_TOP10;
-		// sqLiteXerial.prepare(queryScenario);
-		// System.out.println(sqLiteXerial.query(queryScenario));
-
-		sqLiteXerial.stop();
+		QueryScenario queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_ONE_ENTITY;
+		queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY;
+		database.prepare(queryScenario);
+		QueryResult queryResult = database.query(queryScenario);
+		System.out.println(queryResult);
+		
+		queryScenario = QueryScenario.ENTITY_RETRIEVAL_BY_ID_100_ENTITIES;
+		queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_100_ENTITIES;
+		database.prepare(queryScenario);
+		queryResult = database.query(queryScenario);
+		System.out.println(queryResult);
+		
+//		queryScenario = QueryScenario.GRAPH_LIKE_RELATED_BY_DCTERMS_SUBJECTS_1HOP_ONE_ENTITY;
+//		database.prepare(queryScenario);
+//		queryResult = database.query(queryScenario);
+//		System.out.println(queryResult);
+		
+		
+		database.stop();
 	}
 
 	@Override
