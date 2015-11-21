@@ -20,9 +20,13 @@ public enum Dataset {
 	hebis_100000_records("hebis_100000.rdf.gz");
 
 	private Dataset(String filename) {
-		this.file = new File(this.getClass().getResource("/" + filename).getFile());
-		this.string = new String(this.getClass().getResource("/" + filename).getFile());
-		this.datasetName = filename;
+		try {
+			this.file = new File(this.getClass().getResource("/" + filename).toURI());
+			this.string = new String(this.getClass().getResource("/" + filename).getFile());
+			this.datasetName = filename;
+		} catch (Exception e) {
+			throw new RuntimeException();
+		}
 	}
 
 	private Dataset(String path, String filename) {
