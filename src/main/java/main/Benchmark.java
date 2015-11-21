@@ -1,7 +1,9 @@
 package main;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -26,29 +28,40 @@ public class Benchmark {
 	public static void main(String[] args) throws Exception {
 
 		List<TestSeries> testSeries = new ArrayList<>();
-//		testSeries.add(TestSeries.TINY);
-//		testSeries.add(TestSeries.SMALL);
-//		 testSeries.add(TestSeries.MEDIUM);
-//		 testSeries.add(TestSeries.LARGE);
+		testSeries.add(TestSeries.TINY);
+		// testSeries.add(TestSeries.SMALL);
+		// testSeries.add(TestSeries.MEDIUM);
+		// testSeries.add(TestSeries.LARGE);
 
 		List<Database> testDatabases = new ArrayList<>();
-//		testDatabases.add(new SQLite4Java());
-//		 testDatabases.add(new SQLiteXerial());
-//		 testDatabases.add(new PostgreSQL());
-		 testDatabases.add(new ArangoDB());
-//		 testDatabases.add(new MongoDB());
-//		 testDatabases.add(new Virtuoso());
-//		 testDatabases.add(new Fuseki());
+		testDatabases.add(new SQLite4Java());
+		// testDatabases.add(new SQLiteXerial());
+		// testDatabases.add(new PostgreSQL());
+		// testDatabases.add(new ArangCoDB());
+		// testDatabases.add(new MongoDB());
+		// testDatabases.add(new Virtuoso());
+		// testDatabases.add(new Fuseki());
 
 		for (TestSeries testSerie : testSeries) {
 			new File("results/serialisedBenchmarkObjects/" + testSerie + "/").mkdirs();
+
 			List<BenchmarkObject> benchmarkObjects = new ArrayList<>();
 			for (Database db : testDatabases) {
 				// benchmarkObjects.add(new BenchmarkObject(database));
 				// }
 
 				// for (BenchmarkObject benchmarkObject : benchmarkObjects) {
-				BenchmarkObject benchmarkObject = new BenchmarkObject(db);
+				File bo = new File("results/serialisedBenchmarkObjects/" + testSerie + "/" + db.getName() + ".ser");
+				BenchmarkObject benchmarkObject;
+				if (bo.exists()) {
+					FileInputStream fis = new FileInputStream(bo);
+					ObjectInputStream ois = new ObjectInputStream(fis);
+					benchmarkObject = (BenchmarkObject) ois.readObject();
+					ois.close();
+				} else {
+					benchmarkObject = new BenchmarkObject(db);
+				}
+
 				benchmarkObjects.add(benchmarkObject);
 
 				// Database db = benchmarkObject.getDatabase();
